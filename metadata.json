@@ -1,0 +1,6 @@
+{
+  "name": "Xí nghiệp In Tài Chính",
+  "description": "Website chính thức của Xí nghiệp In Tài Chính trực thuộc Công ty TNHH MTV Xổ số kiến thiết TP.HCM. Chuyên nghiệp – Chính xác – Bảo mật.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

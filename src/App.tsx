@@ -1,0 +1,175 @@
+import { useState, useEffect } from 'react';
+import { Phone, ArrowUp, ShieldCheck, Mail, MapPin } from 'lucide-react';
+import Header from './components/Header';
+import HeroSlider from './components/HeroSlider';
+import Introduction from './components/Introduction';
+import Services from './components/Services';
+import Technology from './components/Technology';
+import Gallery from './components/Gallery';
+import Recruitment from './components/Recruitment';
+import Contact from './components/Contact';
+import CompanyFooter from './components/CompanyFooter';
+import QuoteModal from './components/QuoteModal';
+import { COMPANY_INFO } from './data/companyData';
+
+export default function App() {
+  const [activeSection, setActiveSection] = useState('hero');
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [preselectedService, setPreselectedService] = useState('');
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // IntersectionObserver to dynamically highlight active sticky menu link on scroll
+  useEffect(() => {
+    const sections = ['hero', 'about', 'services', 'technology', 'gallery', 'recruitment', 'contact'];
+    
+    const handleScrollActiveLink = () => {
+      const scrollPos = window.scrollY + 200; // Offset for sticky menu height
+      
+      // Determine if back to top toggle is visible
+      if (window.scrollY > 400) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollActiveLink);
+    return () => window.removeEventListener('scroll', handleScrollActiveLink);
+  }, []);
+
+  // Standard smooth navigation trigger
+  const handleNavigate = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      const offsetTop = el.offsetTop - (sectionId === 'hero' ? 0 : 120); // Accounting for double-tier header
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+      setActiveSection(sectionId);
+    }
+  };
+
+  const handleOpenQuoteWithService = (serviceTitle: string) => {
+    setPreselectedService(serviceTitle);
+    setIsQuoteModalOpen(true);
+  };
+
+  const handleOpenGeneralQuote = () => {
+    setPreselectedService('');
+    setIsQuoteModalOpen(true);
+  };
+
+  const handleCallHotline = () => {
+    window.location.href = `tel:${COMPANY_INFO.phone.replace(/\s+/g, '')}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans antialiased overflow-x-hidden">
+      
+      {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
+      <Header 
+        activeSection={activeSection} 
+        onNavigate={handleNavigate} 
+        openQuoteModal={handleOpenGeneralQuote} 
+      />
+
+      {/* MAIN CONTAINER CONTENT SECTION */}
+      <main className="flex-1 w-full flex flex-col">
+        
+        {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
+        <div id="hero">
+          <HeroSlider 
+            onLearnMore={handleNavigate} 
+            openQuoteModal={handleOpenGeneralQuote} 
+          />
+        </div>
+
+        {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
+        <div id="about">
+          <Introduction />
+        </div>
+
+        {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
+        <div id="services">
+          <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
+        </div>
+
+        {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
+        <div id="technology">
+          <Technology />
+        </div>
+
+        {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
+        <div id="gallery">
+          <Gallery />
+        </div>
+
+        {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
+        <div id="recruitment">
+          <Recruitment />
+        </div>
+
+        {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
+        <div id="contact">
+          <Contact />
+        </div>
+
+      </main>
+
+      {/* 9. LICENSED STATE ENTERPRISE LEGAL FOOTER MARKER */}
+      <CompanyFooter onNavigate={handleNavigate} />
+
+      {/* 10. ONLINE INQUIRY SPEC RFQ BOX DIALOG POP-WINDOW */}
+      <QuoteModal 
+        isOpen={isQuoteModalOpen} 
+        onClose={() => setIsQuoteModalOpen(false)} 
+        preselectedService={preselectedService} 
+      />
+
+      {/* 11. FLOATING QUICK HELPMATE TOOLS (Zalo/Hotline and BackToTop) */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3.5">
+        
+        {/* Back To Top arrow visual widget */}
+        {showBackToTop && (
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Về đầu trang"
+            className="w-11 h-11 bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-amber-300"
+          >
+            <ArrowUp className="w-5 h-5 font-black" />
+          </button>
+        )}
+
+        {/* Corporate direct rapid reached hotline phone widget */}
+        <button
+          onClick={handleCallHotline}
+          aria-label="Gọi điện thoại tư vấn ngay"
+          className="w-14 h-14 bg-gradient-to-tr from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer relative group"
+        >
+          {/* Wave radar pulse ring decor */}
+          <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointers-none z-0"></span>
+          <Phone className="w-6 h-6 rotate-12 relative z-10" />
+          
+          <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-slate-700 hidden sm:block">
+            Gọi: {COMPANY_INFO.phoneDisplay}
+          </div>
+        </button>
+
+      </div>
+
+    </div>
+  );
+}

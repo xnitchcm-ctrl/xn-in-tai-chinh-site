@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", sans-serif;
+  
+  --color-brand-blue: #0A3273;
+  --color-brand-blue-dark: #07224f;
+  --color-brand-gold: #DCA92A;
+  --color-brand-gold-dark: #b88616;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+@utility animate-scanline {
+  animation: scanline 6s linear infinite;
+}
+
+@utility text-shadow-glow {
+  text-shadow: 0 0 10px rgba(220, 169, 42, 0.4);
+}
