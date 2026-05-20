@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Phone, Mail, MapPin, Clock, Send, ThumbsUp, HelpCircle, ShieldAlert, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Clock, 
+  Send, 
+  ThumbsUp, 
+  HelpCircle, 
+  ShieldAlert, 
+  Award, 
+  Map, 
+  Compass, 
+  ArrowUpRight, 
+  Globe 
+} from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 
 export default function Contact() {
@@ -37,94 +51,176 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 relative">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-950 relative overflow-hidden">
+      
+      {/* High-end decorative background overlays and light grids */}
+      <span className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-[#03091e] to-slate-950 pointer-events-none" />
+      
+      {/* Dynamic blurred color nodes matching navy blue + gold gold theme */}
+      <span className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-sky-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <span className="absolute bottom-1/4 left-0 w-[350px] h-[350px] bg-brand-gold/10 rounded-full blur-[125px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Section Heading */}
-        <div className="text-center flex flex-col items-center gap-2 mb-16">
-          <span className="text-xs font-bold tracking-widest text-brand-gold uppercase font-display">
-            LIÊN HỆ & BÁO GIÁ
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black font-display text-brand-blue tracking-tight leading-tight uppercase">
-            HỢP TÁC VỮNG BỀN – Ý KIẾN PHẢN HỒI
-          </h2>
-          <div className="w-20 h-1 bg-brand-gold rounded-full mt-2"></div>
-          <p className="text-slate-500 font-sans text-xs sm:text-sm max-w-xl mt-2">
-            Mọi thắc mắc của cơ quan phát hành vé số, tổ chức ngân hàng tài chính sẽ được bộ phận nghiệp vụ tiếp nhận và phản hồi tối đa trong vòng 24 giờ làm việc.
-          </p>
+        {/* SECTION HEADER BLOCK */}
+        <div className="text-center flex flex-col items-center mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-2 px-3.5 py-1 bg-white/5 border border-white/10 rounded-full text-brand-gold text-[10px] uppercase font-black tracking-widest mb-4"
+          >
+            <Globe className="w-3.5 h-3.5 text-brand-gold animate-spin-slow" />
+            <span>Kênh tiếp nhận hỗ trợ đại lý & doanh nghiệp toàn quốc</span>
+          </motion.div>
+
+          <motion.h2 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-4xl lg:text-4.5xl font-black font-display text-white tracking-tight leading-tight uppercase"
+          >
+            LIÊN HỆ & QUY TRÌNH BÁO GIÁ
+          </motion.h2>
+          
+          <div className="w-16 h-1.5 bg-gradient-to-r from-brand-gold to-yellow-500 rounded-full mt-4 mb-4" />
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-slate-400 font-sans text-xs sm:text-sm max-w-2xl text-center leading-relaxed"
+          >
+            Mọi thắc mắc của đại lý xổ số kiến thiết, khối ban ngành, ngân hàng về sê-ri ấn phẩm bảo mật 
+            sẽ được ban thư ký tiếp nhận & phản hồi nhanh chóng trong 24 giờ.
+          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           
-          {/* Corporate Logistics Info Block (Left 5 cols) */}
+          {/* ================= LEFT COLUMN: ENTERPRISE LOCATION & MAP ================= */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             
-            {/* Direct details info list */}
-            <div className="bg-gradient-to-br from-brand-blue to-brand-blue-dark text-white rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col gap-6">
-              
+            {/* Premium glassmorphic address details card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ 
+                boxShadow: '0 0 35px rgba(220,169,42,0.12)',
+              }}
+              className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col gap-6 transition-all duration-300 relative overflow-hidden group shadow-xl"
+            >
+              {/* Light accent lines */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 blur-2xl pointer-events-none group-hover:bg-brand-gold/10 transition-colors" />
+              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-brand-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-550" />
+
               <div>
-                <p className="text-[10px] text-amber-300 font-black tracking-widest uppercase font-display">
+                <span className="text-[9px] font-black tracking-widest text-[#60a5fa] uppercase font-display leading-none">
                   {COMPANY_INFO.parentCompany}
-                </p>
-                <h3 className="text-lg sm:text-xl font-bold font-display uppercase tracking-wider mt-1.5 text-white">
+                </span>
+                <h3 className="text-base sm:text-lg font-black font-display text-white uppercase tracking-wide mt-1.5 leading-snug">
                   {COMPANY_INFO.name}
                 </h3>
-                <div className="w-12 h-1 bg-brand-gold rounded-full mt-3"></div>
+                <div className="w-12 h-[3px] bg-brand-gold rounded-full mt-3" />
               </div>
 
-              <div className="space-y-4 text-xs sm:text-sm">
-                {/* Map pin */}
-                <div className="flex gap-3.5 items-start">
-                  <MapPin className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-bold font-display text-xs tracking-wider uppercase text-amber-300">Địa chỉ xưởng:</h4>
-                    <p className="text-slate-200 mt-1 leading-relaxed font-sans">{COMPANY_INFO.address}</p>
+              {/* Grid lists of location info with premium icons */}
+              <div className="space-y-5 text-xs sm:text-sm">
+                
+                {/* 1. Address Row with Radar Pin */}
+                <div className="flex gap-4 items-start group/item">
+                  <div className="relative p-2.5 bg-brand-gold/10 rounded-xl text-brand-gold shrink-0 border border-brand-gold/20 group-hover/item:scale-105 transition-transform duration-300 shadow-[0_0_10px_rgba(220,169,42,0.1)]">
+                    <MapPin className="w-5 h-5" />
+                    <span className="absolute inset-0 rounded-xl bg-brand-gold/25 animate-ping opacity-60" />
                   </div>
-                </div>
-
-                {/* Telephone */}
-                <div className="flex gap-3.5 items-start">
-                  <Phone className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-bold font-display text-xs tracking-wider uppercase text-amber-300">Điện thoại bàn:</h4>
-                    <p className="text-slate-200 mt-0.5 leading-none font-mono font-medium">{COMPANY_INFO.phone}</p>
-                  </div>
-                </div>
-
-                {/* Mail address */}
-                <div className="flex gap-3.5 items-start">
-                  <Mail className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-bold font-display text-xs tracking-wider uppercase text-amber-300">Hòm thư điện tử:</h4>
-                    <p className="text-slate-200 mt-0.5 leading-none font-sans font-medium">{COMPANY_INFO.email}</p>
-                  </div>
-                </div>
-
-                {/* Office hours */}
-                <div className="flex gap-3.5 items-start">
-                  <Clock className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="font-bold font-display text-xs tracking-wider uppercase text-amber-300">Giờ thu nhận công văn:</h4>
-                    <p className="text-slate-200 mt-1 leading-relaxed font-sans">
-                      Thứ Hai – Thứ Sáu: 07:30 – 16:30<br />
-                      Thứ Bảy: 07:30 – 11:30 (Chỉ tiếp nhận hồ sơ sê-ri khẩn)
+                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-brand-gold">Địa chỉ hành chính & xưởng sản xuất:</h4>
+                    <p className="text-slate-250 mt-1 leading-relaxed font-sans font-light">
+                      {COMPANY_INFO.address}
                     </p>
                   </div>
                 </div>
+
+                {/* 2. Phone */}
+                <div className="flex gap-4 items-start group/item">
+                  <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 shrink-0 border border-blue-500/20 group-hover/item:scale-105 transition-transform duration-300">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-blue-400">Số máy tổng đài:</h4>
+                    <p className="text-slate-200 mt-1 leading-none font-mono font-medium tracking-wide">
+                      {COMPANY_INFO.phone}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3. Email */}
+                <div className="flex gap-4 items-start group/item">
+                  <div className="p-2.5 bg-purple-500/10 rounded-xl text-purple-400 shrink-0 border border-purple-500/20 group-hover/item:scale-105 transition-transform duration-300">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-purple-400">Email giao thiệp sê-ri:</h4>
+                    <p className="text-slate-200 mt-1 leading-none font-sans font-medium hover:text-brand-gold transition-colors">
+                      {COMPANY_INFO.email}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 4. Hours */}
+                <div className="flex gap-4 items-start group/item">
+                  <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 shrink-0 border border-emerald-500/20 group-hover/item:scale-105 transition-transform duration-300">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-emerald-450 text-emerald-400">Giờ giao thu nhận công văn:</h4>
+                    <p className="text-slate-350 mt-1 leading-relaxed font-sans font-light text-xs">
+                      Thứ Hai – Thứ Sáu: <span className="font-medium text-slate-200">07:30 – 16:30</span><br />
+                      Thứ Bảy: <span className="font-medium text-slate-200">07:30 – 11:30</span> <span className="text-[10px] text-brand-gold italic">(Chỉ nhận sê-ri vé số khẩn)</span>
+                    </p>
+                  </div>
+                </div>
+
               </div>
 
-              {/* Security Policy Reminder */}
-              <div className="p-4 rounded-xl bg-slate-800/40 border border-white/10 flex items-start gap-3 mt-2">
-                <HelpCircle className="w-5 h-5 text-brand-gold shrink-0" />
-                <p className="text-[11px] text-slate-300 leading-normal">
-                  Lưu ý: Để phục vụ mục đích bảo mật, khách hàng khi đến làm việc trực tiếp về bản gốc thiết kế vé số vui lòng đem theo Giấy giới thiệu có mộc đỏ và Căn cước công dân khớp thông tin đăng ký.
+              {/* Google maps route navigation action button */}
+              <div className="pt-2 border-t border-white/5">
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=C%E1%BB%A5m+C%C3%B4ng+Nghi%E1%BB%87p+Nh%E1%BB%8B+Xu%C3%A2n"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-500 hover:from-yellow-500 hover:to-brand-gold text-slate-950 font-black font-display text-xs tracking-widest uppercase transition-all duration-300 shadow shadow-brand-gold/15 flex items-center justify-center gap-2 group/btn select-none cursor-pointer"
+                >
+                  <Map className="w-4 h-4 text-slate-950 group-hover/btn:rotate-12 transition-transform" />
+                  <span>XEM ĐƯỜNG ĐI TRÊN GOOGLE MAPS</span>
+                  <ArrowUpRight className="w-4 h-4 text-slate-950 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                </a>
+              </div>
+
+              {/* Security advice block inside the glass */}
+              <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl flex gap-3">
+                <HelpCircle className="w-4.5 h-4.5 text-brand-gold shrink-0 mt-0.5" />
+                <p className="text-[10.5px] text-slate-400 leading-normal font-light">
+                  <span className="font-bold text-slate-300 uppercase">Quy định bảo mật:</span> Đơn vị đến làm việc chuyển nhận phôi kẽm thiết kế gốc cần xuất trình Giấy giới thiệu có con dấu chính chủ của Tổng công ty Xổ Số cùng CCCD hợp pháp.
                 </p>
               </div>
 
-            </div>
+            </motion.div>
 
-            {/* Embedded Active Google Map Frame pointing to CCN Nhị Xuân */}
-            <div className="relative h-64 sm:h-72 border border-slate-200 rounded-2xl overflow-hidden shadow-inner bg-slate-300">
+            {/* Embedded Active Google Map Frame pointing to CCN Nhị Xuân - Upgraded design */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="relative h-72 sm:h-80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl bg-slate-900 group"
+            >
+              <div className="absolute top-4 left-4 z-20 bg-slate-950/80 border border-white/10 text-brand-gold text-[9px] font-black uppercase font-display px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Hoạt Động KCS 24/7 trực tuyến</span>
+              </div>
+
               <iframe
                 title="Bản đồ Xí nghiệp In Tài Chính - Cụm CN Nhị Xuân"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.428383321595!2d106.518602075704!3d10.85501465773822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b0200000001%3A0xe5a3c984954d2460!2zQ-G7pW0gQ8O0bmcgbmdoaeG7h3AgTmjhu4sgWHXDom4!5e0!3m2!1svi!2s!4v1716168000000!5m2!1svi!2s"
@@ -134,219 +230,233 @@ export default function Contact() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full grayscale hover:grayscale-0 transition-all duration-300"
+                className="w-full h-full grayscale contrast-125 brightness-90 hover:grayscale-0 hover:brightness-100 transition-all duration-700 pointer-events-auto"
               ></iframe>
-            </div>
+            </motion.div>
 
           </div>
 
-          {/* Interactive communications feedback/quote form (Right 7 cols) */}
-          <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col">
+          {/* ================= RIGHT COLUMN: INTERACTIVE FORM ================= */}
+          <div className="lg:col-span-7 flex flex-col">
             
-            {/* Form category selection tabs */}
-            <div className="flex gap-3 border-b border-slate-200 pb-4 mb-6">
-              <button
-                type="button"
-                onClick={() => {
-                  setFormType('contact');
-                  setIsSuccess(false);
-                }}
-                className={`flex-1 py-3 text-center border-b-2 font-display text-xs font-black tracking-widest uppercase transition-all cursor-pointer ${
-                  formType === 'contact'
-                    ? 'border-brand-blue text-brand-blue bg-blue-50/50'
-                    : 'border-transparent text-slate-500 hover:text-brand-blue hover:bg-zinc-50'
-                }`}
-              >
-                Gửi Thư Liên Hệ
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setFormType('quote');
-                  setIsSuccess(false);
-                }}
-                className={`flex-1 py-3 text-center border-b-2 font-display text-xs font-black tracking-widest uppercase transition-all cursor-pointer ${
-                  formType === 'quote'
-                    ? 'border-brand-blue text-brand-blue bg-blue-50/50'
-                    : 'border-transparent text-slate-500 hover:text-brand-blue hover:bg-zinc-50'
-                }`}
-              >
-                Yêu Cầu Báo Giá In
-              </button>
-            </div>
-
-            {isSuccess ? (
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-emerald-50/70 border border-emerald-200 rounded-xl gap-4 my-auto"
-              >
-                <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-                  <ThumbsUp className="w-8 h-8" />
-                </div>
-                <h4 className="text-base font-black text-emerald-950 font-display">GỬI YÊU CẦU THÀNH CÔNG!</h4>
-                <p className="text-xs text-emerald-800 leading-relaxed max-w-sm">
-                  Yêu cầu liên hệ / nghiệp vụ báo giá của bạn đã được chuyển tới Ban Thư ký Kỹ thuật của Xí nghiệp In Tài Chính. Chúng tôi sẽ nhanh chóng rà soát thông tin để thiết lập cuộc gọi bàn bạc chi tiết.
-                </p>
+            {/* Interactive communication wrapper glass card */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl flex-1 flex flex-col"
+            >
+              
+              {/* Tabs list with gold accents */}
+              <div className="flex gap-3 border-b border-white/5 pb-4 mb-6">
                 <button
                   type="button"
-                  onClick={() => setIsSuccess(false)}
-                  className="px-5 py-2 text-xs font-extrabold font-display bg-brand-blue hover:bg-brand-blue-dark text-white rounded transition-colors"
+                  onClick={() => {
+                    setFormType('contact');
+                    setIsSuccess(false);
+                  }}
+                  className={`flex-1 py-3 text-center border-b-2 font-display text-xs font-black tracking-widest uppercase transition-all duration-300 cursor-pointer ${
+                    formType === 'contact'
+                      ? 'border-brand-gold text-white bg-white/5'
+                      : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
+                  }`}
                 >
-                  Quay lại biểu mẫu
+                  Gửi Thư Liên Hệ
                 </button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                
-                {/* Contact Name & Phone */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                      Họ và Tên Đối Tác / Đơn Vị: <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Nguyễn Văn A"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                      Số điện thoại di động / nội bộ: <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="091 xxx xxxx hoặc 028 xxx..."
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                    />
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormType('quote');
+                    setIsSuccess(false);
+                  }}
+                  className={`flex-1 py-3 text-center border-b-2 font-display text-xs font-black tracking-widest uppercase transition-all duration-300 cursor-pointer ${
+                    formType === 'quote'
+                      ? 'border-brand-gold text-white bg-white/5'
+                      : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
+                  }`}
+                >
+                  Yêu Cầu Báo Giá In
+                </button>
+              </div>
 
-                {/* Email address */}
-                <div>
-                  <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                    Địa chỉ thư điện tử (Email):
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="partner@com.vn"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                  />
-                </div>
-
-                {/* Dynamic fields based on active tab type selection */}
-                {formType === 'contact' ? (
-                  <>
-                    {/* Subject line */}
+              {isSuccess ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-emerald-500/10 border border-emerald-500/25 rounded-2xl gap-4 my-auto"
+                >
+                  <div className="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-400/30 shadow-lg">
+                    <ThumbsUp className="w-8 h-8" />
+                  </div>
+                  <h4 className="text-base font-black text-white font-display tracking-wider uppercase">GỬI YÊU CẦU THÀNH CÔNG!</h4>
+                  <p className="text-xs text-slate-300 leading-relaxed max-w-sm">
+                    Yêu cầu thông tin báo giá đã được luân chuyển an toàn về Ban Kế hoạch Kỹ thuật của Xí nghiệp. 
+                    Chúng tôi sẽ điện thoại xác thực mã số sê-ri báo giá sớm nhất.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setIsSuccess(false)}
+                    className="px-6 py-2.5 text-xs font-black font-display bg-brand-gold hover:bg-yellow-500 text-slate-950 rounded transition-colors uppercase tracking-wider"
+                  >
+                    Quay lại biểu mẫu
+                  </button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleContactSubmit} className="space-y-5">
+                  
+                  {/* Name & phone side by side */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                        Tiêu đề Liên hệ / Sự vụ:
+                      <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                        Họ & Tên Đơn Vị/Đối Tác: <span className="text-brand-gold">*</span>
                       </label>
                       <input
                         type="text"
-                        placeholder="In vé số Tết / Thắc mắc nghiệp vụ hoa văn..."
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
+                        required
+                        placeholder="Nguyễn Văn A"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                       />
                     </div>
-
-                    {/* Content text */}
                     <div>
-                      <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                        Nội dung chi tiết:
+                      <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                        Điện thoại liên lỷ: <span className="text-brand-gold">*</span>
                       </label>
-                      <textarea
-                        rows={4}
-                        placeholder="Viết nội dung thắc mắc hoặc phản ánh ý kiến về dịch vụ của chúng tôi ở đây..."
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                      ></textarea>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Ví dụ: 091 xxx xxxx"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-mono"
+                      />
                     </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Quotation inputs */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  </div>
+
+                  {/* Mail box entry */}
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                      Địa chỉ Email đối soát:
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="business@partner.com.vn"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                    />
+                  </div>
+
+                  {/* Dynamic sections depending on form category selectors in UI */}
+                  {formType === 'contact' ? (
+                    <>
+                      {/* Topic title */}
                       <div>
-                        <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                          Phân Loại Ấn Phẩm Cần In:
-                        </label>
-                        <select
-                          value={quoteService}
-                          onChange={(e) => setQuoteService(e.target.value)}
-                          className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                        >
-                          <option value="In Vé Số Kiến Thiết">In Vé Số Kiến Thiết</option>
-                          <option value="In Vé Cào Cào Bảo Mật">In Vé Cào Cào Bảo Mật</option>
-                          <option value="In Hóa Đơn Tài Chính GTGT">In Hóa Đơn Tài Chính GTGT</option>
-                          <option value="In Chứng Từ Carbonless Nhiều Liên">In Chứng Từ Carbonless Nhiều Liên</option>
-                          <option value="In Ấn Phẩm Hologram/UV Chống Giả">In Ấn Phẩm Hologram/UV Chống Giả</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                          Số Lượng Dự Kiến (Tờ/Cuốn): <span className="text-red-500">*</span>
+                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                          Tiêu đề sự vụ và sê-ri hợp đồng:
                         </label>
                         <input
                           type="text"
-                          required
-                          placeholder="Ví dụ: 10,000 tờ hoặc 500 cuốn..."
-                          value={quoteQuantity}
-                          onChange={(e) => setQuoteQuantity(e.target.value)}
-                          className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
+                          placeholder="Mẫu vẽ số xuân hỷ / Sắp xếp bàn giao..."
+                          value={subject}
+                          onChange={(e) => setSubject(e.target.value)}
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                         />
                       </div>
-                    </div>
 
-                    {/* Requirements specifications details */}
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1 font-display">
-                        Mô tả Quy cách / Khổ in / Loại giấy (nếu có):
-                      </label>
-                      <textarea
-                        rows={4}
-                        placeholder="Hãy bổ sung quy cách mong muốn ví dụ khổ A5, Giấy carbonless 3 liên trắng-hồng-xanh, cán màng Hologram tem chống giả mộc rải rác..."
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:bg-white"
-                      ></textarea>
-                    </div>
-                  </>
-                )}
+                      {/* Content rich text letters */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                          Yêu cầu nội dung chi tiết:
+                        </label>
+                        <textarea
+                          rows={4}
+                          placeholder="Bổ sung thắc mắc nghiệp vụ thiết kế kẽm in hoặc quy cách bảo hộ tại xưởng..."
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                        ></textarea>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Dropdown service lists & expected quantity */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                            Vận Đơn Sản Phẩm Cần In:
+                          </label>
+                          <select
+                            value={quoteService}
+                            onChange={(e) => setQuoteService(e.target.value)}
+                            className="w-full px-4 py-3 text-xs bg-slate-950 border border-white/10 rounded-xl text-slate-300 focus:outline-none focus:border-brand-gold select-none"
+                          >
+                            <option value="In Vé Số Kiến Thiết">In Vé Số Kiến Thiết</option>
+                            <option value="In Vé Cào Cào Bảo Mật">In Vé Cào Cào Bảo Mật</option>
+                            <option value="In Hóa Đơn Tài Chính GTGT">In Hóa Đơn Tài Chính GTGT</option>
+                            <option value="In Chứng Từ Carbonless Nhiều Liên">In Chứng Từ Carbonless Nhiều Liên</option>
+                            <option value="In Ấn Phẩm Hologram/UV Chống Giả">In Ấn Phẩm Hologram/UV Chống Giả</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                            Sản Lượng / Số Véc-tờ Dự Kiến: <span className="text-brand-gold">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Ví dụ: 10,000 tờ hoặc 1,000 cuốn phôi..."
+                            value={quoteQuantity}
+                            onChange={(e) => setQuoteQuantity(e.target.value)}
+                            className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                          />
+                        </div>
+                      </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full py-3 text-xs font-black font-display tracking-widest text-white rounded transition-all cursor-pointer shadow uppercase flex items-center justify-center gap-2 ${
-                    isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-brand-blue hover:bg-brand-blue-dark'
-                  }`}
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  {isSubmitting ? <span>ĐANG XỬ LÝ GỬI THƯ...</span> : <span>GỬI YÊU CẦU NGAY</span>}
-                </button>
-              </form>
-            )}
+                      {/* Specs information details */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                          Phân cấp chất liệu, cán bóng & màng kẽm UV:
+                        </label>
+                        <textarea
+                          rows={4}
+                          placeholder="Mô tả các yêu cầu kĩ thuật chuyên môn: Giấy Carbonless 3 liên, số nhảy mực sê-ri nhạy nhiệt, tem vỡ hologram dán chặt gia công đóng tập..."
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                        ></textarea>
+                      </div>
+                    </>
+                  )}
 
-            {/* Quick trust metrics row inside Contact */}
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 flex-wrap gap-2">
-              <span className="flex items-center gap-1">
-                <ShieldAlert className="w-3.5 h-3.5 text-brand-gold shrink-0" /> Cam kết bảo mật dữ liệu khách hàng 100%
-              </span>
-              <span className="flex items-center gap-1">
-                <Award className="w-3.5 h-3.5 text-brand-blue shrink-0" /> Chứng nhận chuẩn ISO/IEC 27001
-              </span>
-            </div>
+                  {/* Submission triggers */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`w-full py-4 px-6 text-xs font-black font-display tracking-widest text-slate-950 rounded-xl transition-all duration-300 cursor-pointer shadow-lg uppercase flex items-center justify-center gap-2 ${
+                      isSubmitting 
+                        ? 'bg-slate-600 border border-transparent text-slate-400 cursor-not-allowed' 
+                        : 'bg-brand-gold hover:bg-yellow-500 shadow-brand-gold/10'
+                    }`}
+                  >
+                    <Send className="w-4 h-4 text-slate-950 shrink-0" />
+                    {isSubmitting ? <span>ĐANG XỬ LÝ GỬI THƯ...</span> : <span>GỬI YÊU CẦU NGHIỆP VỤ NGAY</span>}
+                  </button>
+                </form>
+              )}
+
+              {/* Verified badges */}
+              <div className="mt-8 pt-5 border-t border-white/5 flex flex-wrap items-center justify-between text-[11px] text-slate-450 gap-4">
+                <span className="flex items-center gap-1.5 font-light">
+                  <ShieldAlert className="w-4 h-4 text-brand-gold shrink-0" /> Bảo mật thông tin dòng vé tuyệt đối
+                </span>
+                <span className="flex items-center gap-1.5 font-light">
+                  <Award className="w-4 h-4 text-[#60a5fa] shrink-0" /> Chứng nhận bảo mật ISO 27001
+                </span>
+              </div>
+
+            </motion.div>
 
           </div>
 

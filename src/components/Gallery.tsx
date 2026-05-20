@@ -84,7 +84,7 @@ export default function Gallery() {
           </h2>
           <div className="w-16 h-1 bg-brand-gold rounded-full mt-3"></div>
           <p className="text-slate-500 font-sans text-xs sm:text-sm max-w-xl mt-4 leading-relaxed">
-            HÌnh ảnh thật 100% được tập hợp tại xưởng sản xuất Hóc Môn. Quy trình vận hành kiểm tra nghiêm ngặt, khép kín, tuyệt mật theo triết lý bảo toàn thông tin tối cao.
+            Hình ảnh thật 100% được tập hợp tại xưởng sản xuất Cụm CN - Khu dân cư Nhị Xuân (Xuân Thới Sơn, TP.HCM). Quy trình vận hành kiểm tra nghiêm ngặt,... KCS khép kín, tuyệt mật theo triết lý bảo toàn thông tin tối cao.
           </p>
         </div>
 

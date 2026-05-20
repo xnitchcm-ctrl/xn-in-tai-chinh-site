@@ -4,7 +4,7 @@ export const COMPANY_INFO = {
   name: 'XÍ NGHIỆP IN TÀI CHÍNH',
   parentCompany: 'CÔNG TY TNHH MTV XỔ SỐ KIẾN THIẾT TP.HCM',
   slogan: 'CHUYÊN NGHIỆP – CHÍNH XÁC – BẢO MẬT',
-  address: 'Lô A1-A2 Đường A, Cụm Công Nghiệp Nhị Xuân, Hóc Môn, TP.HCM',
+  address: 'Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, TP Hồ Chí Minh',
   phone: '028 3595 0311',
   phoneDisplay: '028 3595 0311', // Hotline format
   email: 'xnitchcm@gmail.com',

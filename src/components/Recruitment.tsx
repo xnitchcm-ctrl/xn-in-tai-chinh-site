@@ -92,7 +92,7 @@ export default function Recruitment() {
                             <DollarSign className="w-3.5 h-3.5 text-brand-gold" /> {job.salary}
                           </span>
                           <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5" /> Hóc Môn, TP.HCM
+                            <MapPin className="w-3.5 h-3.5" /> Cụm CN Nhị Xuân, TP.HCM
                           </span>
                           <span className="flex items-center gap-1">
                             <Calendar className="w-3.5 h-3.5" /> Hạn nộp: {job.deadline}
