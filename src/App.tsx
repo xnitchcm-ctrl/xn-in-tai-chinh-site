@@ -7,6 +7,7 @@ import Introduction from './components/Introduction';
 import Services from './components/Services';
 import Technology from './components/Technology';
 import Gallery from './components/Gallery';
+import NewsSection from './components/NewsSection';
 import Recruitment from './components/Recruitment';
 import Contact from './components/Contact';
 import CompanyFooter from './components/CompanyFooter';
@@ -22,11 +23,39 @@ export default function App() {
   const [preselectedService, setPreselectedService] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
 
+  // HTML5 History pathing state
+  const [currentPage, setCurrentPage] = useState<'home' | 'news'>(() => {
+    if (typeof window !== 'undefined' && window.location.pathname === '/tin-tuc-hoat-dong') {
+      return 'news';
+    }
+    return 'home';
+  });
+  const [selectedNewsCategory, setSelectedNewsCategory] = useState<string | null>(null);
+
+  // Sync back/forward browser navigation buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      if (window.location.pathname === '/tin-tuc-hoat-dong') {
+        setCurrentPage('news');
+        setActiveSection('news');
+      } else {
+        setCurrentPage('home');
+        setActiveSection('hero');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   // IntersectionObserver to dynamically highlight active sticky menu link on scroll
   useEffect(() => {
     const sections = ['hero', 'about', 'org-chart', 'services', 'technology', 'gallery', 'recruitment', 'contact'];
     
     const handleScrollActiveLink = () => {
+      if (currentPage === 'news') {
+        setActiveSection('news');
+        return;
+      }
       const scrollPos = window.scrollY + 200; // Offset for sticky menu height
       
       // Determine if back to top toggle is visible
@@ -51,19 +80,34 @@ export default function App() {
 
     window.addEventListener('scroll', handleScrollActiveLink);
     return () => window.removeEventListener('scroll', handleScrollActiveLink);
-  }, []);
+  }, [currentPage]);
 
-  // Standard smooth navigation trigger
-  const handleNavigate = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      const offsetTop = el.offsetTop - (sectionId === 'hero' ? 0 : 120); // Accounting for double-tier header
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth',
-      });
-      setActiveSection(sectionId);
+  // Standard smooth navigation trigger supporting paths pre-selected categories filters
+  const handleNavigate = (sectionId: string, category?: string) => {
+    if (sectionId === 'news') {
+      setCurrentPage('news');
+      setSelectedNewsCategory(category || 'All');
+      setActiveSection('news');
+      window.history.pushState({}, '', '/tin-tuc-hoat-dong');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
+
+    // Switch to home root if clicked other menus
+    setCurrentPage('home');
+    window.history.pushState({}, '', '/');
+    setActiveSection(sectionId);
+
+    setTimeout(() => {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        const offsetTop = el.offsetTop - (sectionId === 'hero' ? 0 : 120); // Accounting for double-tier header
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
   };
 
   const handleOpenQuoteWithService = (serviceTitle: string) => {
@@ -88,7 +132,9 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans antialiased overflow-x-hidden">
+      <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden transition-all duration-300 ${
+        currentPage === 'news' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-800'
+      }`}>
         
         {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
         <Header 
@@ -104,83 +150,91 @@ export default function App() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="flex-1 w-full flex flex-col"
         >
-          
-          {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
-          <div id="hero">
-            <HeroSlider 
-              onLearnMore={handleNavigate} 
-              openQuoteModal={handleOpenGeneralQuote} 
+          {currentPage === 'news' ? (
+            <NewsSection 
+              onBackToHome={() => handleNavigate('hero')}
+              preSelectedCategory={selectedNewsCategory}
             />
-          </div>
+          ) : (
+            <>
+              {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
+              <div id="hero">
+                <HeroSlider 
+                  onLearnMore={handleNavigate} 
+                  openQuoteModal={handleOpenGeneralQuote} 
+                />
+              </div>
 
-          {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
-          <motion.div 
-            id="about"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Introduction />
-          </motion.div>
+              {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
+              <motion.div 
+                id="about"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Introduction />
+              </motion.div>
 
-          {/* SƠ ĐỒ TỔ CHỨC CORPORATE PREMIUM */}
-          <OrgChart />
+              {/* SƠ ĐỒ TỔ CHỨC CORPORATE PREMIUM */}
+              <OrgChart />
 
-          {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
-          <motion.div 
-            id="services"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
-          </motion.div>
+              {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
+              <motion.div 
+                id="services"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
+              </motion.div>
 
-          {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
-          <motion.div 
-            id="technology"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Technology />
-          </motion.div>
+              {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
+              <motion.div 
+                id="technology"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Technology />
+              </motion.div>
 
-          {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
-          <motion.div 
-            id="gallery"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Gallery />
-          </motion.div>
+              {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
+              <motion.div 
+                id="gallery"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Gallery />
+              </motion.div>
 
-          {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
-          <motion.div 
-            id="recruitment"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Recruitment />
-          </motion.div>
+              {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
+              <motion.div 
+                id="recruitment"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Recruitment />
+              </motion.div>
 
-          {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
-          <motion.div 
-            id="contact"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Contact />
-          </motion.div>
+              {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
+              <motion.div 
+                id="contact"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Contact />
+              </motion.div>
+            </>
+          )}
 
         </motion.main>
 

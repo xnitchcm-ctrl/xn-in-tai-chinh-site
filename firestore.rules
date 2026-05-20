@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Core validator helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+    
+    function isValidNews(data) {
+      return data.keys().hasAll(['title', 'category', 'content', 'isPinned', 'createdAt'])
+          && data.title is string && data.title.size() >= 2 && data.title.size() <= 256
+          && data.category is string && data.category.size() >= 2 && data.category.size() <= 100
+          && data.content is string && data.content.size() >= 2 && data.content.size() <= 500000
+          && data.isPinned is bool
+          && (data.subtitle == null || (data.subtitle is string && data.subtitle.size() <= 1024))
+          && (data.imageUrl == null || (data.imageUrl is string && data.imageUrl.size() <= 15000000))
+          && (data.videoUrl == null || (data.videoUrl is string && data.videoUrl.size() <= 15000000))
+          && (data.author == null || (data.author is string && data.author.size() <= 128));
+    }
+
+    match /news/{newsId} {
+      // News posts can be read by anyone (public website)
+      allow read, list: if true;
+      
+      // Writes must have complete static validation structure
+      allow create: if isValidNews(incoming()) && isValidId(newsId);
+      allow update: if isValidNews(incoming()) && isValidId(newsId);
+      allow delete: if true;
+    }
+  }
+}

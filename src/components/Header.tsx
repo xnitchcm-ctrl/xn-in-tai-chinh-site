@@ -22,13 +22,14 @@ import {
   Award,
   Home,
   Image as ImageIcon,
-  Users
+  Users,
+  FileText
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 
 interface HeaderProps {
   activeSection: string;
-  onNavigate: (sectionId: string) => void;
+  onNavigate: (sectionId: string, category?: string) => void;
   openQuoteModal: () => void;
 }
 
@@ -37,7 +38,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
   const [isSticky, setIsSticky] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNotification, setSearchNotification] = useState('');
-  const [activeDropdown, setActiveDropdown] = useState<'services' | 'about' | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<'services' | 'about' | 'news' | null>(null);
 
   // Scroll handler to make navbar sticky on page scroll
   useEffect(() => {
@@ -58,12 +59,13 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
     { id: 'services', label: 'DỊCH VỤ IN', hasDropdown: true, dropdownType: 'services' as const },
     { id: 'technology', label: 'CÔNG NGHỆ' },
     { id: 'gallery', label: 'THƯ VIỆN' },
+    { id: 'news', label: 'TIN TỨC - HOẠT ĐỘNG', hasDropdown: true, dropdownType: 'news' as const },
     { id: 'recruitment', label: 'TUYỂN DỤNG' },
     { id: 'contact', label: 'LIÊN HỆ' },
   ];
 
-  const handleNavClick = (id: string, subSubid?: string) => {
-    onNavigate(id);
+  const handleNavClick = (id: string, subSubid?: string, category?: string) => {
+    onNavigate(id, category);
     setActiveDropdown(null);
     setIsMenuOpen(false);
     
@@ -93,6 +95,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
       case 'services': return <Ticket className="w-4 h-4" />;
       case 'technology': return <Cpu className="w-4 h-4" />;
       case 'gallery': return <ImageIcon className="w-4 h-4" />;
+      case 'news': return <FileText className="w-4 h-4" />;
       case 'recruitment': return <Users className="w-4 h-4" />;
       case 'contact': return <Mail className="w-4 h-4" />;
       default: return <Building className="w-4 h-4" />;
@@ -106,6 +109,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
       case 'services': return 'Vé số, hóa đơn & biểu mẫu bảo mật';
       case 'technology': return 'Máy móc nhập khẩu Đức & Nhật';
       case 'gallery': return 'Thành phẩm & Hình ảnh nhà xưởng';
+      case 'news': return 'Cập nhật hoạt động sản xuất, đoàn thể';
       case 'recruitment': return 'Cơ hội phát triển nghề nghiệp';
       case 'contact': return 'Hợp tác in ấn & Địa chỉ và Bản đồ';
       default: return '';
@@ -371,7 +375,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                             <span className="text-[9px] text-blue-700 font-bold uppercase hover:underline cursor-pointer" onClick={openQuoteModal}>In thử mẫu ngay</span>
                           </div>
                         </motion.div>
-                      ) : (
+                      ) : link.dropdownType === 'about' ? (
                         <motion.div
                           initial={{ opacity: 0, y: 15 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -434,6 +438,44 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                                 <p className="text-[9px] text-slate-400 mt-0.5 font-light">Mô hình phân tầng cơ sở khép kín</p>
                               </div>
                             </div>
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 15 }}
+                          transition={{ duration: 0.25, ease: 'easeOut' }}
+                          className="w-[330px] bg-slate-950 text-white rounded-xl shadow-2xl overflow-hidden border border-slate-800/80 p-4"
+                        >
+                          <div className="border-b border-white/10 pb-2 mb-2 flex items-center justify-between">
+                            <h3 className="text-[10px] font-black tracking-widest text-[#DCA92A] uppercase font-display">CHUYÊN MỤC TIN TỨC - HOẠT ĐỘNG</h3>
+                            <span className="text-[8px] bg-brand-gold/15 text-brand-gold border border-brand-gold/20 px-2 py-0.5 rounded uppercase font-black tracking-wider">Tin Mới</span>
+                          </div>
+                          <div className="space-y-1.5 pt-1">
+                            {[
+                              { label: "Hoạt động sản xuất", desc: "Tiến độ kỹ thuật in, sê-ri & KCS", color: "text-blue-400 bg-blue-500/10" },
+                              { label: "Hoạt động đoàn thể", desc: "Đại hội công đoàn, phong trào & giải thể thao", color: "text-indigo-400 bg-indigo-500/10" },
+                              { label: "Thi đua - Khen thưởng", desc: "Tôn vinh cống hiến & cá nhân xuất sắc", color: "text-amber-400 bg-amber-500/10" },
+                              { label: "Công nghệ in mới", desc: "Đón đầu dây chuyền sấy Heidelberg Đức", color: "text-emerald-400 bg-emerald-500/10" },
+                              { label: "Thông báo doanh nghiệp", desc: "Thông cáo hành chính và văn kiện pháp chế", color: "text-rose-400 bg-rose-500/10" },
+                              { label: "Văn hoá doanh nghiệp", desc: "Giá trị cốt lõi, thiện nguyện vì xã hội", color: "text-cyan-400 bg-cyan-500/10" },
+                            ].map((item) => (
+                              <div 
+                                key={item.label}
+                                onClick={() => handleNavClick('news', undefined, item.label)}
+                                className="group/item flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/5"
+                              >
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-display font-black text-xs ${item.color}`}>
+                                  {item.label.substring(0, 2).toUpperCase()}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-xs font-bold text-white group-hover/item:text-brand-gold transition-colors leading-tight">{item.label}</h4>
+                                  <p className="text-[9px] text-slate-400 font-light mt-0.5 leading-none transition-colors group-hover/item:text-slate-200">{item.desc}</p>
+                                </div>
+                                <ArrowRight className="w-3.5 h-3.5 text-slate-600 opacity-0 group-hover/item:opacity-100 group-hover/item:text-brand-gold transition-all group-hover/item:translate-x-1" />
+                              </div>
+                            ))}
                           </div>
                         </motion.div>
                       )}

@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "NewsPost": {
+      "title": "NewsPost",
+      "description": "Represents a corporate news post or activity update for the enterprise website.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "videoUrl": {
+          "type": "string"
+        },
+        "isPinned": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "author": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "content", "category", "isPinned", "createdAt"]
+    }
+  },
+  "firestore": {
+    "news/{newsId}": {
+      "schema": "NewsPost",
+      "description": "Collection of corporate news, activities, announcements, and print technology updates."
+    }
+  }
+}
