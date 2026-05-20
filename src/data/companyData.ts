@@ -22,73 +22,45 @@ export const STATISTICS = [
 
 export const SERVICE_ITEMS: ServiceItem[] = [
   {
-    id: 'in-ve-so',
-    title: 'IN VÉ SỐ TRUYỀN THỐNG & TỰ CHỌN',
-    shortDesc: 'Công nghệ hiện đại, màu sắc sắc nét, chống giả hiệu quả.',
-    longDesc: 'Dịch vụ in vé số kiến thiết truyền thống, vé số tự chọn, vé cào biết đổi số sê-ri tự động có độ tin cậy tuyệt đối. 100% sản phẩm được in trên giấy chống giả cao cấp có vân chìm chéo độc quyền của Xổ Số TP.HCM.',
+    id: 'in-ve-so-kts',
+    title: 'In Vé Số Kiến Thiết KTS',
+    shortDesc: 'Vé số kiến thiết bằng máy in KTS hiện đại kèm mã vạch 2 chiều tích hợp số dự thưởng.',
+    longDesc: 'Xí nghiệp sở hữu giải pháp in vé số kiến thiết bằng máy in KTS hiện đại tích hợp dữ liệu biến đổi thời gian thực. Toàn bộ vé số được tích hợp mã vạch 2 chiều (QR Code/DataMatrix) mã hóa chuỗi số dự thưởng, đảm bảo tính minh bạch, chính xác tuyệt đối, dễ dàng tra cứu tự động và ngăn chặn triệt để mọi nguy cơ làm giả.',
     image: '/src/assets/images/lottery_sheet_1779242696323.png',
     iconName: 'Ticket',
     bullets: [
-      'In số sê-ri nhảy biến đổi bằng công nghệ laser tốc độ cao',
-      'Ứng dụng mực in nhạy nhiệt (biến mất hoặc đổi màu dưới xúc tác nhiệt)',
-      'Thiết kế họa tiết hoa văn phức tạp độc quyền khó dựng lại bằng máy scan',
-      'Hệ thống kiểm đếm và ép đóng bó tự động niêm phong',
+      'In số sê-ri nhảy biến đổi bằng công nghệ laser kỹ thuật số siêu tốc',
+      'Tích hợp mã vạch 2 chiều (QR code) chứa thông tin số dự thưởng mã hóa',
+      'Thiết kế họa tiết Guilloche vân chống giả đa màu sắc độc quyền',
+      'Hệ thống đóng bó, kiểm đếm và ép niêm phong bằng màng co tự động'
     ]
   },
   {
-    id: 'in-chung-tu',
-    title: 'IN CHỨNG TỪ TÀI CHÍNH & HÓA ĐƠN',
-    shortDesc: 'Chứng từ tài chính, hóa đơn thuế, độ tin cậy tuyệt đối.',
-    longDesc: 'Xí nghiệp in chuyên cung cấp giải pháp in ấn các loại biểu mẫu carbonless tự nhân bản, hóa đơn VAT kế toán, phiếu thu chi, biên nhận ngân hàng chất lượng cao, giữ màu liên tục dài lâu.',
+    id: 'in-ve-so-cao',
+    title: 'In Vé Số Cào',
+    shortDesc: 'Vé số cào trên hệ thống thiết bị hiện đại, bảo mật tuyệt đối, chống soi chiếu.',
+    longDesc: 'Quy trình in vé số cào được thực hiện khép kín trên hệ thống thiết bị phủ latex nhôm hiện đại, bảo đảm độ che phủ 100%, dễ cào nhưng tuyệt đối chống soi dưới mọi cường độ ánh sáng. Các mã số trúng thưởng và chuỗi số bảo mật được mã hóa ngẫu nhiên bằng thuật toán phần mềm chuyên dụng của ngành tài chính.',
+    image: '/src/assets/images/security_lens_1779242712535.png',
+    iconName: 'Cpu',
+    bullets: [
+      'Lớp phủ cào latex nhôm cao cấp siêu mịn, chống lột và chống soi sáng',
+      'Mã sê-ri biến thiên và mã PIN được sinh ngẫu nhiên bảo mật 100%',
+      'In công nghệ nhiều lớp chống giả lập và chống can thiệp vật lý',
+      'Kiểm duyệt và hủy phế phẩm lỗi tự động nghiêm ngặt bằng camera AI'
+    ]
+  },
+  {
+    id: 'in-chung-tu-tai-chinh',
+    title: 'In Chứng Từ & Biểu Mẫu Tài Chính',
+    shortDesc: 'Chứng từ, biểu mẫu, hóa đơn đỏ, và các ấn phẩm khác của ngành tài chính.',
+    longDesc: 'Chuyên cung cấp dịch vụ in ấn các loại chứng từ thuế, hóa đơn tự in có ký hiệu, biên lai phí/lệ phí, phiếu thu chi kế toán và các biểu mẫu carbonless đa liên tự nhân bản. Sản phẩm sử dụng mực in chống trôi và giấy nhập khẩu chất lượng cao đảm bảo lưu trữ thông tin bền bỉ theo thời gian.',
     image: '/src/assets/images/invoice_docs_1779242750401.png',
     iconName: 'FileSpreadsheet',
     bullets: [
-      'Giấy carbonless nhập khẩu cao cấp cho trải nghiệm viết nhạy bén',
-      'In liên tục từ 2 đến 5 liên khác màu chuẩn xác nét chữ',
-      'Răng cưa gờ xé micro-perforation bén ngắt, rạch ròi',
-      'Kiểm soát mã vạch và số nhảy liên tục không trùng lặp lỗi'
-    ]
-  },
-  {
-    id: 'in-bao-mat',
-    title: 'IN ẤN BẢO MẬT CHẤT LƯỢNG CAO',
-    shortDesc: 'Giải pháp in bảo mật đáp ứng tiêu chuẩn nhà nước khắt khe.',
-    longDesc: 'Sử dụng các công nghệ bảo an tiền tệ và chứng chỉ cao cấp của Ngân hàng nhà nước Việt Nam, bao gồm in mực phản quang vô hình, dập nóng màng Hologram óng ánh, ký hiệu siêu nhỏ chỉ đọc được dưới kính lúp chuyên dụng.',
-    image: '/src/assets/images/security_lens_1779242712535.png',
-    iconName: 'ShieldAlert',
-    bullets: [
-      'Họa tiết nền bảo an Guilloche cong tròn toán học siêu nét',
-      'Mực phát quang dưới đèn UV bước sóng hồng cực ngắn',
-      'Tem Hologram 3D chống giả dán chặt bằng nhiệt cơ học',
-      'Ký tự hiển vi độ phân giải cực cao khó photocopy'
-    ]
-  },
-  {
-    id: 'gia-cong-sau-in',
-    title: 'GIA CÔNG THÀNH PHẨM SAU IN',
-    shortDesc: 'Cắt, đóng số, đóng tập, co màng bảo vệ tự động hoàn toàn.',
-    longDesc: 'Chúng tôi sở hữu dây chuyền khép kín tự động hóa sau in. Bao gồm hệ thống xén lập trình máy tính kỹ thuật số, đóng bìa ghim cơ khí lực lớn, gấp và dán thùng carton hoàn thiện, đai bảo vệ kiên cố chống ẩm mốc.',
-    image: '/src/assets/images/post_press_1779242727987.png',
-    iconName: 'Cpu',
-    bullets: [
-      'Sử dụng máy cắt CNC tốc độ cao thương hiệu Polar của Đức',
-      'Đóng tập đục lỗ gấp nếp góc cơ khí năng suất 200,000 cuốn/ngày',
-      'Hút chân không, đóng màng co nhiệt giúp sản phẩm luôn sáng mới',
-      'Dán mác QR code quản lý lô hàng và bảo mật vị trí vận chuyển'
-    ]
-  },
-  {
-    id: 'kiem-soat-kcs',
-    title: 'KIỂM SOÁT CHẤT LƯỢNG (KCS)',
-    shortDesc: 'Quy trình kiểm soát chặt chẽ từng con số, đảm bảo sản phẩm đạt chuẩn.',
-    longDesc: 'Áp dụng bộ tiêu chuẩn quản lý chất lượng quốc tế ISO 9001:2015 khắt khe nhất. Mỗi tờ in vé số và chứng từ đều trải qua quy trình kiểm soát KCS 3 tầng: quét sensor quang học tự động, kiểm tra ngoại quan thủ công, và nghiệm thu chất lượng bàn giao.',
-    image: '/src/assets/images/quality_control_1779242766739.png',
-    iconName: 'CheckSquare',
-    bullets: [
-      'Trực tiếp giám sát tỷ lệ lệch màu dE dưới 1.0 bằng quang phổ kế',
-      'Hủy thủ tiêu toàn bộ phế phẩm lỗi in bảo mật theo biên bản hội đồng',
-      'Hệ thống camera AI phát hiện đứt nét sê-ri ở vận tốc 500m/phút',
-      'Lưu mẫu đối chứng nghiêm ngặt trong hệ thống kho bảo an cứu hộ'
+      'Sử dụng giấy Carbonless tự sao cao cấp, nét viết nhạy bén và rõ ràng',
+      'In liên tục từ 2 đến 5 liên khác màu với độ đồng màu và chính xác cao',
+      'Đường xé răng cưa micro-perforation cực mịn, dễ xé rời không rách',
+      'Hệ thống quản lý chuỗi số nhảy hóa đơn (red numbers) nghiêm ngặt'
     ]
   }
 ];
