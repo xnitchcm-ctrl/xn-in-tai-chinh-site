@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React from 'react';
+import { motion } from 'motion/react';
 import { 
   UserCheck, 
   Users, 
@@ -9,173 +9,103 @@ import {
   Printer, 
   Sliders, 
   Package, 
-  ShieldCheck, 
-  Sparkles, 
   Cpu, 
-  Clock, 
-  HelpCircle,
-  Building,
-  Target,
-  ChevronDown,
-  ChevronUp,
-  Award
+  Building2,
+  Boxes,
+  Compass
 } from 'lucide-react';
 
-interface DepartmentNode {
-  id: string;
-  role: string;
-  name: string;
-  leaderTitle: string;
-  icon: React.ReactNode;
-  benefits?: string[];
-  tasks: string[];
-  color: string;
-}
-
 export default function OrgChart() {
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
-
-  // Exquisite corporate nodes data structure
-  const directorNode: DepartmentNode = {
-    id: 'giamdoc',
-    role: 'GIÁM ĐỐC BAN ĐIỀU HÀNH',
-    name: 'Đại Diện Pháp Luật & Tổng Chỉ Huy',
-    leaderTitle: 'Phụ trách toàn diện chiến lược, kinh doanh và bảo mật hệ thống nhà nước.',
+  // Director Node
+  const directorNode = {
+    role: 'BAN GIÁM ĐỐC',
+    name: 'GIÁM ĐỐC',
     icon: <UserCheck className="w-6 h-6 text-brand-gold" />,
-    tasks: [
-      'Chỉ đạo hoạch định chiến lược kinh doanh trung và dài hạn.',
-      'Chịu trách nhiệm tối cao về an ninh in ấn & tiêu chuẩn bảo mật nhà nước.',
-      'Phê duyệt các dự án đầu tư máy móc công nghệ Đức & Nhật.',
-      'Quản trị dòng tài chính phát triển của doanh nghiệp.'
-    ],
-    color: 'border-brand-gold shadow-[0_0_20px_rgba(220,169,42,0.25)]'
+    color: 'border-brand-gold/50 shadow-[0_0_25px_rgba(220,169,42,0.12)] bg-slate-900/90 hover:border-brand-gold hover:shadow-[0_0_30px_rgba(220,169,42,0.2)]'
   };
 
-  const deputyDirectorNode: DepartmentNode = {
-    id: 'phogiamdoc',
-    role: 'PHÓ GIÁM ĐỐC KỸ THUẬT & SẢN XUẤT',
-    name: 'Quản Trị Vận Hành & Khép Kín Hệ Thống',
-    leaderTitle: 'Trực tiếp giám sát chất lượng KCS, tiến độ Offset và phối hợp các phân xưởng.',
-    icon: <Users className="w-6 h-6 text-[#60a5fa]" />,
-    tasks: [
-      'Điều phối trực tiếp hoạt động 4 xưởng sản xuất chủ lực.',
-      'Kiểm soát quy trình kiểm định chất lượng sản phẩm KCS 3 khối.',
-      'Phát triển nguồn lực nhân sự, định mức kỹ thuật chuyên sâu.',
-      'Giám sát an toàn thông tin sê-ri chống trùng lắp bí mật quốc gia.'
-    ],
-    color: 'border-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.15)]'
+  // Deputy Director Node
+  const deputyDirectorNode = {
+    role: 'BAN GIÁM ĐỐC',
+    name: 'PHÓ GIÁM ĐỐC',
+    icon: <Users className="w-6 h-6 text-blue-400" />,
+    color: 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.1)] bg-slate-900/90 hover:border-blue-450 hover:shadow-[0_0_25px_rgba(59,130,246,0.2)]'
   };
 
-  // Administration, account support branches of general org
-  const administrationNodes: DepartmentNode[] = [
+  // 2 Administration Departments (Placed Bottom Left)
+  const administrationNodes = [
     {
       id: 'ketoan',
-      role: 'PHÒNG KẾ TOÁN - NGHIỆP VỤ',
-      name: 'Phòng Kế Toán - Nghiệp Vụ Kinh Doanh',
-      leaderTitle: 'Kế toán trưởng & Đội ngũ chuyên viên báo giá',
+      tag: 'PHÒNG NGHIỆP VỤ',
+      name: 'Phòng Kế toán - Nghiệp vụ kinh doanh',
       icon: <Calculator className="w-5 h-5 text-emerald-400" />,
-      tasks: [
-        'Lập dự toán chi phí, lập bảng chào giá in chính xác.',
-        'Quản lý hợp đồng bảo mật, sê-ri vé số phát hành toàn quốc.',
-        'Kết toán tài chính minh bạch cho các công ty Xổ số Kiến thiết.'
-      ],
-      color: 'border-emerald-500/50 hover:border-emerald-400'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(52,211,153,0.15)] hover:border-emerald-400/60'
     },
     {
       id: 'hanhchinh',
-      role: 'PHÒNG HÀNH CHÍNH - TỔ CHỨC',
-      name: 'Phòng Hành Chính - Tổ Chức Nhân Sự',
-      leaderTitle: 'Trưởng phòng Nhân sự & Quản trị văn phòng',
+      tag: 'PHÒNG NGHIỆP VỤ',
+      name: 'Phòng Hành chính - Tổ chức',
       icon: <Briefcase className="w-5 h-5 text-purple-400" />,
-      tasks: [
-        'Tuyển dụng & đào tạo thợ in có tay nghề chuyên sâu.',
-        'Tổ chức kiểm đới an ninh nhà xưởng thực tế hành chính.',
-        'Đảm bảo quy chuẩn bảo hộ lao động và chính sách phúc lợi.'
-      ],
-      color: 'border-purple-500/50 hover:border-purple-400'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(192,132,252,0.15)] hover:border-purple-400/60'
     }
   ];
 
-  // Heavy duty machinery printing branches
-  const workshopNodes: DepartmentNode[] = [
+  // 4 Workshops (Placed Bottom Right)
+  const workshopNodes = [
     {
       id: 'cheban',
-      role: 'PHÂN XƯỞNG CHẾ BẢN',
-      name: 'Quy Trình Chế Bản Thượng Hạng',
-      leaderTitle: 'Đội trưởng kỹ thuật & Chuyên viên CTP',
+      tag: 'PHÂN XƯỞNG SẢN XUẤT',
+      name: 'Phân xưởng Chế bản',
       icon: <Layers className="w-5 h-5 text-amber-500" />,
-      tasks: [
-        'Tiếp nhận file thiết kế gốc & ra kẽm CTP bảo mật cao.',
-        'Thiết lập thông số sê-ri mã hóa số nhảy tự động.',
-        'Cung cấp bản mẫu kỹ thuật duyệt khối chuẩn KCS trước khi in offset.'
-      ],
-      color: 'border-amber-400/50 hover:border-amber-300'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:border-amber-500/60'
     },
     {
       id: 'offset',
-      role: 'PHÂN XƯỞNG OFFSET',
-      name: 'Dây Chuyền In Offset Tốc Độ Cao',
-      leaderTitle: 'Đội trưởng vận hành dòng máy Heidelberg Đức',
+      tag: 'PHÂN XƯỞNG SẢN XUẤT',
+      name: 'Phân xưởng In Offset',
       icon: <Printer className="w-5 h-5 text-sky-400" />,
-      tasks: [
-        'In offset chính xác chồng màu lót và lưới phản quang.',
-        'Điện toán hóa mực thông minh chống mờ nhòe chống nước.',
-        'Giám sát vận hành máy 24/7 đạt hiệu suất hàng vạn tờ/giờ.'
-      ],
-      color: 'border-sky-400/50 hover:border-sky-300'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(56,189,248,0.15)] hover:border-sky-400/60'
     },
     {
       id: 'batnhap',
-      role: 'PHÂN XƯỞNG BẮT NHÁP CẶP',
-      name: 'Kiểm Đếm & Bắt Nháp Cặp Số Nhảy',
-      leaderTitle: 'Tổ cơ cấu so khớp logic sê-ri điện tử',
+      tag: 'PHÂN XƯỞNG SẢN XUẤT',
+      name: 'Phân xưởng Bắt nhấp cặp',
       icon: <Sliders className="w-5 h-5 text-pink-400" />,
-      tasks: [
-        'Ghép cặp, bắt nháp xếp chồng đúng thứ tự sê-ri kín.',
-        'Loại bỏ lập tức các trang in hỏng, lệch mực hoặc sọc nhạt.',
-        'Đảm bảo không xảy ra trùng lắp số nhảy hoặc mất sê-ri.'
-      ],
-      color: 'border-pink-400/50 hover:border-pink-300'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(244,114,182,0.15)] hover:border-pink-400/60'
     },
     {
       id: 'thanhpham',
-      role: 'PHÂN XƯỞNG THÀNH PHẨM',
-      name: 'Đóng Gói Thành Phẩm & Khóa Niêm',
-      leaderTitle: 'Tổ đóng gói bao bì & Kỹ thuật cắt xén Đức Polar',
+      tag: 'PHÂN XƯỞNG SẢN XUẤT',
+      name: 'Phân xưởng Thành phẩm',
       icon: <Package className="w-5 h-5 text-indigo-400" />,
-      tasks: [
-        'Xén góc phẳng tuyệt đối bằng dao lập trình Polar hiện đại.',
-        'Điện tử hóa niêm ròng, đóng bó và co màng nhiệt bảo ôn.',
-        'Vận chuyển xe chuyên dụng an toàn tuyệt mật về kho bàn giao.'
-      ],
-      color: 'border-indigo-400/50 hover:border-indigo-300'
+      glowColor: 'hover:shadow-[0_0_20px_rgba(129,140,248,0.15)] hover:border-indigo-400/60'
     }
   ];
 
   return (
-    <section id="org-chart" className="w-full bg-slate-950 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section id="org-chart" className="w-full bg-slate-950 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden select-none">
       
-      {/* High-end decorative overlays (corporate gradient) */}
-      <div className="absolute inset-0 bg-radial-gradient from-blue-900/10 via-slate-950/10 to-transparent pointer-events-none" />
-      <span className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      {/* Dynamic tech-grid background patterning */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/40 to-slate-950 pointer-events-none" />
 
-      {/* Decorative Gold & Blue Neon blur clouds, representing tech corporate vibe */}
-      <span className="absolute top-10 right-10 w-[450px] h-[450px] bg-brand-blue/15 rounded-full blur-[140px] pointer-events-none" />
-      <span className="absolute bottom-10 left-10 w-[350px] h-[350px] bg-brand-gold/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Corporate high-end gold & deep blue ambient lighting highlights */}
+      <span className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[130px] pointer-events-none" />
+      <span className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-brand-gold/5 rounded-full blur-[100px] pointer-events-none" />
+      <span className="absolute top-10 right-10 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* SECTION HEADER BLOCK */}
-        <div className="text-center flex flex-col items-center mb-16 relative z-15">
+        <div className="text-center flex flex-col items-center mb-20">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-brand-gold text-[10px] uppercase font-black font-display tracking-widest mb-4"
+            className="flex items-center gap-2 px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-full text-brand-gold text-[10px] uppercase font-black font-display tracking-widest mb-4"
           >
             <Cpu className="w-3.5 h-3.5 text-brand-gold animate-pulse" />
-            <span>Kết Kấu Quản Trị Hệ Thống Doanh Nghiệp Nhà Nước</span>
+            <span>Xí nghiệp In Bản đồ và Tranh ảnh có tên bộ</span>
           </motion.div>
 
           <motion.h2 
@@ -187,531 +117,249 @@ export default function OrgChart() {
             SƠ ĐỒ TỔ CHỨC
           </motion.h2>
           
-          <div className="w-16 h-1.5 bg-gradient-to-r from-brand-gold to-yellow-500 rounded-full mt-4 mb-4" />
-          
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-slate-450 font-sans text-xs sm:text-sm max-w-2xl text-center leading-relaxed text-slate-400"
-          >
-            Quy chuẩn quản lý nhân sự đa tầng, khép kín từ Ban giám đốc tài ba đến các bộ phận phân xưởng. 
-            Đảm bảo tính chịu trách nhiệm tuyệt đối, tăng cường KCS chuẩn mực quốc tế và bảo vệ an ninh thông tin.
-          </motion.p>
+          <div className="w-16 h-1 bg-gradient-to-r from-brand-gold via-yellow-500 to-amber-600 rounded-full mt-4" />
         </div>
 
-        {/* CLICK NOTIFICATION PROMPT ACCORD */}
-        <div className="text-center mb-4 block lg:hidden">
-          <span className="text-[10px] text-brand-gold/80 italic font-medium">👉 Nhấp vào từng phòng ban để xem chi tiết nghiệp vụ sản xuất</span>
-        </div>
-
-        {/* ================= DESKTOP TREE VIEW (Visible on lg screening) ================= */}
-        <div className="hidden lg:flex flex-col items-center relative z-20 pb-16">
+        {/* ================= DESKTOP TREE VIEW (Visible on lg screens) ================= */}
+        <div className="hidden lg:flex flex-col items-center w-full relative z-20 pb-4">
           
           {/* TIER 1: GIÁM ĐỐC */}
           <div className="flex flex-col items-center relative w-full mb-8">
             <motion.div
-              whileHover={{ 
-                scale: 1.03, 
-                boxShadow: '0 0 35px rgba(220, 169, 42, 0.35)' 
-              }}
-              onHoverStart={() => setHoveredNode(directorNode.id)}
-              onHoverEnd={() => setHoveredNode(null)}
-              onClick={() => setSelectedNode(selectedNode === directorNode.id ? null : directorNode.id)}
-              className={`w-[450px] p-6 rounded-2xl bg-slate-900/80 border text-left cursor-pointer transition-all duration-300 relative overflow-hidden backdrop-blur-md ${directorNode.color} group`}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className={`w-[320px] p-5 rounded-xl border text-center transition-all duration-300 relative overflow-hidden backdrop-blur-md ${directorNode.color} group`}
             >
-              {/* Gold light corner sweep */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 blur-2xl pointer-events-none group-hover:bg-brand-gold/15 transition-all" />
-              
-              <div className="flex items-start gap-4">
-                <div className="p-3.5 bg-brand-gold/15 rounded-xl border border-brand-gold/30 shrink-0 text-brand-gold shadow-[0_0_15px_rgba(220,169,42,0.1)] group-hover:scale-105 transition-transform">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-gold/5 blur-xl pointer-events-none group-hover:bg-brand-gold/10 transition-all" />
+              <div className="flex flex-col items-center gap-3">
+                <div className="p-3 bg-brand-gold/10 rounded-xl border border-brand-gold/20 text-brand-gold shrink-0">
                   {directorNode.icon}
                 </div>
-                <div className="flex-1">
-                  <span className="text-[10px] font-black tracking-widest text-brand-gold uppercase font-display leading-none">
+                <div>
+                  <span className="text-[9px] font-black tracking-widest text-brand-gold/85 uppercase font-display block leading-none mb-1">
                     {directorNode.role}
                   </span>
-                  <h3 className="text-base font-black text-white font-display mt-1.5 uppercase tracking-wide">
+                  <h3 className="text-xl font-black text-white font-display uppercase tracking-wide">
                     {directorNode.name}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed font-sans font-light">
-                    {directorNode.leaderTitle}
-                  </p>
-                  
-                  {/* Expand tasks indicator */}
-                  <div className="mt-3 flex items-center gap-1 text-[10px] text-brand-gold font-bold">
-                    <span>{selectedNode === directorNode.id ? 'Thu gọn thông tin' : 'Xem nhiệm vụ cốt lõi'}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${selectedNode === directorNode.id ? 'rotate-180' : ''}`} />
-                  </div>
                 </div>
               </div>
-
-              {/* Collapsible Duty List block */}
-              <AnimatePresence>
-                {selectedNode === directorNode.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden mt-4 pt-4 border-t border-white/10"
-                  >
-                    <p className="text-[9px] font-bold text-slate-400 tracking-wider uppercase mb-2">NHIỆM VỤ ĐẮC LỰC:</p>
-                    <ul className="space-y-2">
-                      {directorNode.tasks.map((task, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-slate-300 leading-relaxed font-light">
-                          <span className="text-brand-gold font-bold select-none">•</span>
-                          <span>{task}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
 
-            {/* Direct Line connecting Tier 1 to Tier 2 */}
+            {/* Connection line: T1 to T2 */}
             <div className="h-10 w-[2px] bg-gradient-to-b from-brand-gold to-blue-400 relative">
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-400" />
             </div>
           </div>
 
           {/* TIER 2: PHÓ GIÁM ĐỐC */}
-          <div className="flex flex-col items-center relative w-full mb-12">
+          <div className="flex flex-col items-center relative w-full mb-10">
             <motion.div
-              whileHover={{ 
-                scale: 1.03, 
-                boxShadow: '0 0 30px rgba(96, 165, 250, 0.3)' 
-              }}
-              onHoverStart={() => setHoveredNode(deputyDirectorNode.id)}
-              onHoverEnd={() => setHoveredNode(null)}
-              onClick={() => setSelectedNode(selectedNode === deputyDirectorNode.id ? null : deputyDirectorNode.id)}
-              className={`w-[450px] p-6 rounded-2xl bg-slate-900/80 border text-left cursor-pointer transition-all duration-300 relative overflow-hidden backdrop-blur-md ${deputyDirectorNode.color} group`}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className={`w-[320px] p-5 rounded-xl border text-center transition-all duration-300 relative overflow-hidden backdrop-blur-md ${deputyDirectorNode.color} group`}
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-2xl pointer-events-none group-hover:bg-blue-500/15 transition-all" />
-
-              <div className="flex items-start gap-4">
-                <div className="p-3.5 bg-blue-500/15 rounded-xl border border-blue-400/30 shrink-0 text-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.1)] group-hover:scale-105 transition-transform">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-xl pointer-events-none group-hover:bg-blue-500/10 transition-all" />
+              <div className="flex flex-col items-center gap-3">
+                <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-400/20 text-blue-400 shrink-0">
                   {deputyDirectorNode.icon}
                 </div>
-                <div className="flex-1">
-                  <span className="text-[10px] font-black tracking-widest text-[#60a5fa] uppercase font-display leading-none">
+                <div>
+                  <span className="text-[9px] font-black tracking-widest text-blue-400 uppercase font-display block leading-none mb-1">
                     {deputyDirectorNode.role}
                   </span>
-                  <h3 className="text-base font-black text-white font-display mt-1.5 uppercase tracking-wide">
+                  <h3 className="text-xl font-black text-white font-display uppercase tracking-wide">
                     {deputyDirectorNode.name}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed font-sans font-light">
-                    {deputyDirectorNode.leaderTitle}
-                  </p>
-
-                  {/* Expand tasks indicator */}
-                  <div className="mt-3 flex items-center gap-1 text-[10px] text-[#60a5fa] font-bold">
-                    <span>{selectedNode === deputyDirectorNode.id ? 'Thu gọn thông tin' : 'Xem nhiệm vụ cốt lõi'}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${selectedNode === deputyDirectorNode.id ? 'rotate-180' : ''}`} />
-                  </div>
                 </div>
               </div>
-
-              {/* Collapsible Deputy Duty List block */}
-              <AnimatePresence>
-                {selectedNode === deputyDirectorNode.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden mt-4 pt-4 border-t border-white/10"
-                  >
-                    <p className="text-[9px] font-bold text-slate-400 tracking-wider uppercase mb-2">QUẢN TRỊ NGHIỆP VỤ PHÒNG BAN & PHÂN XƯỞNG:</p>
-                    <ul className="space-y-2">
-                      {deputyDirectorNode.tasks.map((task, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-slate-300 leading-relaxed font-light">
-                          <span className="text-[#60a5fa] font-bold select-none">•</span>
-                          <span>{task}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
 
-            {/* Complex SVG Connector tree lines drawing */}
-            <div className="relative w-full h-16">
-              {/* Solid horizontal line connecting the bounds */}
-              <div className="absolute top-1/2 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-emerald-500/40 via-blue-400 to-[#dca92a]/40" />
+            {/* Symmetrical Connector Lines System */}
+            <div className="relative w-full h-12">
+              {/* Center vertical node drop */}
+              <div className="absolute top-0 bottom-1/2 left-1/2 w-[2px] bg-slate-800" />
+              {/* Horizontal crossbar line linking the two main branches */}
+              <div className="absolute top-1/2 left-[25%] right-[25%] h-[2px] bg-slate-800" />
               
-              {/* Vertical line descending from Deputy Director node center */}
-              <div className="absolute top-0 bottom-1/2 left-1/2 w-[2px] bg-blue-400" />
-
-              {/* Verticals dropping under the horizontal bridge to the columns */}
-              {/* Dropping to Administration columns center */}
-              <div className="absolute top-1/2 bottom-full left-[25%] w-[2px]" />
-              <div className="absolute top-1/2 bottom-0 left-[25%] w-[2px] bg-emerald-500/60" />
-
-              {/* Dropping to production workspace columns center */}
-              <div className="absolute top-1/2 bottom-0 left-[75%] w-[2px] bg-brand-gold/60" />
+              {/* Drop down line left (to Administration) */}
+              <div className="absolute top-1/2 bottom-0 left-[25%] w-[2px] bg-slate-800" />
+              {/* Drop down line right (to Workshops) */}
+              <div className="absolute top-1/2 bottom-0 right-[25%] w-[2px] bg-slate-800" />
             </div>
           </div>
 
-          {/* TIER 3: TWO MAJOR GENERAL BLOCKS FOR ADMIN & WORKSPACE */}
-          <div className="grid grid-cols-2 gap-12 w-full relative z-10 px-8">
+          {/* TIER 3: GRID SPLIT: SYMMETRICAL HEIGHT LAYOUT */}
+          <div className="grid grid-cols-2 gap-12 w-full relative z-10 px-6">
             
-            {/* LEFT COUPLING: PHÒNG BAN QUẢN LÝ (EMERALD VIBE) */}
-            <div className="flex flex-col items-center gap-6 border-r border-white/5 pr-6">
-              <div className="flex items-center gap-2 mb-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
-                <Building className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[10px] font-black text-emerald-400 uppercase font-display tracking-wider">CƠ CẤU NGHIỆP VỤ BÀN GIẤY</span>
+            {/* LEFT SECTOR: 2 CO-EQUAL PHÒNG BAN MANAGEMENT (STRETCHY OR ALIGNED STACK) */}
+            <div className="flex flex-col items-center h-full">
+              {/* Category indicator label */}
+              <div className="flex items-center gap-2 mb-6 bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full shrink-0">
+                <Building2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[10px] font-bold text-emerald-400 uppercase font-display tracking-widest">CƠ CẤU PHÒNG BAN QUẢN LÝ (02)</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                {administrationNodes.map((node) => {
-                  const isNodeSelected = selectedNode === node.id;
-                  return (
-                    <motion.div
-                      key={node.id}
-                      whileHover={{ scale: 1.025, boxShadow: '0 4px 20px rgba(16, 185, 129, 0.15)' }}
-                      onClick={() => setSelectedNode(isNodeSelected ? null : node.id)}
-                      className={`p-5 rounded-2xl bg-slate-900/75 border border-slate-850 cursor-pointer text-left transition-all duration-300 relative group overflow-hidden ${node.color}`}
-                    >
-                      {/* Hover effect flash */}
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
-                      
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
-                          {node.icon}
-                        </div>
-                        <div>
-                          <span className="text-[9px] font-extrabold text-emerald-400 tracking-wider block font-display">{node.role}</span>
-                          <h4 className="text-xs font-black text-white uppercase tracking-normal mt-0.5">{node.name}</h4>
-                        </div>
-                      </div>
-                      
-                      <p className="text-[11px] text-slate-400 mt-2 font-light leading-relaxed truncate-2-lines line-clamp-2">
-                        {node.leaderTitle}
-                      </p>
-
-                      <div className="mt-3 flex items-center justify-between text-[9px] font-bold text-slate-400">
-                        <span className="group-hover:text-emerald-400">Chi tiết nhiệm vụ</span>
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isNodeSelected ? 'rotate-180 text-emerald-400' : ''}`} />
-                      </div>
-
-                      {/* Expand detail */}
-                      <AnimatePresence>
-                        {isNodeSelected && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="mt-3.5 pt-3 border-t border-white/5 space-y-1.5 overflow-hidden"
-                          >
-                            {node.tasks.map((t, idx) => (
-                              <div key={idx} className="text-[11px] text-slate-350 leading-relaxed font-light flex items-start gap-1.5">
-                                <span className="text-emerald-400 font-bold">•</span>
-                                <span>{t}</span>
-                              </div>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  );
-                })}
+              {/* Symmetrical vertical stack in 2 rows, matching the height of the right-side grid */}
+              <div className="grid grid-cols-1 gap-4 w-full max-w-md h-full">
+                {administrationNodes.map((node, i) => (
+                  <motion.div
+                    key={node.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                    className={`flex items-center gap-4 p-5 rounded-xl border bg-slate-900/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
+                  >
+                    <div className="p-3.5 bg-emerald-500/10 rounded-lg text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-all duration-300 shrink-0">
+                      {node.icon}
+                    </div>
+                    <div className="text-left min-w-0">
+                      <span className="text-[8px] font-extrabold text-emerald-400/80 tracking-wider block font-display uppercase leading-none mb-1.5">
+                        {node.tag}
+                      </span>
+                      <h4 className="text-sm font-extrabold text-white group-hover:text-emerald-350 transition-colors duration-300 leading-snug">
+                        {node.name}
+                      </h4>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
-            {/* RIGHT COUPLING: CÁC PHÂN XƯỞNG CHẾ BẢN - SẢN XUẤT (GOLD VIBE) */}
-            <div className="flex flex-col items-center gap-6 pl-6">
-              <div className="flex items-center gap-2 mb-2 bg-brand-gold/10 border border-brand-gold/20 px-3 py-1.5 rounded-full">
-                <Target className="w-3.5 h-3.5 text-brand-gold" />
-                <span className="text-[10px] font-black text-brand-gold uppercase font-display tracking-wider">CƠ CẤU PHÂN XƯỞNG THỰC ĐỊA NGŨ TUYẾN</span>
+            {/* RIGHT SECTOR: 4 PHÂN XƯỞNG PRODUCTION GRID IN 2x2 */}
+            <div className="flex flex-col items-center h-full">
+              {/* Category indicator label */}
+              <div className="flex items-center gap-2 mb-6 bg-brand-gold/10 border border-brand-gold/15 px-3.5 py-1.5 rounded-full shrink-0">
+                <Boxes className="w-3.5 h-3.5 text-brand-gold" />
+                <span className="text-[10px] font-bold text-brand-gold uppercase font-display tracking-widest">CƠ CẤU PHÂN XƯỞNG SẢN XUẤT (04)</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 w-full">
-                {workshopNodes.map((node) => {
-                  const isNodeSelected = selectedNode === node.id;
-                  return (
-                    <motion.div
-                      key={node.id}
-                      whileHover={{ scale: 1.025, boxShadow: '0 4px 20px rgba(220, 169, 42, 0.15)' }}
-                      onClick={() => setSelectedNode(isNodeSelected ? null : node.id)}
-                      className={`p-5 rounded-2xl bg-slate-900/75 border border-slate-850 cursor-pointer text-left transition-all duration-300 relative group overflow-hidden ${node.color}`}
-                    >
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-brand-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
-                      
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-brand-gold/10 rounded-xl text-brand-gold group-hover:bg-brand-gold group-hover:text-slate-950 transition-colors">
-                          {node.icon}
-                        </div>
-                        <div>
-                          <span className="text-[9px] font-extrabold text-brand-gold tracking-wider block font-display leading-tight">{node.role}</span>
-                          <h4 className="text-xs font-black text-white uppercase tracking-normal mt-0.5">{node.name}</h4>
-                        </div>
-                      </div>
-
-                      <p className="text-[11px] text-slate-400 mt-2 font-light leading-relaxed truncate-2-lines line-clamp-2">
-                        {node.leaderTitle}
-                      </p>
-
-                      <div className="mt-3 flex items-center justify-between text-[9px] font-bold text-slate-400">
-                        <span className="group-hover:text-brand-gold">Chi tiết nhiệm vụ</span>
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isNodeSelected ? 'rotate-180 text-brand-gold' : ''}`} />
-                      </div>
-
-                      {/* Expand detail */}
-                      <AnimatePresence>
-                        {isNodeSelected && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="mt-3.5 pt-3 border-t border-white/5 space-y-1.5 overflow-hidden"
-                          >
-                            {node.tasks.map((t, idx) => (
-                              <div key={idx} className="text-[11px] text-slate-350 leading-relaxed font-light flex items-start gap-1.5">
-                                <span className="text-brand-gold font-bold">•</span>
-                                <span>{t}</span>
-                              </div>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  );
-                })}
+              {/* Responsive 2x2 grid representing production flow */}
+              <div className="grid grid-cols-2 gap-4 w-full h-full">
+                {workshopNodes.map((node, i) => (
+                  <motion.div
+                    key={node.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
+                    className={`flex items-center gap-3.5 p-5 rounded-xl border bg-slate-900/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
+                  >
+                    <div className="p-3.5 bg-brand-gold/10 rounded-lg text-brand-gold group-hover:bg-brand-gold group-hover:text-slate-950 transition-all duration-300 shrink-0">
+                      {node.icon}
+                    </div>
+                    <div className="text-left min-w-0">
+                      <span className="text-[8px] font-extrabold text-brand-gold/80 tracking-wider block font-display uppercase leading-none mb-1.5">
+                        {node.tag}
+                      </span>
+                      <h4 className="text-sm font-extrabold text-white group-hover:text-brand-gold transition-colors duration-300 leading-snug">
+                        {node.name}
+                      </h4>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
           </div>
+
         </div>
 
-        {/* ================= MOBILE TIMELINE VIEW (Visible under lg screening) ================= */}
+        {/* ================= MOBILE VIEW (Adaptive flow, clean spacing) ================= */}
         <div className="lg:hidden flex flex-col gap-6 relative z-15 px-2">
           
-          {/* Vertical central tracking line */}
-          <div className="absolute left-[30px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-brand-gold via-blue-400 to-emerald-500/20" />
+          {/* Subtle side tracker alignment line */}
+          <div className="absolute left-[23px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-brand-gold via-blue-500 to-transparent opacity-30" />
 
-          {/* 1. Director Mob */}
+          {/* 1. GIÁM ĐỐC */}
           <motion.div 
-            initial={{ opacity: 0, x: -15 }}
+            initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            onClick={() => setSelectedNode(selectedNode === 'mob-giamdoc' ? null : 'mob-giamdoc')}
             className="flex gap-4 relative"
           >
-            {/* Timeline icon node badge */}
-            <div className="w-12 h-12 rounded-full bg-brand-gold border-2 border-slate-900 flex items-center justify-center text-slate-950 z-20 shrink-0 shadow-lg shadow-brand-gold/10">
+            <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-brand-gold flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-lg shadow-brand-gold/10">
               <UserCheck className="w-5 h-5" />
             </div>
             
-            <div className={`flex-1 p-5 rounded-2xl bg-slate-900 border ${selectedNode === 'mob-giamdoc' ? 'border-brand-gold shadow-[0_0_15px_rgba(220,169,42,0.15)] bg-slate-900/95' : 'border-slate-800 bg-slate-900/80'} cursor-pointer`}>
-              <span className="text-[9px] font-black tracking-widest text-brand-gold uppercase font-display leading-none">GIÁM ĐỐC BAN ĐIỀU HÀNH</span>
-              <h3 className="text-sm font-black text-white font-display mt-1">{directorNode.name}</h3>
-              <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed font-light">{directorNode.leaderTitle}</p>
-              
-              <div className="mt-3 flex items-center gap-1.5 text-[10px] text-brand-gold font-bold">
-                <span>{selectedNode === 'mob-giamdoc' ? 'Thu gọn nhiệm vụ' : 'Chạm xem nhiệm vụ chính'}</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${selectedNode === 'mob-giamdoc' ? 'rotate-180' : ''}`} />
-              </div>
-
-              {/* collapsible inner task timeline mob */}
-              {selectedNode === 'mob-giamdoc' && (
-                <ul className="mt-3 pt-3 border-t border-white/5 space-y-2">
-                  {directorNode.tasks.map((t, idx) => (
-                    <li key={idx} className="text-xs text-slate-300 font-light flex items-start gap-1.5">
-                      <span className="text-brand-gold font-bold leading-none">•</span>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-brand-gold/20 text-left">
+              <span className="text-[8px] font-black tracking-widest text-brand-gold uppercase font-display">BAN GIÁM ĐỐC</span>
+              <h3 className="text-base font-black text-white font-display mt-0.5">GIÁM ĐỐC</h3>
             </div>
           </motion.div>
 
-          {/* 2. Deputy Director Mob */}
+          {/* 2. PHÓ GIÁM ĐỐC */}
           <motion.div 
-            initial={{ opacity: 0, x: -15 }}
+            initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            onClick={() => setSelectedNode(selectedNode === 'mob-phogiamdoc' ? null : 'mob-phogiamdoc')}
             className="flex gap-4 relative"
           >
-            <div className="w-12 h-12 rounded-full bg-blue-500 border-2 border-slate-900 flex items-center justify-center text-slate-950 z-20 shrink-0 shadow-lg shadow-blue-500/10">
-              <Users className="w-5 h-5 text-white" />
+            <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-blue-500/60 flex items-center justify-center text-blue-450 z-20 shrink-0 shadow-lg shadow-blue-500/10">
+              <Users className="w-5 h-5" />
             </div>
             
-            <div className={`flex-1 p-5 rounded-2xl bg-slate-900 border ${selectedNode === 'mob-phogiamdoc' ? 'border-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.15)] bg-slate-900/95' : 'border-slate-800 bg-slate-900/80'} cursor-pointer`}>
-              <span className="text-[9px] font-black tracking-widest text-blue-400 uppercase font-display leading-none">PHÓ GIÁM ĐỐC KỸ THUẬT & SẢN XUẤT</span>
-              <h3 className="text-sm font-black text-white font-display mt-1">{deputyDirectorNode.name}</h3>
-              <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed font-light">{deputyDirectorNode.leaderTitle}</p>
-              
-              <div className="mt-3 flex items-center gap-1.5 text-[10px] text-blue-400 font-bold">
-                <span>{selectedNode === 'mob-phogiamdoc' ? 'Thu gọn nhiệm vụ' : 'Chạm xem nhiệm vụ chính'}</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${selectedNode === 'mob-phogiamdoc' ? 'rotate-180' : ''}`} />
-              </div>
-
-              {/* collapsible */}
-              {selectedNode === 'mob-phogiamdoc' && (
-                <ul className="mt-3 pt-3 border-t border-white/5 space-y-2">
-                  {deputyDirectorNode.tasks.map((t, idx) => (
-                    <li key={idx} className="text-xs text-slate-300 font-light flex items-start gap-1.5">
-                      <span className="text-blue-400 font-bold leading-none">•</span>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-blue-500/15 text-left">
+              <span className="text-[8px] font-black tracking-widest text-blue-450 uppercase font-display">BAN GIÁM ĐỐC</span>
+              <h3 className="text-base font-black text-white font-display mt-0.5">PHÓ GIÁM ĐỐC</h3>
             </div>
           </motion.div>
 
-          {/* Loop all administrative & workshop nodes seamlessly as an elegant chain */}
-          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-4 mb-2 pl-14">PHÒNG NGHIỆP VỤ & PHÂN XƯỞNG THÀNH VIÊN</p>
+          {/* Section Divider on Mobile */}
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-4 pl-14 text-left">CẤC PHÒNG NGHIỆP VỤ (02)</p>
 
-          {[...administrationNodes, ...workshopNodes].map((node, index) => {
-            const isSelected = selectedNode === `mob-${node.id}`;
-            const isFinishedShop = index >= 2; // Color variation
-            return (
-              <motion.div
-                key={node.id}
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                onClick={() => setSelectedNode(isSelected ? null : `mob-${node.id}`)}
-                className="flex gap-4 relative"
-              >
-                <div className={`w-12 h-12 rounded-full border-2 border-slate-900 flex items-center justify-center z-20 shrink-0 shadow-md ${
-                  isFinishedShop 
-                    ? 'bg-slate-950 text-brand-gold border-brand-gold/40' 
-                    : 'bg-slate-950 text-emerald-400 border-emerald-500/45'
-                }`}>
-                  {node.icon}
-                </div>
-
-                <div className={`flex-1 p-5 rounded-2xl bg-slate-900 border ${
-                  isSelected 
-                    ? isFinishedShop 
-                      ? 'border-brand-gold bg-slate-900/95 shadow-lg shadow-brand-gold/5' 
-                      : 'border-emerald-500 bg-slate-900/95 shadow-lg shadow-emerald-500/5'
-                    : 'border-slate-800 bg-slate-900/80'
-                } cursor-pointer`}>
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[8px] font-black tracking-widest uppercase font-display leading-none ${
-                      isFinishedShop ? 'text-brand-gold' : 'text-emerald-400'
-                    }`}>
-                      {node.role}
-                    </span>
-                    <span className="text-[8px] text-slate-500 font-mono">BỘ PHẬN NO.0{index + 1}</span>
-                  </div>
-                  <h3 className="text-sm font-black text-white font-display mt-1.5">{node.name}</h3>
-                  <p className="text-[11px] text-slate-400 mt-1 lines-2 font-light">{node.leaderTitle}</p>
-                  
-                  <div className={`mt-3 flex items-center gap-1 text-[10px] font-bold ${
-                    isFinishedShop ? 'text-brand-gold' : 'text-emerald-400'
-                  }`}>
-                    <span>{isSelected ? 'Thu gọn nhiệm vụ' : 'Chạm xem chi tiết nghiệp vụ'}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'rotate-180' : ''}`} />
-                  </div>
-
-                  {/* Collapsible details list */}
-                  {isSelected && (
-                    <ul className="mt-3.5 pt-3.5 border-t border-white/5 space-y-2">
-                      {node.tasks.map((t, idx) => (
-                        <li key={idx} className="text-xs text-slate-350 font-light flex items-start gap-1.5 leading-relaxed">
-                          <span className={`font-bold select-none ${isFinishedShop ? 'text-brand-gold' : 'text-emerald-400'}`}>•</span>
-                          <span>{t}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
-
-        </div>
-
-        {/* ================= EXTRA UX: SYSTEM STATISTICS PANEL AT THE BOTTOM ================= */}
-        <div className="mt-20 pt-16 border-t border-white/5 relative z-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center max-w-5xl mx-auto">
-            
-            {/* Stat 1 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
+          {/* 3. Room Stack */}
+          {administrationNodes.map((node) => (
+            <motion.div
+              key={node.id}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group hover:bg-white/[0.04] hover:border-brand-gold/30 transition-all shadow-sm"
+              className="flex gap-4 relative"
             >
-              <div className="w-12 h-12 bg-brand-gold/10 text-brand-gold rounded-full flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
-                <Award className="w-5 h-5" />
+              <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-slate-800 flex items-center justify-center text-emerald-400 z-20 shrink-0 shadow-md">
+                {node.icon}
               </div>
-              <p className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-none">
-                45+ <span className="text-sm font-semibold text-brand-gold">Năm</span>
-              </p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 font-display leading-tight">
-                Kinh Nghiệm Ngành In
-              </p>
-            </motion.div>
 
-            {/* Stat 2 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
+                <span className="text-[8px] font-extrabold text-emerald-400/85 uppercase block tracking-widest font-display leading-none mb-1">
+                  {node.tag}
+                </span>
+                <h3 className="text-sm font-extrabold text-white leading-snug">{node.name}</h3>
+              </div>
+            </motion.div>
+          ))}
+
+          {/* Workshops Section Divider on Mobile */}
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-4 pl-14 text-left">PHÂN XƯỞNG SẢN XUẤT (04)</p>
+
+          {/* 4. workshops Stack */}
+          {workshopNodes.map((node) => (
+            <motion.div
+              key={node.id}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group hover:bg-white/[0.04] hover:border-brand-gold/30 transition-all shadow-sm"
+              className="flex gap-4 relative"
             >
-              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
-                <Users className="w-5 h-5" />
+              <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-slate-800 flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-md">
+                {node.icon}
               </div>
-              <p className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-none">
-                200+ <span className="text-sm font-semibold text-blue-400">Thợ in</span>
-              </p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 font-display leading-tight">
-                Nhân Sự Chuyên Nghiệp
-              </p>
-            </motion.div>
 
-            {/* Stat 3 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group hover:bg-white/[0.04] hover:border-brand-gold/30 transition-all shadow-sm"
-            >
-              <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
+                <span className="text-[8px] font-extrabold text-brand-gold/85 uppercase block tracking-widest font-display leading-none mb-1">
+                  {node.tag}
+                </span>
+                <h3 className="text-sm font-extrabold text-white leading-snug">{node.name}</h3>
               </div>
-              <p className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-none">
-                100%
-              </p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 font-display leading-tight">
-                An Toàn Bảo Mật ISO
-              </p>
             </motion.div>
+          ))}
 
-            {/* Stat 4 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group hover:bg-white/[0.04] hover:border-brand-gold/30 transition-all shadow-sm"
-            >
-              <div className="w-12 h-12 bg-pink-500/10 text-pink-400 rounded-full flex items-center justify-center mb-1 group-hover:scale-105 transition-transform">
-                <Clock className="w-5 h-5" />
-              </div>
-              <p className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight leading-none">
-                24/7
-              </p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 font-display leading-tight">
-                Vận Hành Nhà Máy Khép Kín
-              </p>
-            </motion.div>
-
-          </div>
         </div>
 
       </div>
