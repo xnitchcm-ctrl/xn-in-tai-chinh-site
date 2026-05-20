@@ -21,7 +21,6 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
   
   const [isSending, setIsSending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [errorText, setErrorText] = useState<string | null>(null);
 
   // Sync preselectedService whenever it changes
   useEffect(() => {
@@ -30,37 +29,14 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
     }
   }, [preselectedService]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phone || !email || !serviceType) {
-      setErrorText('Vui lòng điền các thông tin bắt buộc: Họ tên, Số điện thoại và Email.');
-      return;
-    }
-    setErrorText(null);
+    if (!fullName || !phone || !serviceType) return;
+
     setIsSending(true);
-
-    try {
-      const res = await fetch('/api/quotation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName,
-          phone,
-          email,
-          companyName,
-          serviceType,
-          quantity,
-          deadline,
-          notes,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Gặp lỗi trong quá trình xử lý yêu cầu báo giá.');
-      }
-
+    // Simulate server side post processing
+    setTimeout(() => {
+      setIsSending(false);
       setIsSuccess(true);
       
       // Clean up fields after success
@@ -71,16 +47,11 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
       setQuantity('');
       setDeadline('');
       setNotes('');
-    } catch (err: any) {
-      setErrorText(err.message || 'Hệ thống gửi phiếu yêu cầu báo giá tạm thời bận. Thử lại sau hoặc trực hotline.');
-    } finally {
-      setIsSending(false);
-    }
+    }, 1800);
   };
 
   const handleReset = () => {
     setIsSuccess(false);
-    setErrorText(null);
     onClose();
   };
 
@@ -140,17 +111,6 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              
-              {errorText && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg font-medium"
-                >
-                  {errorText}
-                </motion.div>
-              )}
-              
               <p className="text-[11px] text-slate-500 font-sans leading-relaxed">
                 Để phục vụ việc tính giá thành phẩm tối ưu cùng điều kiện bảo an chuẩn quốc gia, vui lòng gửi các gợi ý nghiệp vụ ban đầu sau. Mọi dữ liệu cam kết được bảo mật hoàn toàn.
               </p>

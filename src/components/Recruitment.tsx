@@ -15,41 +15,18 @@ export default function Recruitment() {
   const [coverLetter, setCoverLetter] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorText, setErrorText] = useState<string | null>(null);
 
   const toggleAccordion = (id: string) => {
     setExpandedVacancyId((prev) => (prev === id ? null : id));
   };
 
-  const handleApplySubmit = async (e: React.FormEvent) => {
+  const handleApplySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!candidateName || !candidateEmail || !candidatePhone) {
-      setErrorText('Vui lòng điền đầy đủ Họ tên, Email và Số điện thoại liên hệ.');
-      return;
-    }
-    setErrorText(null);
+    if (!candidateName || !candidateEmail || !candidatePhone) return;
+
     setIsSubmitting(true);
-
-    try {
-      const res = await fetch('/api/recruitment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          vacancyTitle: applyVacancyTitle || 'Chưa chọn vị trí cụ thể',
-          candidateName,
-          candidatePhone,
-          candidateEmail,
-          cvLink,
-          coverLetter,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Đã xảy ra sự cố gửi đơn ứng tuyển. Vui lòng kiểm tra và gửi lại.');
-      }
-
+    setTimeout(() => {
+      setIsSubmitting(false);
       setFormSubmitted(true);
       // Clean up Form fields
       setCandidateName('');
@@ -57,11 +34,7 @@ export default function Recruitment() {
       setCandidatePhone('');
       setCvLink('');
       setCoverLetter('');
-    } catch (err: any) {
-      setErrorText(err.message || 'Hệ thống nộp đơn ứng tuyển trực tuyến gặp sự cố. Quý ứng viên có thể thử lại sau hoặc gửi mail trực tiếp.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    }, 1800);
   };
 
   return (
@@ -226,16 +199,6 @@ export default function Recruitment() {
               </motion.div>
             ) : (
               <form onSubmit={handleApplySubmit} className="space-y-4">
-                
-                {errorText && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg font-medium"
-                  >
-                    {errorText}
-                  </motion.div>
-                )}
                 
                 {/* Auto selected or user selected position header */}
                 <div>
