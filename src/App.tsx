@@ -12,6 +12,7 @@ import Contact from './components/Contact';
 import CompanyFooter from './components/CompanyFooter';
 import QuoteModal from './components/QuoteModal';
 import Preloader from './components/Preloader';
+import OrgChart from './components/OrgChart';
 import { COMPANY_INFO } from './data/companyData';
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
 
   // IntersectionObserver to dynamically highlight active sticky menu link on scroll
   useEffect(() => {
-    const sections = ['hero', 'about', 'services', 'technology', 'gallery', 'recruitment', 'contact'];
+    const sections = ['hero', 'about', 'org-chart', 'services', 'technology', 'gallery', 'recruitment', 'contact'];
     
     const handleScrollActiveLink = () => {
       const scrollPos = window.scrollY + 200; // Offset for sticky menu height
@@ -122,6 +123,9 @@ export default function App() {
           >
             <Introduction />
           </motion.div>
+
+          {/* SƠ ĐỒ TỔ CHỨC CORPORATE PREMIUM */}
+          <OrgChart />
 
           {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
           <motion.div 

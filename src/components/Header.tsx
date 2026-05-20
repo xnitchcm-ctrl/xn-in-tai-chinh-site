@@ -421,6 +421,19 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                                 <p className="text-[9px] text-slate-400 mt-0.5 font-light">Chứng nhận bảo mật quốc tế ISO 27001</p>
                               </div>
                             </div>
+
+                            <div 
+                              onClick={() => handleNavClick('org-chart')}
+                              className="group/item flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+                            >
+                              <div className="w-8 h-8 rounded bg-blue-50 text-[#0A3273] flex items-center justify-center shrink-0">
+                                <Users className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <h4 className="text-xs font-bold text-slate-900 group-hover/item:text-brand-blue transition-colors">Sơ Đồ Tổ Chức</h4>
+                                <p className="text-[9px] text-slate-400 mt-0.5 font-light">Mô hình phân tầng cơ sở khép kín</p>
+                              </div>
+                            </div>
                           </div>
                         </motion.div>
                       )}
