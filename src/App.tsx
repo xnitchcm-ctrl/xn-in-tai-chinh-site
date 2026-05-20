@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Phone, ArrowUp, ShieldCheck, Mail, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import Header from './components/Header';
 import HeroSlider from './components/HeroSlider';
 import Introduction from './components/Introduction';
@@ -10,9 +11,11 @@ import Recruitment from './components/Recruitment';
 import Contact from './components/Contact';
 import CompanyFooter from './components/CompanyFooter';
 import QuoteModal from './components/QuoteModal';
+import Preloader from './components/Preloader';
 import { COMPANY_INFO } from './data/companyData';
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('hero');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState('');
@@ -77,99 +80,148 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans antialiased overflow-x-hidden">
-      
-      {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
-      <Header 
-        activeSection={activeSection} 
-        onNavigate={handleNavigate} 
-        openQuoteModal={handleOpenGeneralQuote} 
-      />
-
-      {/* MAIN CONTAINER CONTENT SECTION */}
-      <main className="flex-1 w-full flex flex-col">
-        
-        {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
-        <div id="hero">
-          <HeroSlider 
-            onLearnMore={handleNavigate} 
-            openQuoteModal={handleOpenGeneralQuote} 
-          />
-        </div>
-
-        {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
-        <div id="about">
-          <Introduction />
-        </div>
-
-        {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
-        <div id="services">
-          <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
-        </div>
-
-        {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
-        <div id="technology">
-          <Technology />
-        </div>
-
-        {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
-        <div id="gallery">
-          <Gallery />
-        </div>
-
-        {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
-        <div id="recruitment">
-          <Recruitment />
-        </div>
-
-        {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
-        <div id="contact">
-          <Contact />
-        </div>
-
-      </main>
-
-      {/* 9. LICENSED STATE ENTERPRISE LEGAL FOOTER MARKER */}
-      <CompanyFooter onNavigate={handleNavigate} />
-
-      {/* 10. ONLINE INQUIRY SPEC RFQ BOX DIALOG POP-WINDOW */}
-      <QuoteModal 
-        isOpen={isQuoteModalOpen} 
-        onClose={() => setIsQuoteModalOpen(false)} 
-        preselectedService={preselectedService} 
-      />
-
-      {/* 11. FLOATING QUICK HELPMATE TOOLS (Zalo/Hotline and BackToTop) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3.5">
-        
-        {/* Back To Top arrow visual widget */}
-        {showBackToTop && (
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Về đầu trang"
-            className="w-11 h-11 bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-amber-300"
-          >
-            <ArrowUp className="w-5 h-5 font-black" />
-          </button>
+    <>
+      <AnimatePresence mode="wait">
+        {loading && (
+          <Preloader key="preloader" onComplete={() => setLoading(false)} />
         )}
+      </AnimatePresence>
 
-        {/* Corporate direct rapid reached hotline phone widget */}
-        <button
-          onClick={handleCallHotline}
-          aria-label="Gọi điện thoại tư vấn ngay"
-          className="w-14 h-14 bg-gradient-to-tr from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer relative group"
+      <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans antialiased overflow-x-hidden">
+        
+        {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
+        <Header 
+          activeSection={activeSection} 
+          onNavigate={handleNavigate} 
+          openQuoteModal={handleOpenGeneralQuote} 
+        />
+
+        {/* MAIN CONTAINER CONTENT SECTION */}
+        <motion.main 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: loading ? 0 : 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="flex-1 w-full flex flex-col"
         >
-          {/* Wave radar pulse ring decor */}
-          <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointers-none z-0"></span>
-          <Phone className="w-6 h-6 rotate-12 relative z-10" />
           
-          <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-slate-700 hidden sm:block">
-            Gọi: {COMPANY_INFO.phoneDisplay}
+          {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
+          <div id="hero">
+            <HeroSlider 
+              onLearnMore={handleNavigate} 
+              openQuoteModal={handleOpenGeneralQuote} 
+            />
           </div>
-        </button>
+
+          {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
+          <motion.div 
+            id="about"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Introduction />
+          </motion.div>
+
+          {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
+          <motion.div 
+            id="services"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
+          </motion.div>
+
+          {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
+          <motion.div 
+            id="technology"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Technology />
+          </motion.div>
+
+          {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
+          <motion.div 
+            id="gallery"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Gallery />
+          </motion.div>
+
+          {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
+          <motion.div 
+            id="recruitment"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Recruitment />
+          </motion.div>
+
+          {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
+          <motion.div 
+            id="contact"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Contact />
+          </motion.div>
+
+        </motion.main>
+
+        {/* 9. LICENSED STATE ENTERPRISE LEGAL FOOTER MARKER */}
+        <CompanyFooter onNavigate={handleNavigate} />
+
+        {/* 10. ONLINE INQUIRY SPEC RFQ BOX DIALOG POP-WINDOW */}
+        <QuoteModal 
+          isOpen={isQuoteModalOpen} 
+          onClose={() => setIsQuoteModalOpen(false)} 
+          preselectedService={preselectedService} 
+        />
+
+        {/* 11. FLOATING QUICK HELPMATE TOOLS (Zalo/Hotline and BackToTop) */}
+        <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3.5">
+          
+          {/* Back To Top arrow visual widget */}
+          {showBackToTop && (
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Về đầu trang"
+              className="w-11 h-11 bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-amber-300"
+            >
+              <ArrowUp className="w-5 h-5 font-black" />
+            </button>
+          )}
+
+          {/* Corporate direct rapid reached hotline phone widget */}
+          <button
+            onClick={handleCallHotline}
+            aria-label="Gọi điện thoại tư vấn ngay"
+            className="w-14 h-14 bg-gradient-to-tr from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer relative group"
+          >
+            {/* Wave radar pulse ring decor */}
+            <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointers-none z-0"></span>
+            <Phone className="w-6 h-6 rotate-12 relative z-10" />
+            
+            <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-slate-700 hidden sm:block">
+              Gọi: {COMPANY_INFO.phoneDisplay}
+            </div>
+          </button>
+
+        </div>
 
       </div>
-
-    </div>
+    </>
   );
 }
