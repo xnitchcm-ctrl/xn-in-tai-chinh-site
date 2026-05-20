@@ -19,7 +19,10 @@ import {
   Target,
   History,
   ArrowRight,
-  Award
+  Award,
+  Home,
+  Image as ImageIcon,
+  Users
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 
@@ -81,6 +84,32 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
     if (!searchQuery.trim()) return;
     setSearchNotification(`Đang tra cứu dữ liệu bảo mật cho: "${searchQuery}"...`);
     setTimeout(() => setSearchNotification(''), 4500);
+  };
+
+  const getNavLinkIcon = (id: string) => {
+    switch (id) {
+      case 'hero': return <Home className="w-4 h-4" />;
+      case 'about': return <Target className="w-4 h-4" />;
+      case 'services': return <Ticket className="w-4 h-4" />;
+      case 'technology': return <Cpu className="w-4 h-4" />;
+      case 'gallery': return <ImageIcon className="w-4 h-4" />;
+      case 'recruitment': return <Users className="w-4 h-4" />;
+      case 'contact': return <Mail className="w-4 h-4" />;
+      default: return <Building className="w-4 h-4" />;
+    }
+  };
+
+  const getNavLinkDesc = (id: string) => {
+    switch (id) {
+      case 'hero': return 'Trang chủ Tổng công ty';
+      case 'about': return 'Lịch sử thành lập & Sứ mệnh';
+      case 'services': return 'Vé số, hóa đơn & biểu mẫu bảo mật';
+      case 'technology': return 'Máy móc nhập khẩu Đức & Nhật';
+      case 'gallery': return 'Thành phẩm & Hình ảnh nhà xưởng';
+      case 'recruitment': return 'Cơ hội phát triển nghề nghiệp';
+      case 'contact': return 'Hợp tác in ấn & Địa chỉ và Bản đồ';
+      default: return '';
+    }
   };
 
   return (
@@ -433,50 +462,117 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
         </div>
       </div>
 
-      {/* 2.5 MOBILE DRAWER ACCORDION WITH ANIME */}
+      {/* 2.5 PREMIUM FULL-WINDOW MOBILE SIDEBAR SLIDE-IN */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden w-full bg-brand-blue border-t border-brand-blue-dark py-4 px-4 shadow-2xl relative z-40 overflow-hidden"
-          >
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link) => {
-                const isActive = activeSection === link.id;
-                return (
-                  <button
-                    key={link.id}
-                    onClick={() => handleNavClick(link.id)}
-                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold tracking-wider font-display transition-all ${
-                      isActive 
-                        ? 'bg-brand-gold text-brand-blue shadow' 
-                        : 'text-white hover:bg-slate-800'
-                    }`}
+          <>
+            {/* Backdrop cover with high glassmorphism filter */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-[100] lg:hidden"
+            />
+
+            {/* Premium Slate-dark Right Panel */}
+            <motion.div
+              initial={{ x: '100%', opacity: 0.95 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0.95 }}
+              transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+              className="fixed right-0 top-0 bottom-0 w-[85%] max-w-[350px] bg-slate-950 text-white z-[101] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto lg:hidden border-l border-white/10"
+            >
+              <div>
+                {/* Drawer Header Brand Titles */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-5 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-tr from-brand-blue to-blue-700 rounded-full flex items-center justify-center border border-brand-gold">
+                      <span className="text-[10px] font-black font-display text-white">ITC</span>
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-bold text-brand-gold tracking-widest font-display leading-none">XN IN TÀI CHÍNH</p>
+                      <p className="text-[7px] text-slate-400 font-sans tracking-wide leading-none mt-1">TP. HỒ CHÍ MINH</p>
+                    </div>
+                  </div>
+                  
+                  {/* Close drawer icon */}
+                  <motion.button 
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2 bg-white/5 hover:bg-white/10 hover:text-brand-gold rounded-full text-white cursor-pointer"
+                    aria-label="Đóng menu"
                   >
-                    {link.label}
-                  </button>
-                );
-              })}
-              <div className="pt-4 border-t border-white/10 mt-2 flex flex-col gap-3">
+                    <X className="w-5 h-5" />
+                  </motion.button>
+                </div>
+
+                {/* Mobile Menu Links with responsive Icons, tags & spacing */}
+                <div className="space-y-2">
+                  <p className="text-[8px] font-black tracking-widest text-slate-500 uppercase font-display mb-3 px-2">CHUYÊN MỤC TRUY CẬP NHANH</p>
+                  
+                  {navLinks.map((link) => {
+                    const isActive = activeSection === link.id;
+                    return (
+                      <motion.div
+                        key={link.id}
+                        whileHover={{ x: 6 }}
+                        className="w-full"
+                      >
+                        <button
+                          onClick={() => handleNavClick(link.id)}
+                          className={`w-full text-left px-3.5 py-3 rounded-xl transition-all flex items-center gap-3.5 group cursor-pointer border ${
+                            isActive 
+                              ? 'bg-gradient-to-r from-brand-blue to-blue-900 border-brand-gold/50 text-white shadow-lg shadow-brand-blue/10 font-bold' 
+                              : 'bg-white/[0.02] border-transparent text-slate-300 hover:text-white hover:bg-white/[0.06] hover:border-white/5'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-brand-gold text-brand-blue' : 'bg-white/5 text-slate-400 group-hover:text-brand-gold'}`}>
+                            {getNavLinkIcon(link.id)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-xs font-bold font-display tracking-widest block">{link.label}</span>
+                            <span className="text-[9px] text-slate-400 font-light block mt-0.5 truncate">{getNavLinkDesc(link.id)}</span>
+                          </div>
+                          <ArrowRight className={`w-3 h-3 text-slate-500 transition-transform ${isActive ? 'text-brand-gold translate-x-0.5' : 'group-hover:translate-x-1 group-hover:text-white'}`} />
+                        </button>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Drawer Info Footer & Action triggers */}
+              <div className="mt-8 pt-5 border-t border-white/10 space-y-4">
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
                     openQuoteModal();
                   }}
-                  className="w-full py-3.5 text-center text-xs font-black font-display tracking-widest rounded bg-brand-gold text-brand-blue hover:bg-yellow-400 transition-colors cursor-pointer shadow"
+                  className="w-full py-3.5 text-center text-xs font-black font-display tracking-widest rounded bg-brand-gold text-brand-blue hover:bg-yellow-400 transition-colors cursor-pointer shadow-lg hover:shadow-yellow-500/20 active:scale-[0.98]"
                 >
                   ĐĂNG KÝ TƯ VẤN THÀNH PHẨM IN
                 </button>
-                <div className="text-center text-[9px] text-slate-350 pt-2 font-display uppercase tracking-widest leading-relaxed">
-                  <p>Hotline hỗ trợ: {COMPANY_INFO.phone}</p>
-                  <p className="mt-1">Địa chỉ xưởng: Lô A1-A2 CCN Nhị Xuân, Hóc Môn</p>
+
+                {/* Hotline metadata shortcut */}
+                <div className="p-3 bg-white/[0.02] border border-white/5 rounded-xl flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                    <Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <h5 className="text-[9px] font-black text-brand-gold tracking-widest uppercase">Phòng nghiệp vụ in</h5>
+                    <p className="text-xs font-black text-white font-mono mt-0.5">{COMPANY_INFO.phoneDisplay}</p>
+                  </div>
+                </div>
+
+                <div className="text-center text-[9px] text-slate-500 font-display uppercase tracking-widest leading-relaxed">
+                  <p>MÃ KHU VỰC SẢN XUẤT: HN_NZ_7900</p>
+                  <p className="mt-1 lowercase font-sans text-slate-400 hover:underline cursor-pointer">{COMPANY_INFO.email}</p>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

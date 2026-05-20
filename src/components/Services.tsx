@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Ticket, FileSpreadsheet, ShieldAlert, Cpu, CheckSquare, ArrowRight, ShieldCheck, Check } from 'lucide-react';
 import { SERVICE_ITEMS } from '../data/companyData';
 import { ServiceItem } from '../types';
@@ -97,9 +97,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                   ))}
                 </ul>
 
-                <hr className="border-slate-200 my-1 group-hover:border-slate-300" />
-
-                {/* Sub-actions buttons */}
+                        {/* Sub-actions buttons */}
                 <div className="mt-auto pt-2 flex items-center justify-between">
                   <button
                     onClick={() => setSelectedService(service)}
@@ -120,99 +118,112 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
         </div>
 
         {/* Detailed Service Detail Modal Container */}
-        {selectedService && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 overflow-y-auto">
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden"
-            >
-              {/* Top banner aspect with image */}
-              <div className="relative h-64 sm:h-72 w-full">
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-dark via-brand-blue-dark/50 to-transparent z-10"></div>
-                <img
-                  src={selectedService.image}
-                  alt={selectedService.title}
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                
-                {/* Floating tags */}
-                <span className="absolute top-4 left-4 z-20 px-3 py-1 text-[10px] font-black tracking-widest bg-brand-gold text-brand-blue uppercase rounded font-display">
-                  TIÊU CHUẨN AN TOÀN NHÀ NƯỚC
-                </span>
+        <AnimatePresence>
+          {selectedService && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+              
+              {/* Dismiss backing overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedService(null)}
+                className="fixed inset-0 bg-slate-950/80 z-40"
+              />
 
-                {/* Close Button top-right */}
-                <button
-                  onClick={() => setSelectedService(null)}
-                  className="absolute top-4 right-4 z-30 w-10 h-10 bg-black/45 hover:bg-brand-gold text-white hover:text-brand-blue rounded-full flex items-center justify-center transition-colors cursor-pointer"
-                  aria-label="Đóng"
-                >
-                  <span className="text-xl font-bold">&times;</span>
-                </button>
+              <motion.div
+                initial={{ scale: 0.94, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.94, opacity: 0, y: 20 }}
+                transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+                className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden z-50 my-8"
+              >
+                {/* Top banner aspect with image */}
+                <div className="relative h-48 sm:h-64 md:h-72 w-full">
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-blue-dark via-brand-blue-dark/50 to-transparent z-10"></div>
+                  <img
+                    src={selectedService.image}
+                    alt={selectedService.title}
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  
+                  {/* Floating tags */}
+                  <span className="absolute top-4 left-4 z-20 px-3 py-1 text-[10px] font-black tracking-widest bg-brand-gold text-brand-blue uppercase rounded font-display select-none">
+                    TIÊU CHUẨN AN TOÀN NHÀ NƯỚC
+                  </span>
 
-                {/* Absolute titles on image */}
-                <div className="absolute bottom-6 left-6 right-6 z-20">
-                  <h3 className="text-xl sm:text-2xl font-black text-white font-display tracking-tight text-shadow-lg uppercase">
-                    {selectedService.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-amber-300 font-sans tracking-tight mt-1">
-                    {selectedService.shortDesc}
-                  </p>
-                </div>
-              </div>
+                  {/* Close Button top-right */}
+                  <button
+                    onClick={() => setSelectedService(null)}
+                    className="absolute top-4 right-4 z-30 w-10 h-10 bg-black/45 hover:bg-brand-gold text-white hover:text-brand-blue rounded-full flex items-center justify-center transition-colors cursor-pointer text-2xl font-light"
+                    aria-label="Đóng"
+                  >
+                    &times;
+                  </button>
 
-              {/* Body Content */}
-              <div className="p-6 sm:p-8 flex flex-col gap-6">
-                <div>
-                  <h4 className="text-xs font-black text-brand-blue font-display tracking-widest uppercase mb-1.5">
-                    MÔ TẢ CHI TIẾT NGHIỆP VỤ
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    {selectedService.longDesc}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-black text-brand-blue font-display tracking-widest uppercase mb-2">
-                    CÁC THƯƠNG PHƯƠNG QUY CHUẨN KỸ THUẬT
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    {selectedService.bullets.map((bullet, idx) => (
-                      <div key={idx} className="p-3.5 rounded-lg bg-slate-50 border border-slate-100 flex items-start gap-3">
-                        <span className="p-1 rounded-full bg-emerald-100 text-emerald-600 shrink-0 mt-0.5">
-                          <Check className="w-4 h-4 text-emerald-600" />
-                        </span>
-                        <p className="text-xs text-slate-600 font-sans font-medium">
-                          {bullet}
-                        </p>
-                      </div>
-                    ))}
+                  {/* Absolute titles on image */}
+                  <div className="absolute bottom-6 left-6 right-6 z-20">
+                    <h3 className="text-lg sm:text-2xl font-black text-white font-display tracking-tight text-shadow-lg uppercase">
+                      {selectedService.title}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-amber-300 font-sans tracking-tight mt-1">
+                      {selectedService.shortDesc}
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3.5 mt-4 pt-4 border-t border-slate-100">
-                  <button
-                    onClick={() => setSelectedService(null)}
-                    className="px-5 py-2.5 text-xs text-slate-600 hover:text-brand-blue font-semibold uppercase rounded cursor-pointer"
-                  >
-                    Đóng cửa sổ
-                  </button>
-                  <button
-                    onClick={() => {
-                      onSelectServiceForQuote(selectedService.title);
-                      setSelectedService(null);
-                    }}
-                    className="px-6 py-2.5 text-xs font-extrabold tracking-widest bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded transition-all cursor-pointer font-display uppercase shadow-md"
-                  >
-                    Đăng Ký Tư Vấn Ngay
-                  </button>
+                {/* Body Content */}
+                <div className="p-5 sm:p-8 flex flex-col gap-5 sm:gap-6 max-h-[calc(100vh-280px)] overflow-y-auto">
+                  <div>
+                    <h4 className="text-[10px] font-black text-brand-blue tracking-widest uppercase font-display mb-1.5">
+                      MÔ TẢ CHI TIẾT NGHIỆP VỤ
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-light">
+                      {selectedService.longDesc}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[10px] font-black text-brand-blue tracking-widest uppercase font-display mb-2">
+                      CÁC TIÊU CHUẨN KỸ THUẬT QUY CƠ
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {selectedService.bullets.map((bullet, idx) => (
+                        <div key={idx} className="p-3 rounded-lg bg-slate-50 border border-slate-100 flex items-start gap-3">
+                          <span className="p-1 rounded-full bg-emerald-100 text-emerald-600 shrink-0 mt-0.5">
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          </span>
+                          <p className="text-xs text-slate-600 font-sans font-medium leading-normal">
+                            {bullet}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3.5 mt-2 pt-4 border-t border-slate-100">
+                    <button
+                      onClick={() => setSelectedService(null)}
+                      className="px-5 py-2.5 text-xs text-slate-600 hover:text-brand-blue font-semibold uppercase rounded cursor-pointer"
+                    >
+                      Đóng cửa sổ
+                    </button>
+                    <button
+                      onClick={() => {
+                        onSelectServiceForQuote(selectedService.title);
+                        setSelectedService(null);
+                      }}
+                      className="px-6 py-2.5 text-xs font-black tracking-widest bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded transition-all cursor-pointer font-display uppercase shadow"
+                    >
+                      Đăng Ký Tư Vấn Ngay
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
       </div>
     </section>
