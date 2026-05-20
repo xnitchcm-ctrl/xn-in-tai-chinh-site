@@ -31,14 +31,45 @@ export default function Contact() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return;
-
+    if (!name || !phone) {
+      setErrorText('Vui lòng điền đầy đủ Họ tên và Số điện thoại liên hệ.');
+      return;
+    }
+    setErrorText(null);
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      const isContactVal = formType === 'contact';
+      const endpoint = isContactVal ? '/api/contact' : '/api/quotation';
+      
+      const payload = isContactVal 
+        ? { name, phone, email, subject, message }
+        : { 
+            fullName: name, 
+            phone, 
+            email, 
+            companyName: '', 
+            serviceType: quoteService, 
+            quantity: quoteQuantity, 
+            notes: message 
+          };
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Đã xảy ra sự cố gửi thông tin lên hệ thống. Vui lòng thử lại sau.');
+      }
+
       setIsSuccess(true);
       // Clean up fields
       setName('');
@@ -47,7 +78,11 @@ export default function Contact() {
       setSubject('');
       setMessage('');
       setQuoteQuantity('');
-    }, 1500);
+    } catch (err: any) {
+      setErrorText(err.message || 'Đã xảy ra sự cố đột xuất. Vui lòng kết nối số điện thoại khẩn ở góc màn hình.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -303,6 +338,16 @@ export default function Contact() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-5">
+                  
+                  {errorText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-rose-500/10 border border-rose-500/25 text-rose-250 text-xs rounded-xl font-medium"
+                    >
+                      {errorText}
+                    </motion.div>
+                  )}
                   
                   {/* Name & phone side by side */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
