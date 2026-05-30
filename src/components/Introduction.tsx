@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCMS } from '../context/CMSContext';
-import { Award, ShieldCheck, Target, Zap, Clock, ThumbsUp } from 'lucide-react';
+import { Award, ShieldCheck, Target, Zap, Clock, ThumbsUp, TrendingUp, Factory } from 'lucide-react';
 
 export default function Introduction() {
   const { companyInfo: COMPANY_INFO, statistics: STATISTICS } = useCMS();
@@ -18,12 +18,12 @@ export default function Introduction() {
       ]
     },
     vision: {
-      icon: <Zap className="w-8 h-8 text-amber-500" />,
-      title: 'TẦM NHÌN CHIẾN LƯỢC',
-      subtitle: 'Trở thành tập đoàn in ấn và giải pháp bảo an kỹ thuật số hàng đầu Đông Nam Á.',
+      icon: <TrendingUp className="w-8 h-8 text-red-600" />,
+      title: 'TẦM NHÌN ĐẾN NĂM 2050',
+      subtitle: 'Đơn vị in tài chính và công nghệ cao, phát triển hệ thống sản xuất thông minh.',
       paragraphs: [
-        'Đến năm 2030, Xí nghiệp phấn đấu chuyển dịch 100% dây chuyền quản lý sang số hóa đồng bộ, áp dụng trí tuệ nhân tạo (AI) trong kiểm định chất lượng ấn phẩm (KCS) thời gian thực.',
-        'Mở rộng hợp tác in gia công bảo mật cho các đối tác quốc tế từ Lào, Campuchia và các tập đoàn tài chính đa quốc gia kinh doanh tại Việt Nam.'
+        'Trở thành đơn vị in tài chính và in công nghệ cao uy tín, hiện đại, từng bước phát triển hệ thống sản xuất thông minh, ứng dụng công nghệ số và dữ liệu biến đổi trong ngành in.',
+        'Định hướng mở rộng lĩnh vực sản xuất bao bì tự động bằng hệ thống máy móc hiện đại, nâng cao chất lượng sản phẩm, tối ưu năng suất và đáp ứng nhu cầu phát triển của thị trường in ấn trong thời đại chuyển đổi số.'
       ]
     },
     values: {
@@ -129,10 +129,30 @@ export default function Introduction() {
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mt-4 text-xs font-sans text-slate-600 leading-relaxed">
-                    {tabContents[activeTab].paragraphs.map((p, i) => (
-                      <p key={i}>{p}</p>
-                    ))}
+                  <div className="space-y-4 mt-4 text-xs font-sans text-slate-600 leading-relaxed">
+                    {activeTab === 'vision' ? (
+                      <div className="flex flex-col gap-4 animate-fadeIn">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 bg-red-50/70 border border-red-200/50 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-red-300 transition-all">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/5 rounded-full blur-xl pointer-events-none"></div>
+                          <div className="bg-gradient-to-br from-red-600 to-red-700 text-white font-black font-display tracking-wider text-xl sm:text-2xl px-3.5 py-1.5 rounded-lg flex items-center justify-center shadow-md shadow-red-200 select-none shrink-0">
+                            2050
+                          </div>
+                          <p className="text-slate-800 font-bold text-xs sm:text-[13px] leading-relaxed">
+                            {tabContents.vision.paragraphs[0]}
+                          </p>
+                        </div>
+                        <div className="flex gap-2.5 p-3.5 bg-slate-50/50 border border-slate-100 rounded-xl">
+                          <Factory className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
+                          <p className="text-slate-600 leading-relaxed">
+                            {tabContents.vision.paragraphs[1]}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      tabContents[activeTab].paragraphs.map((p, i) => (
+                        <p key={i}>{p}</p>
+                      ))
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>
