@@ -67,7 +67,7 @@ export default function Introduction() {
             </div>
 
             <p className="text-slate-600 font-sans leading-relaxed text-sm sm:text-base">
-              Nằm trong hệ thống cốt lõi của <strong className="text-brand-blue">{COMPANY_INFO.parentCompany}</strong>, Xí nghiệp In Tài Chính đã bền bỉ phục vụ nhu cầu in vé số và ấn chỉ bảo mật chất lượng cao trên toàn quốc suốt hơn 4 thập kỷ qua. Chúng tôi cam kết đem lại giá trị tối đa dựa trên nền tảng kỹ nghệ in ấn thượng hạng từ Đức.
+              Nằm trong hệ thống cốt lõi của <strong className="text-brand-blue">{COMPANY_INFO.parentCompany}</strong>, Xí nghiệp In Tài Chính đã bền bỉ phục vụ nhu cầu in vé số và ấn chỉ bảo mật chất lượng cao trên toàn quốc suốt hơn 4 thập kỷ qua. Chúng tôi cam kết đem lại giá trị tối đa dựa trên hệ thống trang thiết bị in ấn thế hệ mới hiện đại, chính xác.
             </p>
 
             {/* Interactive Tabs Menu for Vision / Mission / Values & History */}

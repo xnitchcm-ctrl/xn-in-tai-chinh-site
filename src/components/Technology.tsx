@@ -10,9 +10,9 @@ export default function Technology() {
 
   const getMachineMetric = (id: string) => {
     switch (id) {
-      case 'kba-rapida':
-        return { value: '18K', unit: 'Tờ/giờ', label: 'Tốc độ cực đại' };
-      case 'heidelberg-speedmaster':
+      case 'komori-offset':
+        return { value: '16K', unit: 'Tờ/giờ', label: 'Tốc độ cực đại' };
+      case 'mitsubishi':
         return { value: '15K', unit: 'Tờ/giờ', label: 'Tốc độ sản xuất' };
       case 'digital-inkjet-control':
         return { value: '300', unit: 'Mét/phút', label: 'Tốc độ phun liên tục' };

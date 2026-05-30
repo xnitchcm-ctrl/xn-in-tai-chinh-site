@@ -17,7 +17,8 @@ import {
   Sparkles,
   Check,
   QrCode,
-  Printer
+  Printer,
+  ShieldCheck
 } from 'lucide-react';
 
 interface HeroSliderProps {
@@ -74,28 +75,28 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
 
   const corePillars = [
     {
-      icon: <Shield className="w-5 h-5 text-brand-blue" />,
-      title: 'BẢO MẬT TUYỆT ĐỐI',
-      desc: 'Bảo mật thông tin dữ liệu gốc, quản lý nhảy mã sê-ri khép kín đạt chuẩn tối mật quốc gia.',
-      color: 'border-blue-500/20 bg-blue-50/40 hover:border-brand-blue/40'
+      icon: <Cpu className="w-5 h-5 text-[#0A3273]" />,
+      title: 'CÔNG NGHỆ IN KTS BIẾN ĐỔI DỮ LIỆU',
+      desc: 'Ứng dụng hệ thống in kỹ thuật số hiện đại hỗ trợ in dữ liệu biến đổi, tích hợp QR Code định danh và số dự thưởng trên từng tờ vé.',
+      color: 'border-slate-200 bg-white hover:border-[#0A3273]/40 hover:shadow-lg'
     },
     {
-      icon: <Eye className="w-5 h-5 text-emerald-600" />,
-      title: 'CHÍNH XÁC TỐI ĐA',
-      desc: 'Dung sai chồng hạt màu cực nhỏ nhờ điều khiển kỹ xảo Prinect và KCS 3 tầng tự động.',
-      color: 'border-emerald-500/20 bg-emerald-50/40 hover:border-emerald-500/40'
+      icon: <Printer className="w-5 h-5 text-red-600" />,
+      title: 'HỆ THỐNG IN OFFSET HIỆN ĐẠI',
+      desc: 'Vận hành trên dây chuyền máy in Komori và Mitsubishi 4 màu – 5 màu, đáp ứng chất lượng in sắc nét và ổn định cho sản lượng lớn.',
+      color: 'border-slate-200 bg-white hover:border-red-600/40 hover:shadow-lg'
     },
     {
-      icon: <Award className="w-5 h-5 text-amber-600" />,
-      title: 'CHẤT LƯỢNG TIÊU CHUẨN',
-      desc: 'Thành phẩm in ấn sắc nét bọc màng co niêm phong chống tráo, chịu kháng ẩm tốt.',
-      color: 'border-amber-500/20 bg-amber-50/40 hover:border-brand-gold/40'
+      icon: <QrCode className="w-5 h-5 text-[#0A3273]" />,
+      title: 'QUẢN LÝ DỮ LIỆU & QR CODE',
+      desc: 'Mỗi tờ vé được quản lý bằng dữ liệu riêng biệt, hỗ trợ kiểm tra, xác thực thông tin và dò kết quả nhanh chóng bằng QR Code.',
+      color: 'border-slate-200 bg-white hover:border-[#0A3273]/40 hover:shadow-lg'
     },
     {
-      icon: <Cpu className="w-5 h-5 text-purple-600" />,
-      title: 'CÔNG NGHỆ CHLB ĐỨC',
-      desc: 'Hiện thực hóa sản lượng cực lớn qua dàn máy in offset Koenig & Bauer nhập khẩu nguyên chiếc.',
-      color: 'border-purple-500/20 bg-purple-50/40 hover:border-purple-500/40'
+      icon: <ShieldCheck className="w-5 h-5 text-red-600" />,
+      title: 'CHẤT LƯỢNG IN ỔN ĐỊNH',
+      desc: 'Thành phẩm được kiểm soát chất lượng trong từng công đoạn, đảm bảo độ chính xác màu sắc, tính đồng đều và khả năng bảo quản tốt.',
+      color: 'border-slate-200 bg-white hover:border-red-600/40 hover:shadow-lg'
     }
   ];
 

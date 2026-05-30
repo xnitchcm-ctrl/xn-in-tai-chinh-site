@@ -68,30 +68,30 @@ export const SERVICE_ITEMS: ServiceItem[] = [
 
 export const TECHNOLOGIES: TechnologyItem[] = [
   {
-    id: 'kba-rapida',
-    title: 'Hệ Thống Máy In Offset Koenig & Bauer Rapida (Đức)',
-    origin: 'Đức',
+    id: 'komori-offset',
+    title: 'Hệ Thống Máy In Offset Komori (Nhật Bản)',
+    origin: 'Nhật Bản',
     category: 'printing',
     specs: [
-      'Hệ thống cấp ẩm và chỉnh chồng màu hoàn toàn tự động bằng máy tính',
-      'Khổ in tối đa: 720 x 1020 mm',
-      'Tốc độ in cực đại: 18,000 tờ/giờ',
-      'Khả năng tích hợp cụm sấy hồng ngoại và sấy UV đồng bộ trực tiếp'
+      'Hệ thống cấp ẩm và điều khiển chồng tự động chuyên nghiệp',
+      'Khổ in tối ưu, đáp ứng tiêu chuẩn tờ vé số và biểu mẫu',
+      'Tốc độ in cao và ổn định liên tục cho sản lượng lớn',
+      'Khả năng tích hợp sấy đồng bộ trực tiếp chống ẩm nhòe mực'
     ],
-    description: 'Dây chuyền in Offset cao cấp nhất thế giới của Đức chuyên trị các đơn hàng in vé số kiến thiết với độ đồng màu tuyệt đối giữa hàng triệu bản in.'
+    description: 'Dây chuyền máy in Offset Komori tiên tiến từ Nhật Bản chuyên dụng cho các đơn hàng in vé số kiến thiết đạt tính chính xác màu sắc và độ sắc nét hoàn hảo trên hàng triệu bản in.'
   },
   {
-    id: 'heidelberg-speedmaster',
-    title: 'Máy In Heibelberg Speedmaster SM 4 Màu',
-    origin: 'Đức',
+    id: 'mitsubishi',
+    title: 'Máy In Mitsubishi 4 Màu – 5 Màu',
+    origin: 'Nhật Bản',
     category: 'printing',
     specs: [
-      'Điều khiển tập trung thông qua màn hình cảm ứng Prinect Press Center',
-      'Hệ thống chồng màu chính xác tuyệt đối sai lệch dưới 0.01mm',
-      'Tốc độ sản xuất ổn định: 15,000 tờ/giờ',
-      'Hỗ trợ in trên các loại giấy siêu mỏng và các loại decal phức tạp'
+      'Điều khiển lượng mực cân bằng và thông minh bằng máy tính',
+      'Độ chồng hạt màu chính xác cao, khống chế độ lệch hạt mực',
+      'Công suất vận hành lớn, bền bỉ khi in sản lượng ấn phẩm cực đại',
+      'Hỗ trợ cán màng và in trên nhiều định lượng giấy đa dạng'
     ],
-    description: 'Thương hiệu máy in lâu đời của Đức, cho chất lượng tram in mịn màng, độ chuyển sắc trung thực, chuyên dụng cho hóa đơn cao cấp và chứng từ tài chính.'
+    description: 'Thương hiệu máy in nổi tiếng về sự bền bỉ của Nhật Bản, cho chất lượng màu in ổn định, đều màu, chuyên dụng cho hóa đơn thuế, chứng từ tài chính và đa liên liên tục.'
   },
   {
     id: 'digital-inkjet-control',
@@ -124,7 +124,7 @@ export const TECHNOLOGIES: TechnologyItem[] = [
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'g1',
-    title: 'Khu vực vận hành máy in Koenig & Bauer công suất lớn',
+    title: 'Khu vực vận hành hệ thống máy in Komori công suất lớn',
     category: 'machinery',
     image: '/src/assets/images/printing_hero_1779242674142.png',
   },
@@ -163,7 +163,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
 export const VACANCIES: JobVacancy[] = [
   {
     id: 'v1',
-    title: 'Kỹ Sư Vận Hành Máy In Offset Koenig & Bauer / Heidelberg',
+    title: 'Kỹ Sư Vận Hành Máy In Offset Komori / Mitsubishi',
     department: 'Xưởng Sản Xuất In Ấn',
     type: 'Toàn thời gian (Cố định)',
     salary: '15,000,000 - 22,000,000 VNĐ / Tháng',

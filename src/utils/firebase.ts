@@ -152,9 +152,9 @@ export const DEFAULT_MOCK_NEWS: NewsPost[] = [
   },
   {
     id: "tin-6-heidelberg",
-    title: "Nâng cấp và số hóa dây chuyền in công suất cao Heidelberg Speedmaster từ CHLB Đức",
-    subtitle: "Sẵn sàng đáp ứng khát vọng in nhanh, đồng màu mọi lô hàng vạn bản.",
-    content: "Chúng tôi đã bổ sung mô-đun kết nối dữ liệu trung tâm Prinect Press Connection tích hợp cổng quét mật độ màu phân khúc cao thương hiệu Heidelberg. Tiến trình số hóa giúp xưởng tự sấy khô bằng hồng ngoại ngay khi giấy ra lô cuộn, tiết kiệm năng lượng 20% và tăng đáng kể độ bám màu nhạy nhiệt bảo an.",
+    title: "Bảo dưỡng định kỳ và đồng bộ hóa dây chuyền in offset Komori hiện đại",
+    subtitle: "Sẵn sàng đáp ứng yêu cầu in nhanh, bền màu trên mọi lô sản phẩm lớn.",
+    content: "Chúng tôi vừa hoàn tất đợt bảo dưỡng định kỳ và tối ưu hóa hệ thống cấp mực tự động cho dây chuyền máy in Komori. Tiến trình kỹ thuật này giúp đảm bảo độ ổn định tối đa cho màu sắc, chất lượng in sắc nét trên từng sản phẩm, kiểm soát màng co và sấy khô, phục vụ đắc lực cho việc in ấn vé số kiến thiết và chứng từ tài chính.",
     category: "Công nghệ in mới",
     imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
     isPinned: false,
