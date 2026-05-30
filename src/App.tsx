@@ -6,6 +6,7 @@ import HeroSlider from './components/HeroSlider';
 import Introduction from './components/Introduction';
 import Services from './components/Services';
 import Technology from './components/Technology';
+import QRCodeProtection from './components/QRCodeProtection';
 import Gallery from './components/Gallery';
 import NewsSection from './components/NewsSection';
 import Recruitment from './components/Recruitment';
@@ -49,7 +50,7 @@ export default function App() {
 
   // IntersectionObserver to dynamically highlight active sticky menu link on scroll
   useEffect(() => {
-    const sections = ['hero', 'about', 'org-chart', 'services', 'technology', 'gallery', 'recruitment', 'contact'];
+    const sections = ['hero', 'about', 'org-chart', 'services', 'technology', 'qrcode-sec', 'gallery', 'recruitment', 'contact'];
     
     const handleScrollActiveLink = () => {
       if (currentPage === 'news') {
@@ -199,6 +200,17 @@ export default function App() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Technology />
+              </motion.div>
+
+              {/* QR CODE BẢO MẬT ĐA LỚP DOANH NGHIỆP IN ẤN */}
+              <motion.div 
+                id="qrcode-sec"
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <QRCodeProtection />
               </motion.div>
 
               {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
