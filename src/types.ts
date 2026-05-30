@@ -37,6 +37,7 @@ export interface JobVacancy {
   deadline: string;
   requirements: string[];
   benefits: string[];
+  tasks?: string[]; // Optional job descriptions/tasks
 }
 
 export interface QuoteRequest {

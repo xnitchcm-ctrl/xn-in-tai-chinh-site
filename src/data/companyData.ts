@@ -163,42 +163,56 @@ export const GALLERY_ITEMS: GalleryItem[] = [
 export const VACANCIES: JobVacancy[] = [
   {
     id: 'v1',
-    title: 'Kỹ Sư Vận Hành Máy In Offset Komori / Mitsubishi',
-    department: 'Xưởng Sản Xuất In Ấn',
+    title: 'Kỹ Sư Công Nghệ In',
+    department: 'Phòng Kỹ thuật & Công nghệ In',
     type: 'Toàn thời gian (Cố định)',
-    salary: '15,000,000 - 22,000,000 VNĐ / Tháng',
+    salary: '15,000,000 - 25,000,000 VNĐ / Tháng',
     deadline: '30/06/2026',
     requirements: [
-      'Tốt nghiệp Trung cấp/Cao đẳng chuyên ngành Công nghệ kỹ thuật in hoặc ngành cơ khí tự động',
-      'Có tối thiểu 2 năm kinh nghiệm trực tiếp đứng máy vận hành in Máy in Offset 4 màu, 5 màu',
-      'Nắm bắt rõ quy trình pha mực, chồng màu và xử lý lỗi kỹ thuật bọt khí, lem mực',
-      'Chăm chỉ, sẵn sàng làm ca đêm khi có dự án in vé số đợt cao điểm Tết'
+      'Tốt nghiệp chuyên ngành Kỹ sư Công nghệ In',
+      'Có kiến thức về quy trình in offset và in kỹ thuật số',
+      'Hiểu cơ bản về chế bản, quản lý màu và file in',
+      'Có tinh thần trách nhiệm và khả năng làm việc nhóm',
+      'Ưu tiên ứng viên có kinh nghiệm trong ngành in vé số hoặc in ấn tài chính'
+    ],
+    tasks: [
+      'Theo dõi và hỗ trợ vận hành sản xuất in ấn',
+      'Kiểm tra chất lượng file và thành phẩm in',
+      'Hỗ trợ quản lý dữ liệu in biến đổi và QR Code',
+      'Phối hợp giữa bộ phận chế bản và phân xưởng in'
     ],
     benefits: [
       'Được đóng đầy đủ BHXH, BHYT, BHTN theo luật Lao động Nhà nước',
       'Lương tháng 13 + thưởng năng suất ấn phẩm vượt chỉ tiêu cực hấp dẫn',
-      'Hỗ trợ cơm trưa tại xí nghiệp và trợ cấp ca đêm',
-      'Khám sức khỏe định kỳ hàng năm và du lịch nghỉ mát cùng Công ty TNHH MTV Xổ số kiến thiết TP.HCM'
+      'Hỗ trợ cơm trưa tại xí nghiệp và trợ cấp ca kíp, độc hại',
+      'Khám sức khỏe định kỳ hàng năm và du lịch nghỉ mát cùng Công ty'
     ]
   },
   {
     id: 'v2',
-    title: 'Nhân Viên Kiểm Chất Lượng Ấn Phẩm (KCS) - Phòng Bảo Mật',
-    department: 'Mảng Kiểm Soát KCS & Niêm Phong',
+    title: 'Họa Sĩ Thiết Kế Đồ Họa',
+    department: 'Phân Xưởng Chế Bản',
     type: 'Toàn thời gian',
-    salary: '10,000,000 - 14,000,000 VNĐ / Tháng',
+    salary: '12,000,000 - 18,000,000 VNĐ / Tháng',
     deadline: '15/07/2026',
     requirements: [
-      'Tốt nghiệp trung học phổ thông trở lên, ưu tiên người có am hiểu về mỹ thuật hoặc ngành in',
-      'Thị lực tốt, nhạy cảm màu sắc, cẩn thận tỉ mỉ tuyệt đối trong công việc',
-      'Khả năng tập trung cao độ, bảo mật chặt chẽ thông tin khách hàng và sê-ri bản in',
-      'Có khả năng hoạt động nhóm và chịu áp lực thời gian giao hàng'
+      'Thành thạo Adobe Illustrator, Photoshop',
+      'Có kiến thức về thiết kế và chế bản ngành in',
+      'Hiểu cơ bản về màu sắc, dàn trang và file xuất in',
+      'Có khả năng làm việc cẩn thận, chính xác'
+    ],
+    tasks: [
+      'Thiết kế và chỉnh sửa file in',
+      'Tạo mẫu phục vụ sản xuất vé số và ấn phẩm tài chính',
+      'Thực hiện công việc tại phân xưởng chế bản',
+      'Chuẩn bị file in kỹ thuật số và offset',
+      'Phối hợp xử lý dữ liệu biến đổi khi cần'
     ],
     benefits: [
-      'Thưởng chuyên cần vàng và các kì Lễ lớn (30/4, 2/9, Tết Nguyên Đán)',
-      'Phụ cấp độc hại màng cán và tiếng ồn theo chuẩn lao động Công ty Nhà Nước',
-      'Cung cấp đầy đủ đồng phục bảo hộ, khẩu trang lọc carbon, kính phóng đại và sữa dinh dưỡng giữa ca',
-      'Lộ trình thăng tiến lên Trưởng tổ KCS sau 2 năm đạt năng lực xuất sắc'
+      'Hưởng đầy đủ mọi chế độ phúc lợi, nghỉ Lễ Tết theo quy chế Công ty Nhà Nước',
+      'Lương tháng 13 + thưởng hiệu quả hoàn thiện thiết kế xuất sắc',
+      'Cung cấp đầy đủ thiết bị, máy tính đồ họa chuyên sâu cấu hình cao',
+      'Môi trường làm việc văn minh, thân thiện, cơ hội thăng tiến rộng mở'
     ]
   }
 ];
