@@ -301,7 +301,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                           className="w-[450px] bg-white text-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-100 p-4 grid grid-cols-1 gap-1"
                         >
                           <div className="border-b border-slate-100 pb-2 mb-2">
-                            <h3 className="text-[10px] font-black tracking-widest text-slate-400 uppercase font-display">CHUYÊN PHÂN LỚP IN ĐẠT TIÊU CHUẨN QUỐC GIA</h3>
+                            <h3 className="text-[10px] font-black tracking-widest text-[#0A3273] uppercase font-display">CHUYÊN IN ẤN VÉ SỐ & ẤN PHẨM TÀI CHÍNH</h3>
                           </div>
                           <div className="space-y-1">
                             {/* Service dropdown items */}
@@ -438,7 +438,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                               </div>
                               <div>
                                 <h4 className="text-xs font-bold text-slate-900 group-hover/item:text-brand-blue transition-colors">Sơ Đồ Tổ Chức</h4>
-                                <p className="text-[9px] text-slate-400 mt-0.5 font-light">Mô hình phân tầng cơ sở khép kín</p>
+                                <p className="text-[9px] text-slate-400 mt-0.5 font-light">Mô hình cơ cấu tổ chức quản lý</p>
                               </div>
                             </div>
                           </div>

@@ -81,11 +81,11 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
             transition={{ duration: 0.7 }}
             className="text-slate-600 font-sans text-sm sm:text-base max-w-2xl mt-3 leading-relaxed"
           >
-            Mọi quy trình sản xuất đều tuân thủ các quy định bảo mật khắt khe của Nhà nước, giám sát tự động bằng trí tuệ nhân tạo và hệ thống KCS đa lớp khép kín.
+            Quy trình sản xuất chuyên nghiệp, được kiểm soát chặt chẽ từ khâu tiếp nhận dữ liệu, chế bản, in ấn cho đến hoàn thiện và giao thành phẩm.
           </motion.p>
         </div>
 
-        {/* REQUIRED: Banner nổi bật đầu section: CHUYÊN IN TÀI CHÍNH - BẢO MẬT CAO */}
+        {/* REQUIRED: Banner nổi bật đầu section: CHUYÊN IN VÉ SỐ KIẾN THIẾT & ẤN PHẨM TÀI CHÍNH */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -109,14 +109,14 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                 <span className="w-2 h-2 rounded-full bg-[#DCA92A] animate-pulse"></span>
                 Dây Chuyền In Đạt Chuẩn ISO 9001 & ISO 27001
               </div>
-              <h3 className="text-2xl sm:text-3xl font-black font-display text-white tracking-tight uppercase leading-tight mb-4">
-                CHUYÊN IN TÀI CHÍNH - BẢO MẬT CAO
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display text-[#DCA92A] tracking-tight uppercase leading-tight mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                🔴 CHUYÊN IN VÉ SỐ KIẾN THIẾT & ẤN PHẨM TÀI CHÍNH
               </h3>
               
               <div className="w-full h-px bg-white/10 my-4"></div>
               
               <p className="text-slate-300 text-xs sm:text-sm font-sans mb-6 leading-relaxed">
-                Hệ thống xí nghiệp vận hành quy trình khép kín hoạt động tự động hóa cao, cam kết đáp ứng trọn vẹn những sản phẩm chuyên sâu đòi hỏi nghiệp vụ tài chính tiền tệ nghiêm ngặt hàng đầu:
+                Xí nghiệp vận hành quy trình sản xuất khép kín chuyên nghiệp, đáp ứng đầy đủ yêu cầu cho các sản phẩm in ấn đặc thù phục vụ ngành xổ số và tài chính:
               </p>
               
               {/* Bullet points summarizing "CHUYÊN IN" */}
@@ -126,7 +126,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                     <Ticket className="w-3.5 h-3.5" />
                   </span>
                   <div className="text-xs sm:text-sm text-slate-100 leading-relaxed">
-                    <strong className="text-white">Vé số kiến thiết:</strong> In bằng máy in KTS hiện đại kèm mã vạch 2 chiều tích hợp số dự thưởng nhảy dữ liệu biến đổi chống trùng lặp.
+                    <strong className="text-white">Vé số kiến thiết:</strong> Vận hành trên máy in Komori/Mitsubishi và hệ thống in kỹ thuật số biến đổi mã vạch, QR Code định danh, tối ưu hóa công tác dò số đối so kết quả.
                   </div>
                 </div>
 
@@ -135,7 +135,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                     <Cpu className="w-3.5 h-3.5" />
                   </span>
                   <div className="text-xs sm:text-sm text-slate-100 leading-relaxed">
-                    <strong className="text-white">Vé số cào:</strong> Sản xuất trên hệ thống thiết bị phủ latex nhôm và mực chống soi hiện đại bảo đảm độ che phủ 100%, bảo mật mật độ tuyệt mật.
+                    <strong className="text-white">Vé số cào:</strong> Sản xuất trên hệ thống chuyên dụng phủ nhôm latex chống soi đạt yêu cầu và mẫu phủ bóng bảo quản sản phẩm hoàn thiện.
                   </div>
                 </div>
 
