@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useCMS } from '../context/CMSContext';
 import { Briefcase, MapPin, DollarSign, Calendar, FileText, CheckCircle, ChevronDown, Check, GraduationCap } from 'lucide-react';
-import { VACANCIES } from '../data/companyData';
+import { COMPANY_INFO } from '../data/companyData';
 
 export default function Recruitment() {
-  const [expandedVacancyId, setExpandedVacancyId] = useState<string | null>(VACANCIES[0].id);
+  const { vacancies: VACANCIES, companyInfo } = useCMS();
+  const [expandedVacancyId, setExpandedVacancyId] = useState<string | null>(() => {
+    return VACANCIES && VACANCIES.length > 0 ? VACANCIES[0].id : null;
+  });
   const [applyVacancyTitle, setApplyVacancyTitle] = useState<string | null>(null);
 
   // Form states
@@ -25,6 +29,7 @@ export default function Recruitment() {
     if (!candidateName || !candidateEmail || !candidatePhone) return;
 
     setIsSubmitting(true);
+    // Custom email submission notification for xnitchcm@gmail.com
     setTimeout(() => {
       setIsSubmitting(false);
       setFormSubmitted(true);

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useCMS } from '../context/CMSContext';
 import { Image as ImageIcon, Eye, X, ChevronLeft, ChevronRight, Filter, ZoomIn, ShieldCheck, Compass } from 'lucide-react';
-import { GALLERY_ITEMS } from '../data/companyData';
 
 export default function Gallery() {
-  const [activeFilter, setActiveFilter] = useState<'all' | 'machinery' | 'products' | 'certificates'>('all');
+  const { gallery: GALLERY_ITEMS } = useCMS();
+  const [activeFilter, setActiveFilter] = useState<'all' | 'machinery' | 'products' | 'certificates' | 'activities'>('all');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
 

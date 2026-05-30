@@ -105,7 +105,7 @@ export default function OrgChart() {
             className="flex items-center gap-2 px-3.5 py-1.5 bg-white/5 border border-white/10 rounded-full text-brand-gold text-[10px] uppercase font-black font-display tracking-widest mb-4"
           >
             <Cpu className="w-3.5 h-3.5 text-brand-gold animate-pulse" />
-            <span>Xí nghiệp In Bản đồ và Tranh ảnh có tên bộ</span>
+            <span>MÔ HÌNH VẬN HÀNH DOANH NGHIỆP NHÀ NƯỚC</span>
           </motion.div>
 
           <motion.h2 

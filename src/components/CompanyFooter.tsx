@@ -1,11 +1,12 @@
 import { Building, Phone, Mail, MapPin, ChevronUp, Globe, ShieldCheck } from 'lucide-react';
-import { COMPANY_INFO } from '../data/companyData';
+import { useCMS } from '../context/CMSContext';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
 }
 
 export default function CompanyFooter({ onNavigate }: FooterProps) {
+  const { companyInfo: COMPANY_INFO } = useCMS();
   const currentYear = new Date().getFullYear();
 
   const handleBackToTop = () => {
@@ -63,9 +64,17 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
               </span>
             </div>
             
-            <p className="text-[10px] text-amber-300 font-display font-bold uppercase tracking-wider mt-3">
-              Slogan: {COMPANY_INFO.slogan}
-            </p>
+            <div className="mt-4 flex items-center gap-2 select-none">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-950/50 border border-red-500/20 rounded-md shadow-lg shadow-red-950/30 group hover:border-red-500/40 transition-all duration-300">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+                <span className="text-[10px] font-black text-red-400 tracking-wider font-display uppercase leading-none">
+                  SLOGAN: {COMPANY_INFO.slogan}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Site Navigation Links Grid (4 Cols) */}

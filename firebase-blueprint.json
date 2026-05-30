@@ -2,48 +2,98 @@
   "entities": {
     "NewsPost": {
       "title": "NewsPost",
-      "description": "Represents a corporate news post or activity update for the enterprise website.",
+      "description": "Enterprise secure digital publications.",
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "subtitle": {
-          "type": "string"
-        },
-        "content": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "imageUrl": {
-          "type": "string"
-        },
-        "videoUrl": {
-          "type": "string"
-        },
-        "isPinned": {
-          "type": "boolean"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "author": {
-          "type": "string"
-        }
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "isPinned": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "author": { "type": "string" }
       },
-      "required": ["title", "content", "category", "isPinned", "createdAt"]
+      "required": ["id", "title", "content", "category", "createdAt", "author"]
+    },
+    "ServiceItem": {
+      "title": "ServiceItem",
+      "description": "Print shop service divisions details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "shortDesc": { "type": "string" },
+        "longDesc": { "type": "string" },
+        "image": { "type": "string" },
+        "iconName": { "type": "string" },
+        "bullets": { "type": "array" }
+      },
+      "required": ["id", "title", "shortDesc", "longDesc", "image"]
+    },
+    "GalleryItem": {
+      "title": "GalleryItem",
+      "description": "High-contrast visual industrial assets.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "image": { "type": "string" }
+      },
+      "required": ["id", "title", "category", "image"]
+    },
+    "JobVacancy": {
+      "title": "JobVacancy",
+      "description": "Talent acquisition roles available at the press.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "department": { "type": "string" },
+        "type": { "type": "string" },
+        "salary": { "type": "string" },
+        "deadline": { "type": "string" },
+        "requirements": { "type": "array" },
+        "benefits": { "type": "array" }
+      },
+      "required": ["id", "title", "department", "type", "salary", "deadline"]
+    },
+    "SettingsConfig": {
+      "title": "SettingsConfig",
+      "description": "General text configurations, company data and visual slides.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "companyInfo": { "type": "object" },
+        "slides": { "type": "array" },
+        "statistics": { "type": "array" }
+      },
+      "required": ["id", "companyInfo", "slides", "statistics"]
     }
   },
   "firestore": {
-    "news/{newsId}": {
+    "/news/{newsId}": {
       "schema": "NewsPost",
-      "description": "Collection of corporate news, activities, announcements, and print technology updates."
+      "description": "Publications for the company activities feed."
+    },
+    "/services/{serviceId}": {
+      "schema": "ServiceItem",
+      "description": "Services offered by the print shop."
+    },
+    "/gallery/{galleryId}": {
+      "schema": "GalleryItem",
+      "description": "Filtering items for the images gallery grid."
+    },
+    "/vacancies/{vacancyId}": {
+      "schema": "JobVacancy",
+      "description": "Recruitment postings."
+    },
+    "/settings/{settingId}": {
+      "schema": "SettingsConfig",
+      "description": "Dynamic layout texts, slides and contacts."
     }
   }
 }

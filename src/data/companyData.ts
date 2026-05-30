@@ -1,13 +1,14 @@
 import { ServiceItem, TechnologyItem, GalleryItem, JobVacancy } from '../types';
 
 export const COMPANY_INFO = {
-  name: 'XÍ NGHIỆP IN TÀI CHÍNH',
+  name: 'XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH',
   parentCompany: 'CÔNG TY TNHH MTV XỔ SỐ KIẾN THIẾT TP.HCM',
-  slogan: 'CHUYÊN NGHIỆP – CHÍNH XÁC – BẢO MẬT',
-  address: 'Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, TP Hồ Chí Minh',
-  phone: '028 3595 0311',
-  phoneDisplay: '028 3595 0311', // Hotline format
-  email: 'xnitchcm@gmail.com',
+  slogan: 'UY TÍN – CHẤT LƯỢNG – NHANH CHÓNG',
+  address: 'Lô A1 - A2 Đường A4, Cụm Công Nghiệp - Khu Đô Thị Mới Nhị Xuân, Ấp 5, Xã Xuân Thới Sơn, Hóc Môn, TP. Hồ Chí Minh',
+  phone: '(028) 3595 0311 - 3595 0312',
+  phoneDisplay: '(028) 3595 0311 - 3595 0312',
+  fax: '(028) 3595 0818',
+  email: 'itc177@hotmail.com',
   website: 'www.xskthcm.com',
   establishedYear: '1978',
   standards: ['ISO 9001:2015', 'ISO/IEC 27001:2013'],
@@ -23,44 +24,44 @@ export const STATISTICS = [
 export const SERVICE_ITEMS: ServiceItem[] = [
   {
     id: 'in-ve-so-kts',
-    title: 'In Vé Số Kiến Thiết KTS',
-    shortDesc: 'Vé số kiến thiết bằng máy in KTS hiện đại kèm mã vạch 2 chiều tích hợp số dự thưởng.',
-    longDesc: 'Xí nghiệp sở hữu giải pháp in vé số kiến thiết bằng máy in KTS hiện đại tích hợp dữ liệu biến đổi thời gian thực. Toàn bộ vé số được tích hợp mã vạch 2 chiều (QR Code/DataMatrix) mã hóa chuỗi số dự thưởng, đảm bảo tính minh bạch, chính xác tuyệt đối, dễ dàng tra cứu tự động và ngăn chặn triệt để mọi nguy cơ làm giả.',
+    title: 'Vé số kiến thiết bằng máy in KTS hiện đại',
+    shortDesc: 'Kèm mã vạch 2 chiều tích hợp số dự thưởng, bảo mật tuyệt đối.',
+    longDesc: 'Giải pháp in vé số kiến thiết ứng dụng công nghệ kỹ thuật số hiện đại tiên tiến bậc nhất. Toàn bộ vé số được tích hợp hệ thống số nhảy và mã vạch 2 chiều (QR Code / DataMatrix) mã hóa chuỗi số dự thưởng biến đổi thời gian thực, đảm bảo tính minh bạch, tính xác thực cao và ngăn chặn tuyệt đối các hình thức làm giả.',
     image: '/src/assets/images/lottery_sheet_1779242696323.png',
     iconName: 'Ticket',
     bullets: [
-      'In số sê-ri nhảy biến đổi bằng công nghệ laser kỹ thuật số siêu tốc',
-      'Tích hợp mã vạch 2 chiều (QR code) chứa thông tin số dự thưởng mã hóa',
-      'Thiết kế họa tiết Guilloche vân chống giả đa màu sắc độc quyền',
-      'Hệ thống đóng bó, kiểm đếm và ép niêm phong bằng màng co tự động'
+      'In số sê-ri nhảy biến đổi bằng công nghệ laser kỹ thuật số siêu tốc, không trùng lặp',
+      'Tích hợp mã vạch 2 chiều (QR Code) chứa thông tin số dự thưởng mã hóa tối mật',
+      'Thiết kế họa tiết Guilloche vân chống giả đa màu sắc độc quyền của ngành xổ số',
+      'Hệ thống quản lý, đóng bó, kiểm đếm và ép niêm phong bằng màng co tự động khép kín'
     ]
   },
   {
     id: 'in-ve-so-cao',
-    title: 'In Vé Số Cào',
-    shortDesc: 'Vé số cào trên hệ thống thiết bị hiện đại, bảo mật tuyệt đối, chống soi chiếu.',
-    longDesc: 'Quy trình in vé số cào được thực hiện khép kín trên hệ thống thiết bị phủ latex nhôm hiện đại, bảo đảm độ che phủ 100%, dễ cào nhưng tuyệt đối chống soi dưới mọi cường độ ánh sáng. Các mã số trúng thưởng và chuỗi số bảo mật được mã hóa ngẫu nhiên bằng thuật toán phần mềm chuyên dụng của ngành tài chính.',
+    title: 'Vé số cào trên hệ thống thiết bị hiện đại',
+    shortDesc: 'Hệ thống thiết bị cào hiện đại bảo an cao chống soi chiếu tuyệt đối.',
+    longDesc: 'Dây chuyền in vé số cào chuyên nghiệp được thực hiện tự động khép kín với hệ thống phủ latex nhôm hiện đại, bảo đảm độ che phủ 100%, dễ cào nhưng tuyệt đối chống soi dưới mọi loại cường độ ánh sáng hay thiết bị nội soi tầm nhiệt. Thuật toán phần mềm chuyên dụng tạo chuỗi ký tự bảo mật tối thượng.',
     image: '/src/assets/images/security_lens_1779242712535.png',
     iconName: 'Cpu',
     bullets: [
-      'Lớp phủ cào latex nhôm cao cấp siêu mịn, chống lột và chống soi sáng',
-      'Mã sê-ri biến thiên và mã PIN được sinh ngẫu nhiên bảo mật 100%',
-      'In công nghệ nhiều lớp chống giả lập và chống can thiệp vật lý',
-      'Kiểm duyệt và hủy phế phẩm lỗi tự động nghiêm ngặt bằng camera AI'
+      'Lớp phủ cào latex nhôm cao cấp siêu mịn, dễ cào, chống lột và chống soi sáng',
+      'Mã PIN và chuỗi sê-ri biến thiên được sinh ngẫu nhiên bảo mật 100% bằng phần mềm chuyên nghiệp',
+      'Thiết kế cấu trúc in nhiều lớp phức tạp nhằm ngăn ngừa can thiệp vật lý ngoại vi',
+      'Hệ thống camera AI kiểm duyệt chất lượng từng ô cào tự động và loại bỏ phế phẩm lỗi'
     ]
   },
   {
     id: 'in-chung-tu-tai-chinh',
-    title: 'In Chứng Từ & Biểu Mẫu Tài Chính',
-    shortDesc: 'Chứng từ, biểu mẫu, hóa đơn đỏ, và các ấn phẩm khác của ngành tài chính.',
-    longDesc: 'Chuyên cung cấp dịch vụ in ấn các loại chứng từ thuế, hóa đơn tự in có ký hiệu, biên lai phí/lệ phí, phiếu thu chi kế toán và các biểu mẫu carbonless đa liên tự nhân bản. Sản phẩm sử dụng mực in chống trôi và giấy nhập khẩu chất lượng cao đảm bảo lưu trữ thông tin bền bỉ theo thời gian.',
+    title: 'Chứng từ, biểu mẫu, các ấn phẩm khác của ngành tài chính',
+    shortDesc: 'Chứng từ kế toán thuế, hóa đơn đỏ tự in, biểu mẫu carbonless tự nhân bản.',
+    longDesc: 'Cung cấp giải pháp in ấn chuyên nghiệp cho toàn bộ hệ thống hóa đơn GTGT, hóa đơn tự in có ký hiệu bảo an, biên lai phí/lệ phí nhà nước, phiếu thu - chi kế toán và các định dạng biểu mẫu carbonless đa liên tự nhân bản sắc nét. Giấy nhập khẩu chất lượng cao đảm bảo độ bền lưu trữ lâu năm.',
     image: '/src/assets/images/invoice_docs_1779242750401.png',
     iconName: 'FileSpreadsheet',
     bullets: [
-      'Sử dụng giấy Carbonless tự sao cao cấp, nét viết nhạy bén và rõ ràng',
-      'In liên tục từ 2 đến 5 liên khác màu với độ đồng màu và chính xác cao',
-      'Đường xé răng cưa micro-perforation cực mịn, dễ xé rời không rách',
-      'Hệ thống quản lý chuỗi số nhảy hóa đơn (red numbers) nghiêm ngặt'
+      'Sử dụng giấy Carbonless tự sao cao cấp, chữ viết đè nhạy bén và rõ chữ ở các liên dưới',
+      'Quy trình in liên tục từ 2 đến 5 liên khác màu với độ đồng màu sê-ri cực kỳ chuẩn xác',
+      'Đường xé răng cưa tinh xảo (micro-perforation), hỗ trợ xé rời dễ dàng không gây rách nát',
+      'Kiểm soát và lưu giữ chuỗi số nhảy hóa đơn (red numbers) nghiêm ngặt đúng quy định tài chính'
     ]
   }
 ];

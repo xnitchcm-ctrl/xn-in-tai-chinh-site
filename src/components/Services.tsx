@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useCMS } from '../context/CMSContext';
 import { 
   Ticket, 
   FileSpreadsheet, 
@@ -11,7 +12,6 @@ import {
   Lock, 
   Shield 
 } from 'lucide-react';
-import { SERVICE_ITEMS } from '../data/companyData';
 import { ServiceItem } from '../types';
 
 interface ServicesProps {
@@ -19,6 +19,7 @@ interface ServicesProps {
 }
 
 export default function Services({ onSelectServiceForQuote }: ServicesProps) {
+  const { services: SERVICE_ITEMS } = useCMS();
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
   const getIcon = (iconName: string) => {

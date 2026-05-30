@@ -164,10 +164,13 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
               <h1 className="text-lg sm:text-xl lg:text-2xl font-black text-brand-blue font-display tracking-tight leading-none uppercase mt-0.5">
                 {COMPANY_INFO.name}
               </h1>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="h-[2px] w-6 bg-brand-gold rounded-full"></span>
-                <p className="text-[9px] font-extrabold text-brand-gold tracking-widest uppercase font-display leading-none">
-                  TIÊU CHUẨN QUỐC GIA – CHẤT LƯỢNG QUỐC TẾ
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
+                </span>
+                <p className="text-[10px] sm:text-[11px] font-black text-red-600 dark:text-red-500 tracking-widest uppercase font-display leading-none transition-all duration-300 hover:text-red-500 select-none drop-shadow-[0_1px_2px_rgba(220,38,38,0.2)]">
+                  UY TÍN – CHẤT LƯỢNG – NHANH CHÓNG
                 </p>
               </div>
             </div>
@@ -494,7 +497,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
               onClick={openQuoteModal}
               className="px-5 py-2.5 text-xs font-black tracking-widest font-display rounded bg-brand-gold text-brand-blue hover:bg-yellow-400 border border-amber-300 transition-all cursor-pointer shadow uppercase"
             >
-              YÊU CẦU BÁO GIÁ TRỰC TUYẾN
+              Tư vấn in ấn
             </motion.button>
           </div>
 
@@ -502,7 +505,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
           <div className="lg:hidden flex items-center justify-between w-full sm:w-auto py-2">
             {!isSticky && (
               <span className="font-display font-black text-[10px] tracking-wider text-amber-300 uppercase block sm:hidden">
-                CHUYÊN NGHIỆP – CHÍNH XÁC – BẢO MẬT
+                UY TÍN – CHẤT LƯỢNG – NHANH CHÓNG
               </span>
             )}
             <button
@@ -605,9 +608,9 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                     setIsMenuOpen(false);
                     openQuoteModal();
                   }}
-                  className="w-full py-3.5 text-center text-xs font-black font-display tracking-widest rounded bg-brand-gold text-brand-blue hover:bg-yellow-400 transition-colors cursor-pointer shadow-lg hover:shadow-yellow-500/20 active:scale-[0.98]"
+                  className="w-full py-3.5 text-center text-xs font-black font-display tracking-widest rounded bg-brand-gold text-brand-blue hover:bg-yellow-400 transition-colors cursor-pointer shadow-lg hover:shadow-yellow-500/20 active:scale-[0.98] uppercase"
                 >
-                  ĐĂNG KÝ TƯ VẤN THÀNH PHẨM IN
+                  Liên hệ ngay
                 </button>
 
                 {/* Hotline metadata shortcut */}

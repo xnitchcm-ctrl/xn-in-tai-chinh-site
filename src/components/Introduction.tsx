@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useCMS } from '../context/CMSContext';
 import { Award, ShieldCheck, Target, Zap, Clock, ThumbsUp } from 'lucide-react';
-import { COMPANY_INFO, STATISTICS } from '../data/companyData';
 
 export default function Introduction() {
+  const { companyInfo: COMPANY_INFO, statistics: STATISTICS } = useCMS();
   const [activeTab, setActiveTab] = useState<'mission' | 'vision' | 'values' | 'history'>('mission');
 
   const tabContents = {

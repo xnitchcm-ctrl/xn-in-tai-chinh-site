@@ -290,8 +290,7 @@ export default function Contact() {
                   </div>
                   <h4 className="text-base font-black text-white font-display tracking-wider uppercase">GỬI YÊU CẦU THÀNH CÔNG!</h4>
                   <p className="text-xs text-slate-300 leading-relaxed max-w-sm">
-                    Yêu cầu thông tin báo giá đã được luân chuyển an toàn về Ban Kế hoạch Kỹ thuật của Xí nghiệp. 
-                    Chúng tôi sẽ điện thoại xác thực mã số sê-ri báo giá sớm nhất.
+                    Yêu cầu thông tin báo giá đã được luân chuyển an toàn về địa chỉ điện tử tiếp nhận <strong>xnitchcm@gmail.com</strong> của Ban Kế hoạch Xí nghiệp. Chúng tôi sẽ liên hệ phản sắc nét sớm nhất có thể.
                   </p>
                   <button
                     type="button"

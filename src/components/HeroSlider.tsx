@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useCMS } from '../context/CMSContext';
 import { 
   Shield, 
   Eye, 
@@ -13,7 +14,10 @@ import {
   Video, 
   VideoOff, 
   FlameKindling,
-  Sparkles
+  Sparkles,
+  Check,
+  QrCode,
+  Printer
 } from 'lucide-react';
 
 interface HeroSliderProps {
@@ -22,6 +26,7 @@ interface HeroSliderProps {
 }
 
 export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderProps) {
+  const { slides } = useCMS();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoActive, setIsVideoActive] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -29,40 +34,14 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const slides = [
-    {
-      id: 'slide-1',
-      image: '/src/assets/images/printing_hero_1779242674142.png',
-      title: 'CHUYÊN NGHIỆP – CHÍNH XÁC – BẢO MẬT',
-      subtitle: 'Xí Nghiệp In Tài Chính trực thuộc Công Ty TNHH MTV Xổ Số Kiến Thiết TP.HCM là đơn vị tiên phong về giải pháp thiết kế, in hóa đơn bảo mật và chống giả hàng đầu Việt Nam.',
-      badgeText: 'Chất Lượng Vượt Trội',
-      targetId: 'about',
-    },
-    {
-      id: 'slide-2',
-      image: '/src/assets/images/lottery_sheet_1779242696323.png',
-      title: 'BẢO AN VÉ SỐ TRUYỀN THỐNG TIÊU CHUẨN CAO',
-      subtitle: 'Ứng dụng thuật toán nhảy số siêu ngẫu nhiên Kodak Prosper, kết hợp màng dập hologram óng nhiệt cùng hệ thống mực hóa học nhạy cảm để đẩy lùi vấn nạn vé số giả mạo.',
-      badgeText: 'Công Nghệ Đột Phá',
-      targetId: 'services',
-    },
-    {
-      id: 'slide-3',
-      image: '/src/assets/images/security_lens_1779242712535.png',
-      title: 'HỆ THỐNG MÁY IN OFFSET ĐỨC CHUYÊN DỤNG',
-      subtitle: 'Sản xuất trên hệ thống dây chuyền Koenig & Bauer và Heidelberg Speedmaster thông minh giúp đảm bảo độ chuẩn xác sê-ri màu sắc đồng bộ hoàn mỹ mười triệu bản như một.',
-      badgeText: 'Năng Lực Sản Xuất Lớn',
-      targetId: 'technology',
-    }
-  ];
-
   // Rotate slides automatically every 8 seconds
   useEffect(() => {
+    if (!slides || slides.length === 0) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 8500);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides?.length]);
 
   // Adjust video play state
   useEffect(() => {
@@ -135,7 +114,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
       )}
 
       {/* 4. ACTUAL BACKGROUND CONTROLLER (Video loops vs Photorealistic Image Slider) */}
-      <div className="relative h-[680px] sm:h-[620px] lg:h-[680px] w-full">
+      <div className="relative min-h-[820px] sm:min-h-[720px] lg:h-[750px] w-full flex items-center justify-center">
         
         {/* Full screen Video component */}
         {isVideoActive && !videoError && (
@@ -187,56 +166,150 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         )}
 
         {/* 5. TEXT CONTENT & CALLS-TO-ACTION LAYOUT OVERLAY */}
-        <div className="absolute inset-0 z-20 flex items-center justify-start px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="max-w-3xl flex flex-col items-start gap-5">
+        <div className="absolute inset-0 z-20 flex items-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full items-center pt-16 sm:pt-4 pb-28 lg:pb-0">
             
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                initial={{ y: 25, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -25, opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="flex flex-col items-start gap-4"
-              >
-                {/* Micro tag badge */}
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black tracking-widest bg-brand-gold text-brand-blue rounded font-display uppercase shadow-sm">
-                  <Sparkles className="w-3 h-3 text-brand-blue-dark animate-pulse" />
-                  {slides[currentSlide].badgeText}
-                </span>
+            {/* Left Column: Slider Heading, Badge, Subtitle & Buttons */}
+            <div className="lg:col-span-7 flex flex-col items-start gap-4 sm:gap-5">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ y: 25, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -25, opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col items-start gap-4"
+                >
+                  {/* Micro tag badge */}
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black tracking-widest bg-brand-gold text-brand-blue rounded font-display uppercase shadow-sm">
+                    <Sparkles className="w-3 h-3 text-brand-blue-dark animate-pulse" />
+                    {slides[currentSlide].badgeText}
+                  </span>
 
-                {/* Main Heading headline splits */}
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase leading-tight">
-                  {slides[currentSlide].title.split('–')[0]}
-                  {slides[currentSlide].title.includes('–') && (
-                    <span className="text-brand-gold block xl:inline mt-1 xl:mt-0 xl:before:content-['-'] xl:before:mx-2 text-shadow-glow">
-                      {slides[currentSlide].title.split('–')[1]}
+                  {/* Main Heading headline splits */}
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase leading-tight">
+                    {slides[currentSlide].title.split('–')[0]}
+                    {slides[currentSlide].title.includes('–') && (
+                      <span className="text-brand-gold block xl:inline mt-1 xl:mt-0 xl:before:content-['-'] xl:before:mx-2 text-shadow-glow">
+                        {slides[currentSlide].title.split('–')[1]}
+                      </span>
+                    )}
+                  </h2>
+
+                  {/* Support detail text */}
+                  <p className="text-sm sm:text-[15px] text-slate-200 font-sans leading-relaxed max-w-2xl font-light">
+                    {slides[currentSlide].subtitle}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Mobile/Tablet inline Highlight Block for QR & Digital tech */}
+              <div className="block lg:hidden w-full mt-1">
+                <div className="bg-slate-950/80 backdrop-blur-md border border-brand-gold/30 rounded-lg p-4 shadow-xl">
+                  <div className="flex items-center gap-2 pb-2 border-b border-white/10 mb-2.5">
+                    <Cpu className="w-4 h-4 text-brand-gold shrink-0 animate-pulse" />
+                    <span className="text-xs font-black text-white uppercase tracking-wider font-display">🚀 CÔNG NGHỆ IN KTS HIỆN ĐẠI</span>
+                  </div>
+                  
+                  <div className="p-2 py-1.5 rounded bg-red-950/50 border border-red-500/25 mb-2.5 flex items-center gap-2">
+                    <span className="relative flex h-1.5 w-1.5 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
                     </span>
-                  )}
-                </h2>
+                    <span className="text-[10px] font-black text-red-200 uppercase tracking-widest leading-tight">
+                      KÈM MÃ QR CODE 2 CHIỀU TÍCH HỢP SỐ DỰ THƯỞNG DÒ KẾT QUẢ
+                    </span>
+                  </div>
 
-                {/* Support detail text */}
-                <p className="text-sm sm:text-[15px] text-slate-200 font-sans leading-relaxed max-w-2xl font-light">
-                  {slides[currentSlide].subtitle}
-                </p>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] text-slate-300">
+                    <li className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> In vé số máy KTS tiên tiến</li>
+                    <li className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Tích hợp QR Code 2 chiều</li>
+                    <li className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Dò thưởng nhanh & chính xác</li>
+                    <li className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Tăng bảo mật & dữ liệu gốc</li>
+                    <li className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Sắc nét – tốc độ cao – ổn định</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Always static interactive CTA Row */}
+              <div className="flex flex-wrap gap-3.5 mt-2">
+                <button
+                  onClick={() => onLearnMore(slides[currentSlide].targetId)}
+                  className="flex items-center gap-2 px-6 py-3.5 bg-brand-gold text-brand-blue hover:bg-yellow-400 hover:shadow-lg rounded font-display font-extrabold text-xs tracking-widest uppercase transition-all duration-200 scale-100 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-md"
+                >
+                  KHÁM PHÁ NGAY <ArrowRight className="w-4 h-4 text-brand-blue" />
+                </button>
+                
+                <button
+                  onClick={openQuoteModal}
+                  className="flex items-center gap-2 px-6 py-3.5 bg-white/10 text-white border border-white/20 hover:bg-white hover:text-brand-blue hover:border-white rounded font-display font-bold text-xs tracking-widest uppercase transition-all duration-200 cursor-pointer backdrop-blur-sm"
+                >
+                  GỬI YÊU CẦU BÁO GIÁ
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Modern tech block - always visible on desktop, high-contrast, premium styling */}
+            <div className="lg:col-span-5 hidden lg:block">
+              <motion.div 
+                initial={{ opacity: 0, x: 35 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative bg-slate-950/85 backdrop-blur-md border border-brand-gold/30 rounded-xl p-6 shadow-2xl hover:border-brand-gold/50 transition-all duration-300 group overflow-hidden"
+              >
+                {/* Ambient glowing radial effects */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div className="relative z-10 flex flex-col gap-4">
+                  
+                  {/* Box Header */}
+                  <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                    <div className="w-9 h-9 rounded bg-brand-gold/10 flex items-center justify-center border border-brand-gold/25">
+                      <Cpu className="w-5 h-5 text-brand-gold animate-pulse" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-brand-gold uppercase font-black tracking-widest font-display block select-none">Giải pháp đột phá</span>
+                      <h3 className="text-sm font-black text-white tracking-wider uppercase font-display flex items-center gap-1.5 select-none">
+                        🚀 CÔNG NGHỆ IN KTS HIỆN ĐẠI
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* QR Highlight Line requested */}
+                  <div className="p-3.5 rounded-lg bg-red-950/40 border border-red-500/20 shadow-inner flex items-start gap-2.5">
+                    <span className="flex h-2 w-2 relative mt-1 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                    <p className="text-xs font-black text-red-200 tracking-wide uppercase leading-relaxed font-display">
+                      KÈM MÃ QR CODE 2 CHIỀU TÍCH HỢP SỐ DỰ THƯỞNG DÒ KẾT QUẢ
+                    </p>
+                  </div>
+
+                  {/* Advantages bullet list */}
+                  <ul className="flex flex-col gap-3">
+                    {[
+                      "In vé số kiến thiết trên hệ thống máy in kỹ thuật số tiên tiến",
+                      "Tích hợp mã QR Code 2 chiều hiện đại",
+                      "Hỗ trợ dò kết quả dự thưởng nhanh chóng và chính xác",
+                      "Tăng tính bảo mật, quản lý dữ liệu hiệu quả",
+                      "Chất lượng in sắc nét – tốc độ cao – độ ổn định vượt trội"
+                    ].map((text, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 group/item">
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/25 group-hover/item:bg-emerald-500/20 transition-all duration-150">
+                          <Check className="w-3.5 h-3.5 text-emerald-400 font-extrabold" />
+                        </div>
+                        <span className="text-xs text-slate-300 leading-normal font-sans group-hover/item:text-white transition-colors duration-150">
+                          {text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                </div>
               </motion.div>
-            </AnimatePresence>
-
-            {/* Always static interactive CTA Row */}
-            <div className="flex flex-wrap gap-3.5 mt-3">
-              <button
-                onClick={() => onLearnMore(slides[currentSlide].targetId)}
-                className="flex items-center gap-2 px-6 py-3.5 bg-brand-gold text-brand-blue hover:bg-yellow-400 hover:shadow-lg rounded font-display font-extrabold text-xs tracking-widest uppercase transition-all duration-200 scale-100 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-md"
-              >
-                KHÁM PHÁ NGAY <ArrowRight className="w-4 h-4 text-brand-blue" />
-              </button>
-              
-              <button
-                onClick={openQuoteModal}
-                className="flex items-center gap-2 px-6 py-3.5 bg-white/10 text-white border border-white/20 hover:bg-white hover:text-brand-blue hover:border-white rounded font-display font-bold text-xs tracking-widest uppercase transition-all duration-200 cursor-pointer backdrop-blur-sm"
-              >
-                GỬI YÊU CẦU BÁO GIÁ
-              </button>
             </div>
 
           </div>
