@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCMS } from '../context/CMSContext';
-import { Award, ShieldCheck, Target, Zap, Clock, ThumbsUp, TrendingUp, Factory } from 'lucide-react';
+import { Award, ShieldCheck, Target, Zap, Clock, ThumbsUp, TrendingUp, Factory, Cpu, QrCode, Database } from 'lucide-react';
 
 export default function Introduction() {
   const { companyInfo: COMPANY_INFO, statistics: STATISTICS } = useCMS();
@@ -10,11 +10,12 @@ export default function Introduction() {
   const tabContents = {
     mission: {
       icon: <Target className="w-8 h-8 text-brand-blue" />,
-      title: 'SỨ MỆNH CỦA CHÚNG TÔI',
-      subtitle: 'Phục vụ thị trường xổ số kiến thiết tài chính trung thực và an toàn tuyệt đối.',
+      title: '🎯 SỨ MỆNH PHÁT TRIỂN',
+      subtitle: 'Sản xuất và in ấn tài chính chuyên nghiệp, định hướng hiện đại hóa công nghệ.',
       paragraphs: [
-        'Xí nghiệp In Tài Chính có sứ mệnh cao cả trong việc cung cấp các ấn phẩm vé số truyền thống, vé số tự chọn, phiếu thu chi nghiệp vụ và các loại chứng từ bảo mật đạt tiêu chuẩn chống sao chép khắt khe nhất của Nhà nước.',
-        'Chúng tôi đồng hành với ngân sách nhà nước thông qua việc đảm bảo phát hành xổ số kiến thiết thuận lợi, trung thực, hỗ trợ các chương trình phúc lợi công ích đầy nhân văn của Công Ty TNHH MTV Xổ Số Kiến Thiết TP.HCM.'
+        'Xí nghiệp In Tài Chính TP. Hồ Chí Minh thực hiện nhiệm vụ sản xuất và in ấn vé số kiến thiết, vé số cào, chứng từ và các ấn phẩm phục vụ ngành tài chính trên hệ thống thiết bị in hiện đại.',
+        'Đơn vị không ngừng ứng dụng công nghệ in kỹ thuật số biến đổi dữ liệu, tích hợp QR Code và các giải pháp quản lý thông tin nhằm nâng cao chất lượng sản phẩm, hỗ trợ công tác kiểm tra, xác thực và quản lý dữ liệu hiệu quả.',
+        'Với định hướng phát triển ổn định và hiện đại, xí nghiệp luôn chú trọng chất lượng in ấn, tiến độ sản xuất và khả năng đáp ứng nhu cầu ngày càng cao của thị trường.'
       ]
     },
     vision: {
@@ -130,7 +131,40 @@ export default function Introduction() {
                     </div>
                   </div>
                   <div className="space-y-4 mt-4 text-xs font-sans text-slate-600 leading-relaxed">
-                    {activeTab === 'vision' ? (
+                    {activeTab === 'mission' ? (
+                      <div className="flex flex-col gap-4 animate-fadeIn">
+                        {/* Paragraph 1 */}
+                        <div className="flex gap-3 p-3.5 bg-slate-50/70 border border-slate-200/60 rounded-xl hover:border-slate-300 transition-colors">
+                          <Factory className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
+                          <p className="text-slate-700 leading-relaxed text-xs sm:text-[13px]">
+                            {tabContents.mission.paragraphs[0]}
+                          </p>
+                        </div>
+                        
+                        {/* Paragraph 2 - Core tech with highlights */}
+                        <div className="flex flex-col sm:flex-row items-start gap-4 bg-gradient-to-br from-red-50 to-red-100/30 border border-red-200/50 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-red-300 transition-all">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/5 rounded-full blur-xl pointer-events-none"></div>
+                          
+                          <div className="flex gap-2.5 shrink-0 mt-1">
+                            <Cpu className="w-5 h-5 text-red-600 animate-pulse" />
+                            <QrCode className="w-5 h-5 text-brand-blue" />
+                            <Database className="w-5 h-5 text-emerald-600" />
+                          </div>
+                          
+                          <p className="text-slate-800 text-xs sm:text-[13px] leading-relaxed">
+                            Đơn vị không ngừng ứng dụng công nghệ <span className="text-red-700 font-extrabold bg-red-100/60 px-1.5 py-0.5 rounded shadow-sm">in kỹ thuật số biến đổi dữ liệu</span>, tích hợp <span className="text-brand-blue font-extrabold bg-blue-50 px-1.5 py-0.5 rounded shadow-sm">QR Code</span> và các giải pháp <span className="text-emerald-700 font-extrabold bg-emerald-50 px-1.5 py-0.5 rounded shadow-sm">quản lý dữ liệu</span> thông tin nhằm nâng cao chất lượng sản phẩm, hỗ trợ công tác kiểm tra, xác thực và quản lý dữ liệu hiệu quả.
+                          </p>
+                        </div>
+
+                        {/* Paragraph 3 */}
+                        <div className="flex gap-3 p-3.5 bg-[#0a3273]/5 border border-[#0a3273]/10 rounded-xl">
+                          <ShieldCheck className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
+                          <p className="text-slate-700 font-medium leading-relaxed text-xs sm:text-[13px]">
+                            {tabContents.mission.paragraphs[2]}
+                          </p>
+                        </div>
+                      </div>
+                    ) : activeTab === 'vision' ? (
                       <div className="flex flex-col gap-4 animate-fadeIn">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 bg-red-50/70 border border-red-200/50 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-red-300 transition-all">
                           <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/5 rounded-full blur-xl pointer-events-none"></div>
