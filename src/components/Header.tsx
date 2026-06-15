@@ -104,7 +104,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
 
   const getNavLinkDesc = (id: string) => {
     switch (id) {
-      case 'hero': return 'Trang chủ Tổng công ty';
+      case 'hero': return 'Trang chủ Xí nghiệp';
       case 'about': return 'Lịch sử thành lập & Sứ mệnh';
       case 'services': return 'Vé số, hóa đơn & biểu mẫu bảo mật';
       case 'technology': return 'Máy móc nhập khẩu Đức & Nhật';

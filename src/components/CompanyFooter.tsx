@@ -142,11 +142,11 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
           
           {/* Legal texts */}
           <div className="text-center md:text-left">
-            <p className="font-semibold text-slate-400">
-              &copy; {currentYear} {COMPANY_INFO.name}. Đơn vị thành viên Tổng công ty Nhà Nước.
+            <p className="font-semibold text-slate-400 uppercase tracking-wide">
+              &copy; 2026 XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH. Đơn vị trực thuộc Công Ty TNHH MTV Xổ Số Kiến Thiết TP. Hồ Chí Minh.
             </p>
-            <p className="text-[10px] text-slate-600 mt-1">
-              Bản quyền website thuộc về Công Ty TNHH MTV Xổ Số Kiến Thiết TP.Hồ Chí Minh. Nghiêm cấm sao chép, trích xuất dữ liệu, hoặc giả mạo thiết kế hoa văn sê-ri của chúng tôi dưới mọi hình thức pháp lý.
+            <p className="text-[10px] text-slate-500 mt-1.5 leading-relaxed">
+              Bản quyền website thuộc về Xí Nghiệp In Tài Chính TP. Hồ Chí Minh. Nghiêm cấm sao chép, trích xuất dữ liệu hoặc giả mạo thiết kế hoa văn, ký hiệu, số sê-ri và các nội dung thuộc quyền quản lý của đơn vị dưới mọi hình thức.
             </p>
           </div>
 
