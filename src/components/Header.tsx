@@ -188,7 +188,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                 <Phone className="w-4.5 h-4.5 text-brand-blue animate-pulse" />
               </motion.div>
               <div>
-                <p className="text-[9px] text-slate-400 uppercase font-black tracking-widest font-display leading-none mb-1">Hotline nghiệp vụ</p>
+                <p className="text-[9px] text-slate-400 uppercase font-black tracking-widest font-display leading-none mb-1">Hotline</p>
                 <p className="text-base font-black text-brand-blue font-mono tracking-tight leading-none">{COMPANY_INFO.phoneDisplay}</p>
               </div>
             </div>

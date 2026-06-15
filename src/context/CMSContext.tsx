@@ -149,7 +149,14 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             
             if (settingsSnap.exists()) {
               const data = settingsSnap.data();
-              if (data.companyInfo) setCompanyInfo(data.companyInfo);
+              if (data.companyInfo) {
+                const info = { ...data.companyInfo };
+                if (info.email === 'itc177@hotmail.com') {
+                  info.email = 'itc717@hotmail.com';
+                  updateDoc(settingsDocRef, { companyInfo: info }).catch(console.error);
+                }
+                setCompanyInfo(info);
+              }
               if (data.statistics) setStatistics(data.statistics);
               if (data.slides) setSlides(data.slides);
             } else {
@@ -225,7 +232,18 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const loadLocalConfigs = () => {
     // Local storage loaded values
     const cachedCompanyInfo = localStorage.getItem('cms_company_info');
-    if (cachedCompanyInfo) setCompanyInfo(JSON.parse(cachedCompanyInfo));
+    if (cachedCompanyInfo) {
+      try {
+        const parsed = JSON.parse(cachedCompanyInfo);
+        if (parsed.email === 'itc177@hotmail.com') {
+          parsed.email = 'itc717@hotmail.com';
+          localStorage.setItem('cms_company_info', JSON.stringify(parsed));
+        }
+        setCompanyInfo(parsed);
+      } catch (err) {
+        console.error('Error migrating offline company config', err);
+      }
+    }
 
     const cachedStats = localStorage.getItem('cms_statistics');
     if (cachedStats) setStatistics(JSON.parse(cachedStats));

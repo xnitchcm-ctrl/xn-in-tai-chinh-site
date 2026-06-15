@@ -8,7 +8,7 @@ export const COMPANY_INFO = {
   phone: '(028) 3595 0311 - 3595 0312',
   phoneDisplay: '(028) 3595 0311 - 3595 0312',
   fax: '(028) 3595 0818',
-  email: 'itc177@hotmail.com',
+  email: 'itc717@hotmail.com',
   website: 'www.xskthcm.com',
   establishedYear: '1978',
   standards: ['ISO 9001:2015', 'ISO/IEC 27001:2013'],
