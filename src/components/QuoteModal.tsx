@@ -112,7 +112,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <p className="text-[11px] text-slate-500 font-sans leading-relaxed">
-                Để phục vụ việc tính giá thành phẩm tối ưu cùng điều kiện bảo an chuẩn quốc gia, vui lòng gửi các gợi ý nghiệp vụ ban đầu sau. Mọi dữ liệu cam kết được bảo mật hoàn toàn.
+                Để phục vụ việc tính giá thành phẩm tối ưu cùng điều kiện kiểm soát chất lượng chính xác, vui lòng gửi các gợi ý nghiệp vụ ban đầu sau. Mọi dữ liệu cam kết được bảo mật hoàn toàn.
               </p>
 
               {/* Grid 1: Name and Phone */}
@@ -265,7 +265,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
               {/* Security confirmation footer note */}
               <div className="flex items-center gap-2 mt-2 pt-2 text-[9px] text-zinc-400 justify-center">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                <span>Mã hóa bảo mật TLSv1.3. Hồ sơ được lưu trữ nội bộ khép kín đạt tiêu chuẩn ISO 27001.</span>
+                <span>Mã hóa bảo mật TLSv1.3. Hồ sơ được lưu trữ nội bộ khép kín theo hệ thống quản lý chất lượng ISO 9001:2015.</span>
               </div>
             </form>
           )}

@@ -448,10 +448,10 @@ export default function Contact() {
               {/* Verified badges */}
               <div className="mt-8 pt-5 border-t border-white/5 flex flex-wrap items-center justify-between text-[11px] text-slate-450 gap-4">
                 <span className="flex items-center gap-1.5 font-light">
-                  <ShieldAlert className="w-4 h-4 text-brand-gold shrink-0" /> Bảo mật thông tin dòng vé tuyệt đối
+                  <ShieldAlert className="w-4 h-4 text-brand-gold shrink-0" /> Quản lý dữ liệu in ấn chính xác
                 </span>
                 <span className="flex items-center gap-1.5 font-light">
-                  <Award className="w-4 h-4 text-[#60a5fa] shrink-0" /> Chứng nhận bảo mật ISO 27001
+                  <Award className="w-4 h-4 text-emerald-500 shrink-0" /> Chứng nhận chất lượng ISO 9001:2015
                 </span>
               </div>
 

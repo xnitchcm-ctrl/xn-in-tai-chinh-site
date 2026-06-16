@@ -425,7 +425,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                               </div>
                               <div>
                                 <h4 className="text-xs font-bold text-slate-900 group-hover/item:text-brand-blue transition-colors">Chứng Nhận Hệ Thống KCS</h4>
-                                <p className="text-[9px] text-slate-400 mt-0.5 font-light">Chứng nhận bảo mật quốc tế ISO 27001</p>
+                                <p className="text-[9px] text-slate-400 mt-0.5 font-light">Hệ thống quản lý chất lượng ISO 9001:2015</p>
                               </div>
                             </div>
 

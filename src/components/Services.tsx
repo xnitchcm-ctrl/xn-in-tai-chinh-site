@@ -107,7 +107,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#DCA92A]/10 border border-[#DCA92A]/20 rounded-full text-[10px] uppercase font-black tracking-widest text-[#DCA92A] font-display mb-4">
                 <span className="w-2 h-2 rounded-full bg-[#DCA92A] animate-pulse"></span>
-                Dây Chuyền In Đạt Chuẩn ISO 9001 & ISO 27001
+                Dây Chuyền In Chất Lượng Đạt Chuẩn ISO 9001:2015
               </div>
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display text-[#DCA92A] tracking-tight uppercase leading-tight mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 🔴 CHUYÊN IN VÉ SỐ KIẾN THIẾT & ẤN PHẨM TÀI CHÍNH

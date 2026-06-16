@@ -151,7 +151,7 @@ export default function Gallery() {
                     <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300">
                       <div className="flex items-center gap-1.5 text-brand-gold text-[9px] uppercase font-black tracking-widest font-display">
                         <ImageIcon className="w-3.5 h-3.5" />
-                        <span>Hệ thống ISO 27001</span>
+                        <span>Hệ thống ISO 9001:2015</span>
                       </div>
                       <div className="w-8 h-8 rounded-full bg-brand-gold text-brand-blue flex items-center justify-center shadow-lg transform scale-90 hover:scale-100 transition-transform">
                         <Eye className="w-4 h-4" />

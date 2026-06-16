@@ -11,14 +11,14 @@ export const COMPANY_INFO = {
   email: 'itc717@hotmail.com',
   website: 'www.xskthcm.com',
   establishedYear: '1978',
-  standards: ['ISO 9001:2015', 'ISO/IEC 27001:2013'],
+  standards: ['ISO 9001:2015', 'Hệ Thống Quản Lý Chất Lượng'],
 };
 
 export const STATISTICS = [
   { value: '45+', label: 'Năm Kinh Nghiệm', desc: 'Đồng hành cùng ngành xổ số kiến thiết và tài chính cả nước từ năm 1978.' },
   { value: '250M+', label: 'Ấn Phẩm / Năm', desc: 'Năng lực in ấn vượt trội, phục vụ hàng chục tỉnh thành miền Nam.' },
-  { value: '100%', label: 'Bảo Mật An Toàn', desc: 'Bảo vệ dữ liệu, chống rò rỉ thông tin mật và chống giả tuyệt đối.' },
-  { value: '200+', label: 'Nhân Sự Tay Nghề Cao', desc: 'Đội ngũ kỹ sư cơ điện từ Đức, Nhật và chuyên gia hóa học bảo mật.' },
+  { value: '100%', label: 'Kiểm Soát Chất Lượng', desc: 'Toàn bộ quy trình in ấn tuân thủ nghiêm ngặt hệ thống quản lý chất lượng ISO 9001:2015.' },
+  { value: '200+', label: 'Nhân Sự Tay Nghề Cao', desc: 'Đội ngũ kỹ sư cơ điện từ các thương hiệu máy in Đức, Nhật và thợ lành nghề.' },
 ];
 
 export const SERVICE_ITEMS: ServiceItem[] = [

@@ -9,7 +9,7 @@ interface PreloaderProps {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState('ĐANG KHỞI TẠO THIẾT BI BẢO MẬT...');
+  const [statusText, setStatusText] = useState('ĐANG KHỞI TẠO QUY TRÌNH HỆ THỐNG CHẤT LƯỢNG...');
 
   useEffect(() => {
     // Fast increment simulation with realistic pacing changes (tech feeling)
@@ -34,7 +34,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       } else if (current < 55) {
         setStatusText('KẾT NỐI HỆ THỐNG MÁY IN SPEEDMASTER ĐỨC...');
       } else if (current < 85) {
-        setStatusText('KIỂM TRA CHỨNG CHỈ BẢO MẬT ISO 27001...');
+        setStatusText('KIỂM TRA CHỨNG NHẬN CHẤT LƯỢNG ISO 9001:2015...');
       } else {
         setStatusText('KHỞI CHẠY KHÔNG GIAN IN TÀI CHÍNH...');
       }

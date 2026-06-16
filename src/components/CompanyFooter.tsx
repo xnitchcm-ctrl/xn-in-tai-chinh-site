@@ -54,13 +54,13 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
             </div>
 
             <p className="text-xs text-slate-400 font-sans leading-relaxed mt-2">
-              Chúng tôi cam kết cung cấp các dịch vụ in ấn vé số, biểu mẫu, hóa đơn tài chính tự nhân bản đỉnh cao của sự an toàn bảo mật, chống sao chép và chống làm giả tuyệt đối.
+              Chúng tôi cam kết cung cấp các dịch vụ in ấn vé số, biểu mẫu, hóa đơn tài chính chất lượng cao, quy trình kiểm soát chất lượng chặt chẽ và ứng dụng công nghệ in ấn dữ liệu biến đổi hiện đại.
             </p>
 
             <div className="flex items-center gap-4 mt-1">
               <span className="flex items-center gap-1.5 text-xs text-slate-400">
                 <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-                Hệ thống bảo an chuẩn ISO/IEC 27001
+                Hệ thống quản lý chất lượng ISO 9001:2015
               </span>
             </div>
             

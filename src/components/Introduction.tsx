@@ -43,7 +43,7 @@ export default function Introduction() {
       subtitle: 'Hơn 45 năm đồng hành và rạng danh cùng TP.Hồ Chí Minh hùng cường.',
       paragraphs: [
         'Thành lập từ cuối thập niên 1970 từ một xưởng in ấn đơn giản chuyên in phiếu công ích xã hội, xí nghiệp đã liên tục cải biến và sáp nhập vào hệ thống Công Ty TNHH MTV Xổ Số Kiến Thiết TP.HCM năm 1992.',
-        'Tọa lạc tại Cụm công nghiệp - Khu dân cư Nhị Xuân (Xã Xuân Thới Sơn, TP.HCM) quy mô diện tích xưởng trên 5,000m2, chúng tôi tự hào sở hữu hệ máy in Offset hiện đại cùng chứng nhận hệ thống an toàn thông tin ISO 27001 hàng năm.'
+        'Tọa lạc tại Cụm công nghiệp - Khu dân cư Nhị Xuân (Xã Xuân Thới Sơn, TP.HCM) quy mô diện tích xưởng trên 5,000m2, chúng tôi tự hào sở hữu hệ máy in Offset hiện đại cùng hệ thống quản lý chất lượng ISO 9001:2015 nhằm duy trì chất lượng ổn định và cải tiến liên tục sản xuất hàng năm.'
       ]
     }
   };
@@ -234,13 +234,13 @@ export default function Introduction() {
               <Award className="w-14 h-14 text-brand-gold shrink-0 animate-pulse relative z-10" />
               <div className="relative z-10">
                 <p className="text-[10px] tracking-widest text-amber-300 font-bold uppercase font-display leading-none">
-                  HỆ THỐNG QUẢN LÝ ĐÃ ĐƯỢC CHỨNG NHẬN
+                  HỆ THỐNG QUẢN LÝ CHẤT LƯỢNG ĐÃ ĐƯỢC CHỨNG NHẬN
                 </p>
                 <h4 className="text-sm font-bold font-display tracking-tight text-white mt-1 uppercase">
-                  TIÊU CHUẨN ISO 9001:2015 & ISO/IEC 27001
+                  TIÊU CHUẨN ISO 9001:2015
                 </h4>
                 <p className="text-[11px] text-slate-300 font-sans leading-relaxed mt-1">
-                  Xí nghiệp thiết lập hệ thống bảo vệ thông tin mật và chất lượng ấn phẩm tối cao của Tổ chức Tiêu chuẩn hóa quốc tế SGS giám định định kỳ.
+                  Xí Nghiệp In Tài Chính TP. Hồ Chí Minh áp dụng và duy trì hệ thống quản lý chất lượng theo tiêu chuẩn ISO 9001:2015 nhằm nâng cao hiệu quả quản lý, kiểm soát chất lượng sản phẩm, cải tiến liên tục và đáp ứng yêu cầu của khách hàng.
                 </p>
               </div>
             </motion.div>
