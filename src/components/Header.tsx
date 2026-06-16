@@ -120,10 +120,10 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
     <header className="w-full flex flex-col z-50 bg-white shadow-sm transition-all duration-300 relative">
       
       {/* 2.1 PRE-HEADER TRADING METRICS BAR */}
-      <div className="w-full bg-slate-900 border-b border-slate-800 py-2 px-4 sm:px-6 lg:px-8 text-xs text-slate-350 hidden md:block relative z-30">
+      <div className="w-full bg-slate-900 border-b border-slate-800 py-2 px-4 sm:px-6 lg:px-8 text-xs text-slate-300 hidden md:block relative z-30">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2 font-medium text-slate-305">
+            <span className="flex items-center gap-2 font-medium text-slate-300">
               <Building className="w-3.5 h-3.5 text-brand-gold" />
               Chủ quản: <span className="text-white font-semibold">{COMPANY_INFO.parentCompany}</span>
             </span>

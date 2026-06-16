@@ -127,58 +127,58 @@ export default function Contact() {
               </div>
 
               {/* Grid lists of location info with premium icons */}
-              <div className="space-y-5 text-xs sm:text-sm">
+              <div id="contact-info-list" className="space-y-5 text-xs sm:text-sm">
                 
                 {/* 1. Address Row with Radar Pin */}
-                <div className="flex gap-4 items-start group/item">
+                <div id="contact-address-row" className="flex gap-4 items-start group/item">
                   <div className="relative p-2.5 bg-brand-gold/10 rounded-xl text-brand-gold shrink-0 border border-brand-gold/20 group-hover/item:scale-105 transition-transform duration-300 shadow-[0_0_10px_rgba(220,169,42,0.1)]">
                     <MapPin className="w-5 h-5" />
                     <span className="absolute inset-0 rounded-xl bg-brand-gold/25 animate-ping opacity-60" />
                   </div>
                   <div>
                     <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-brand-gold">Địa chỉ hành chính & xưởng sản xuất:</h4>
-                    <p className="text-slate-250 mt-1 leading-relaxed font-sans font-light">
+                    <p id="contact-address-text" className="text-white mt-1 leading-relaxed font-sans font-semibold text-xs sm:text-sm">
                       {COMPANY_INFO.address}
                     </p>
                   </div>
                 </div>
 
                 {/* 2. Phone */}
-                <div className="flex gap-4 items-start group/item">
+                <div id="contact-phone-row" className="flex gap-4 items-start group/item">
                   <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 shrink-0 border border-blue-500/20 group-hover/item:scale-105 transition-transform duration-300">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-blue-400">Số máy tổng đài:</h4>
-                    <p className="text-slate-200 mt-1 leading-none font-mono font-medium tracking-wide">
+                    <p id="contact-phone-text" className="text-white mt-1 leading-none font-mono font-semibold tracking-wide">
                       {COMPANY_INFO.phone}
                     </p>
                   </div>
                 </div>
 
                 {/* 3. Email */}
-                <div className="flex gap-4 items-start group/item">
+                <div id="contact-email-row" className="flex gap-4 items-start group/item">
                   <div className="p-2.5 bg-purple-500/10 rounded-xl text-purple-400 shrink-0 border border-purple-500/20 group-hover/item:scale-105 transition-transform duration-300">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-purple-400">Email giao thiệp sê-ri:</h4>
-                    <p className="text-slate-200 mt-1 leading-none font-sans font-medium hover:text-brand-gold transition-colors">
+                    <p id="contact-email-text" className="text-white mt-1 leading-none font-sans font-semibold hover:text-brand-gold transition-colors">
                       {COMPANY_INFO.email}
                     </p>
                   </div>
                 </div>
 
                 {/* 4. Hours */}
-                <div className="flex gap-4 items-start group/item">
+                <div id="contact-hours-row" className="flex gap-4 items-start group/item">
                   <div className="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 shrink-0 border border-emerald-500/20 group-hover/item:scale-105 transition-transform duration-300">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-emerald-450 text-emerald-400">Giờ giao thu nhận công văn:</h4>
-                    <p className="text-slate-350 mt-1 leading-relaxed font-sans font-light text-xs">
-                      Thứ Hai – Thứ Sáu: <span className="font-medium text-slate-200">07:30 – 16:30</span><br />
-                      Thứ Bảy: <span className="font-medium text-slate-200">07:30 – 11:30</span> <span className="text-[10px] text-brand-gold italic">(Chỉ nhận sê-ri vé số khẩn)</span>
+                    <h4 className="font-extrabold font-display text-[10px] tracking-widest uppercase text-emerald-400">Giờ giao thu nhận công văn:</h4>
+                    <p id="contact-hours-text" className="text-slate-200 mt-1 leading-relaxed font-sans font-medium text-xs">
+                      Thứ Hai – Thứ Sáu: <span className="font-semibold text-white">07:30 – 16:30</span><br />
+                      Thứ Bảy: <span className="font-semibold text-white">07:30 – 11:30</span> <span className="text-[10px] text-brand-gold italic font-bold">(Chỉ nhận sê-ri vé số khẩn)</span>
                     </p>
                   </div>
                 </div>
@@ -306,7 +306,7 @@ export default function Contact() {
                   {/* Name & phone side by side */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                      <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                         Họ & Tên Đơn Vị/Đối Tác: <span className="text-brand-gold">*</span>
                       </label>
                       <input
@@ -315,11 +315,11 @@ export default function Contact() {
                         placeholder="Nguyễn Văn A"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                      <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                         Điện thoại liên lỷ: <span className="text-brand-gold">*</span>
                       </label>
                       <input
@@ -328,14 +328,14 @@ export default function Contact() {
                         placeholder="Ví dụ: 091 xxx xxxx"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-mono"
+                        className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-mono"
                       />
                     </div>
                   </div>
 
                   {/* Mail box entry */}
                   <div>
-                    <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                    <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                       Địa chỉ Email đối soát:
                     </label>
                     <input
@@ -343,7 +343,7 @@ export default function Contact() {
                       placeholder="business@partner.com.vn"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                      className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                     />
                   </div>
 
@@ -352,7 +352,7 @@ export default function Contact() {
                     <>
                       {/* Topic title */}
                       <div>
-                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                        <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                           Tiêu đề sự vụ và sê-ri hợp đồng:
                         </label>
                         <input
@@ -360,13 +360,13 @@ export default function Contact() {
                           placeholder="Mẫu vẽ số xuân hỷ / Sắp xếp bàn giao..."
                           value={subject}
                           onChange={(e) => setSubject(e.target.value)}
-                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                         />
                       </div>
 
                       {/* Content rich text letters */}
                       <div>
-                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                        <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                           Yêu cầu nội dung chi tiết:
                         </label>
                         <textarea
@@ -374,7 +374,7 @@ export default function Contact() {
                           placeholder="Bổ sung thắc mắc nghiệp vụ thiết kế kẽm in hoặc quy cách bảo hộ tại xưởng..."
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
-                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                         ></textarea>
                       </div>
                     </>
@@ -383,7 +383,7 @@ export default function Contact() {
                       {/* Dropdown service lists & expected quantity */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                          <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                          <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                             Vận Đơn Sản Phẩm Cần In:
                           </label>
                           <select
@@ -399,7 +399,7 @@ export default function Contact() {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                          <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                             Sản Lượng / Số Véc-tờ Dự Kiến: <span className="text-brand-gold">*</span>
                           </label>
                           <input
@@ -408,14 +408,14 @@ export default function Contact() {
                             placeholder="Ví dụ: 10,000 tờ hoặc 1,000 cuốn phôi..."
                             value={quoteQuantity}
                             onChange={(e) => setQuoteQuantity(e.target.value)}
-                            className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                            className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                           />
                         </div>
                       </div>
 
                       {/* Specs information details */}
                       <div>
-                        <label className="block text-[10px] font-black text-slate-350 uppercase tracking-widest mb-1.5 font-display">
+                        <label className="block text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1.5 font-display">
                           Phân cấp chất liệu, cán bóng & màng kẽm UV:
                         </label>
                         <textarea
@@ -423,7 +423,7 @@ export default function Contact() {
                           placeholder="Mô tả các yêu cầu kĩ thuật chuyên môn: Giấy Carbonless 3 liên, số nhảy mực sê-ri nhạy nhiệt, tem vỡ hologram dán chặt gia công đóng tập..."
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
-                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-550 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
+                          className="w-full px-4 py-3 text-xs bg-slate-950/70 border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold focus:bg-slate-950 transition-all font-sans font-light"
                         ></textarea>
                       </div>
                     </>
@@ -446,12 +446,12 @@ export default function Contact() {
               )}
 
               {/* Verified badges */}
-              <div className="mt-8 pt-5 border-t border-white/5 flex flex-wrap items-center justify-between text-[11px] text-slate-450 gap-4">
-                <span className="flex items-center gap-1.5 font-light">
+              <div id="contact-verified-badges" className="mt-8 pt-5 border-t border-white/5 flex flex-wrap items-center justify-between text-[11px] text-slate-300 gap-4">
+                <span className="flex items-center gap-1.5 font-medium">
                   <ShieldAlert className="w-4 h-4 text-brand-gold shrink-0" /> Quản lý dữ liệu in ấn chính xác
                 </span>
-                <span className="flex items-center gap-1.5 font-light">
-                  <Award className="w-4 h-4 text-emerald-500 shrink-0" /> Chứng nhận chất lượng ISO 9001:2015
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Award className="w-4 h-4 text-emerald-400 shrink-0" /> Chứng nhận chất lượng ISO 9001:2015
                 </span>
               </div>
 

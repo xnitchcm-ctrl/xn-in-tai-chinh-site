@@ -268,7 +268,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
             
             <div className="w-20 h-1 bg-brand-gold rounded-full mb-5"></div>
             
-            <p className="text-slate-350 font-sans text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-200 font-sans text-sm sm:text-base leading-relaxed">
               Cập nhật hoạt động sản xuất, công nghệ in bảo mật, công tác đoàn thể và các thông báo nổi bật.
             </p>
           </div>
@@ -461,7 +461,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                         <div className="w-full h-px bg-slate-800/60 my-2"></div>
 
                         {/* Description content */}
-                        <p className="text-xs sm:text-xs text-slate-350 leading-relaxed font-normal hover:text-slate-200 duration-200 line-clamp-6">
+                        <p className="text-xs sm:text-xs text-slate-300 leading-relaxed font-normal hover:text-slate-200 duration-200 line-clamp-6">
                           {post.content}
                         </p>
                       </div>
