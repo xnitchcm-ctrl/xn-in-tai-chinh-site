@@ -164,6 +164,7 @@ export const VACANCIES: JobVacancy[] = [
   {
     id: 'v1',
     title: 'Kỹ Sư Công Nghệ In',
+    isClosed: true,
     department: 'Phòng Kỹ thuật & Công nghệ In',
     type: 'Toàn thời gian (Cố định)',
     salary: '15,000,000 - 25,000,000 VNĐ / Tháng',
@@ -191,6 +192,7 @@ export const VACANCIES: JobVacancy[] = [
   {
     id: 'v2',
     title: 'Họa Sĩ Thiết Kế Đồ Họa',
+    isClosed: true,
     department: 'Phân Xưởng Chế Bản',
     type: 'Toàn thời gian',
     salary: '12,000,000 - 18,000,000 VNĐ / Tháng',

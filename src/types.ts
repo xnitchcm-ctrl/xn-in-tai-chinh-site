@@ -38,6 +38,7 @@ export interface JobVacancy {
   requirements: string[];
   benefits: string[];
   tasks?: string[]; // Optional job descriptions/tasks
+  isClosed?: boolean;
 }
 
 export interface QuoteRequest {
