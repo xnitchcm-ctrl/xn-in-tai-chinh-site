@@ -18,46 +18,46 @@ export default function Technology() {
   const features = [
     {
       id: 1,
-      icon: <Cpu className="w-6 h-6 text-red-600" />,
-      title: 'In dữ liệu biến đổi trên từng tờ vé',
-      desc: 'Ứng dụng công nghệ in phun kỹ thuật số tốc độ cao, cho phép hiển thị số sê-ri, số súp và ký hiệu dự thưởng thay đổi liên tục một cách sắc nét, chính xác tuyệt đối.',
-      badge: 'Dữ liệu biến thiên'
+      icon: <Cpu className="w-6 h-6 text-[#0D3B8E]" />,
+      title: 'IN DỮ LIỆU BIẾN ĐỔI TRÊN TỪNG TỜ VÉ',
+      desc: 'Ứng dụng công nghệ in kỹ thuật số biến đổi dữ liệu phục vụ in số dự thưởng, ký hiệu và các thông tin riêng biệt trên từng tờ vé.',
+      badge: 'Công nghệ in biến đổi'
     },
     {
       id: 2,
-      icon: <QrCode className="w-6 h-6 text-[#0A3273]" />,
-      title: 'Tích hợp QR Code định danh riêng biệt',
-      desc: 'Mỗi tờ vé số hoặc chứng từ tài chính được đồng bộ một mã QR Code duy nhất định danh sản phẩm, tối ưu khả năng bảo mật thông tin và nâng cao độ tin cậy.',
-      badge: 'QR Code độc bản'
+      icon: <QrCode className="w-6 h-6 text-[#0D3B8E]" />,
+      title: 'TÍCH HỢP QR CODE ĐỊNH DANH',
+      desc: 'Mỗi tờ vé được tích hợp mã QR Code riêng biệt phục vụ kiểm tra, đối chiếu và xác thực thông tin trong quá trình sử dụng.',
+      badge: 'QR Code định danh'
     },
     {
       id: 3,
-      icon: <Database className="w-6 h-6 text-[#0A3273]" />,
-      title: 'Quản lý và kiểm tra thông tin nhanh chóng',
-      desc: 'Hệ thống cơ sở dữ liệu khép kín lưu trữ thông tin phát hành giúp xí nghiệp và các cơ quan chủ quản quản lý, đối chiếu dữ liệu một cách an toàn và tức thì.',
-      badge: 'Quản lý thông suốt'
+      icon: <Database className="w-6 h-6 text-[#0D3B8E]" />,
+      title: 'QUẢN LÝ DỮ LIỆU TẬP TRUNG',
+      desc: 'Hệ thống hỗ trợ quản lý dữ liệu phát hành và truy xuất thông tin nhanh chóng, phục vụ công tác kiểm tra và đối chiếu khi cần thiết.',
+      badge: 'Quản lý dữ liệu'
     },
     {
       id: 4,
-      icon: <CheckCircle className="w-6 h-6 text-red-600" />,
-      title: 'Hỗ trợ dò kết quả và xác thực dữ liệu',
-      desc: 'Tích hợp giải pháp quét thông tin thông minh hỗ trợ khách hàng dò kết quả nhanh chóng, đồng thời giúp đại lý xác thực vé thật - giả chính xác thông qua hệ thống QR Code.',
-      badge: 'Xác thực nhanh'
+      icon: <CheckCircle className="w-6 h-6 text-[#0D3B8E]" />,
+      title: 'HỖ TRỢ DÒ KẾT QUẢ NHANH CHÓNG',
+      desc: 'QR Code hỗ trợ người sử dụng tra cứu thông tin vé và đối chiếu kết quả dự thưởng thuận tiện.',
+      badge: 'Xác thực thông tin'
     },
     {
       id: 5,
       icon: <RefreshCw className="w-6 h-6 text-emerald-600" />,
-      title: 'Đảm bảo tính đồng bộ sản xuất',
-      desc: 'Mã số biến đổi và QR Code được in đồng bộ hóa trực tiếp với phôi in offset, loại bỏ hoàn toàn nguy cơ trùng lặp dữ liệu hoặc sai số trong suốt quy trình in sản lượng lớn.',
-      badge: 'Đồng bộ 100%'
+      title: 'ĐỒNG BỘ DỮ LIỆU SẢN XUẤT',
+      desc: 'Thông tin dữ liệu được kiểm soát trong suốt quá trình sản xuất nhằm đảm bảo tính chính xác và đồng nhất.',
+      badge: 'Kiểm soát chất lượng sản xuất'
     }
   ];
 
   return (
-    <section id="technology" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#051B3X] text-white relative overflow-hidden">
-      {/* Decorative gradient glowing orb */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#0A3273]/35 rounded-full blur-[120px] pointer-events-none"></div>
+    <section id="technology" className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 text-[#374151] relative overflow-hidden">
+      {/* Decorative subtle gradients */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -67,7 +67,7 @@ export default function Technology() {
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-600/10 border border-red-500/30 text-red-400 font-display text-xs font-black uppercase tracking-wider mb-4 shadow-inner"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200/60 text-[#0D3B8E] font-display text-xs font-black uppercase tracking-wider mb-4 shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
             Công Nghệ In Hiện Đại
@@ -78,25 +78,26 @@ export default function Technology() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl sm:text-4xl font-extrabold font-display text-white tracking-tight uppercase leading-tight"
+            className="text-2xl sm:text-4xl tracking-tight uppercase leading-tight text-[#0D3B8E]"
+            style={{ fontWeight: 800 }}
           >
-            🔴 CÔNG NGHỆ IN KỸ THUẬT SỐ BIẾN ĐỔI DỮ LIỆU
+            CÔNG NGHỆ IN KỸ THUẬT SỐ BIẾN ĐỔI DỮ LIỆU
           </motion.h2>
           
-          <div className="w-24 h-1 bg-red-600 mx-auto mt-4 rounded-full"></div>
+          <div className="w-24 h-1 bg-[#0D3B8E] mx-auto mt-4 rounded-full"></div>
           
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-300 font-sans text-sm sm:text-base mt-6 leading-relaxed max-w-3xl mx-auto font-light"
+            className="text-[#374151] font-sans text-sm sm:text-base mt-6 leading-relaxed max-w-3xl mx-auto font-normal"
           >
-            Xí Nghiệp In Tài Chính TP. Hồ Chí Minh ứng dụng hệ thống in kỹ thuật số biến đổi dữ liệu kết hợp công nghệ QR Code nhằm phục vụ sản xuất vé số kiến thiết và các ấn phẩm ngành tài chính.
+            Xí Nghiệp In Tài Chính TP. Hồ Chí Minh ứng dụng hệ thống in kỹ thuật số biến đổi dữ liệu kết hợp công nghệ QR Code nhằm phục vụ sản xuất các ấn phẩm vé số kiến thiết, vé số cào, chứng từ và các biểu mẫu ngành tài chính.
           </motion.p>
         </div>
 
-        {/* 5 Core App features displayed in cards */}
+        {/* 6 Grid items including 5 modern tech cards and 1 offset production bento */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch mb-16">
           {features.map((feat, index) => (
             <motion.div
@@ -107,58 +108,58 @@ export default function Technology() {
               transition={{ delay: index * 0.08, duration: 0.5 }}
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
-              className="group bg-white border border-slate-200 p-6 sm:p-7 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-red-950/20 hover:border-red-500/30 text-slate-900 cursor-default relative overflow-hidden"
+              className="group bg-white border border-slate-200 p-6 sm:p-7 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:border-[#0D3B8E]/30 text-[#374151] cursor-default relative overflow-hidden shadow-sm"
               style={{
                 transform: hoveredCard === index ? 'translateY(-6px)' : 'translateY(0px)'
               }}
             >
               {/* Card top banner accent */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#0A3273] group-hover:bg-red-600 transition-colors"></div>
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#0D3B8E] group-hover:bg-red-600 transition-colors"></div>
               
               <div>
                 {/* Icon & Badge row */}
                 <div className="flex justify-between items-center mb-6">
-                  <div className="p-3 rounded-xl bg-slate-100 group-hover:bg-red-50 text-slate-800 group-hover:text-red-700 transition-colors w-min shadow-sm">
+                  <div className="p-3 rounded-xl bg-slate-100 group-hover:bg-red-50 text-slate-800 group-hover:text-[#0D3B8E] transition-colors w-min shadow-sm">
                     {feat.icon}
                   </div>
-                  <span className="text-[10px] font-extrabold tracking-widest font-display text-slate-400 group-hover:text-[#0A3273] uppercase bg-slate-50 border border-slate-100 group-hover:bg-blue-50/50 group-hover:border-blue-100/50 px-2.5 py-1 rounded-md transition-colors">
+                  <span className="text-[10px] font-extrabold tracking-widest font-display text-slate-500 group-hover:text-[#0D3B8E] uppercase bg-amber-50 border border-amber-100/50 px-2.5 py-1 rounded-md transition-colors">
                     {feat.badge}
                   </span>
                 </div>
 
                 {/* Title */}
                 <div className="flex gap-2.5 mb-3">
-                  <span className="text-[#0A3273] font-black shrink-0 mt-0.5">✔</span>
-                  <h3 className="text-sm sm:text-base font-bold text-[#0A3273] leading-snug group-hover:text-red-600 transition-colors">
+                  <span className="text-[#0D3B8E] font-black shrink-0 mt-0.5">✔</span>
+                  <h3 className="text-sm sm:text-base font-bold text-[#0D3B8E] leading-snug group-hover:text-red-650 transition-colors">
                     {feat.title}
                   </h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-slate-600 font-sans text-xs sm:text-[13px] leading-relaxed font-light">
+                <p className="text-slate-600 font-sans text-xs sm:text-[13px] leading-relaxed font-normal">
                   {feat.desc}
                 </p>
               </div>
 
               {/* Decorative accent graphic */}
               <div className="mt-6 flex justify-end">
-                <span className="text-[10px] font-black tracking-widest text-[#000]/10 group-hover:text-[#0A3273]/15 uppercase font-mono transition-colors">
-                  SECURE_DATA_T0{feat.id}
+                <span className="text-[10px] font-semibold tracking-widest text-slate-300 group-hover:text-[#0D3B8E]/20 uppercase font-mono transition-colors">
+                  DATA_MGT_0{feat.id}
                 </span>
               </div>
             </motion.div>
           ))}
 
-          {/* Secondary CTA/Fleet highlights integrated inside the bento layout as the 6th element */}
+          {/* Card 6: Offset production bento */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.45 }}
-            className="bg-gradient-to-br from-[#0A3273] to-[#051B3X] border border-white/10 p-6 sm:p-7 rounded-2xl flex flex-col justify-between text-white md:col-span-2 lg:col-span-1 shadow-2xl relative overflow-hidden group hover:border-red-600/30"
+            className="bg-gradient-to-br from-[#0D3B8E] to-[#082960] border border-[#0D3B8E]/10 p-6 sm:p-7 rounded-2xl flex flex-col justify-between text-white md:col-span-2 lg:col-span-1 shadow-xl relative overflow-hidden group hover:border-red-600/30"
           >
-            {/* Subtle background circuit pattern decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-2xl rounded-full pointer-events-none group-hover:bg-red-600/5 transition-colors"></div>
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-2xl rounded-full pointer-events-none"></div>
             
             <div>
               <div className="flex items-center gap-3 mb-5 border-b border-white/10 pb-4">
@@ -166,59 +167,71 @@ export default function Technology() {
                   <Printer className="w-6 h-6 text-[#DCA92A]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black tracking-widest text-[#DCA92A] uppercase font-display font-bold">DâY CHUYỀN OFFSET PHỤ TRỢ</h4>
-                  <p className="text-[10px] text-slate-400">Đồng bộ giải pháp chất lượng cao</p>
+                  <h4 className="text-xs font-black tracking-widest text-[#DCA92A] uppercase font-display font-bold">HỆ THỐNG IN OFFSET HIỆN ĐẠI</h4>
+                  <p className="text-[10px] text-slate-300">Công nghệ sản xuất ổn định</p>
                 </div>
               </div>
               
-              <h3 className="text-sm sm:text-base font-bold text-white mb-3">
-                Tính năng sản xuất nâng cao
-              </h3>
-              
-              <ul className="space-y-2.5 text-xs text-slate-300 font-light font-sans mb-6">
+              <ul className="space-y-2.5 text-xs text-slate-200 font-light font-sans mb-6">
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  Quản lý mã vạch nhảy tự động
+                  Vận hành trên hệ thống máy in Komori
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  Mực bảo an phản quang chống sao chép
+                  Máy in Mitsubishi 4 màu – 5 màu
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                  Không chồng hạt nhòe sọc lỗi
+                  Đáp ứng yêu cầu chất lượng và sản lượng ổn định
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                  Phù hợp sản xuất vé số kiến thiết, vé số cào và các ấn phẩm ngành tài chính
                 </li>
               </ul>
             </div>
 
-            <div className="text-[11px] font-bold text-brand-gold bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-center select-none group-hover:border-red-500/20 transition-colors">
-              XNITC PRODUCTION STANDARDS
-            </div>
+            <button 
+              onClick={() => {
+                const servicesSec = document.getElementById('services');
+                if (servicesSec) {
+                  servicesSec.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="text-xs font-bold text-center w-full bg-red-650 hover:bg-red-700 text-white py-2.5 rounded-xl uppercase transition-colors cursor-pointer shadow-md"
+            >
+              TÌM HIỂU THÊM
+            </button>
           </motion.div>
         </div>
 
-        {/* Closing Paragraph Box (Offset system integration) */}
+        {/* III. Closing Paragraph Box */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-white border border-slate-200/60 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl transition-all shadow-sm text-slate-900 border-l-[6px] border-l-red-600"
+          className="bg-white border border-slate-200 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-lg transition-all shadow-md text-slate-950 border-l-[6px] border-l-[#0D3B8E]"
         >
           <div className="flex-1 flex gap-4 items-start">
-            <div className="p-3 bg-red-50 rounded-xl text-red-600 shrink-0 mt-1">
+            <div className="p-3 bg-blue-50 rounded-xl text-[#0D3B8E] shrink-0 mt-1">
               <Layers className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-[#0A3273] uppercase tracking-wide font-display mb-1.5">HỆ THỐNG MÁY IN OFFSET KOMORI & MITSUBISHI 4 MÀU - 5 MÀU</h4>
-              <p className="text-slate-600 font-sans text-xs sm:text-sm leading-relaxed font-light">
-                Đơn vị đồng thời vận hành hệ thống máy in offset Komori và Mitsubishi 4 màu – 5 màu nhằm đáp ứng yêu cầu chất lượng và sản lượng in ổn định trong mọi điều kiện phát hành số lượng cực lớn.
+              <h4 className="text-sm font-bold text-[#0D3B8E] uppercase tracking-wide font-display mb-1.5 flex items-center gap-2">
+                <span>🔧</span> HỆ THỐNG MÁY IN OFFSET KOMORI & MITSUBISHI 4 MÀU – 5 MÀU
+              </h4>
+              <p className="text-[#374151] font-sans text-xs sm:text-sm leading-relaxed font-normal">
+                Xí Nghiệp In Tài Chính TP. Hồ Chí Minh vận hành hệ thống máy in offset Komori và Mitsubishi 4 màu – 5 màu nhằm đáp ứng yêu cầu chất lượng và sản lượng đối với các sản phẩm vé số kiến thiết, vé số cào, chứng từ và các ấn phẩm ngành tài chính.
+                <br /><br />
+                Kết hợp cùng hệ thống in kỹ thuật số biến đổi dữ liệu, đơn vị có khả năng tích hợp QR Code định danh và quản lý dữ liệu trên từng sản phẩm.
               </p>
             </div>
           </div>
           
           <div className="bg-slate-50 border border-slate-100 px-5 py-3 rounded-xl shrink-0 flex items-center gap-2 shadow-inner">
             <ShieldCheck className="w-5 h-5 text-emerald-600" />
-            <span className="text-slate-700 text-xs font-bold font-sans">Bảo chứng màu sắc & độ bền</span>
+            <span className="text-slate-700 text-xs font-bold font-sans">Kiểm soát chất lượng sản xuất</span>
           </div>
         </motion.div>
 
@@ -226,3 +239,4 @@ export default function Technology() {
     </section>
   );
 }
+
