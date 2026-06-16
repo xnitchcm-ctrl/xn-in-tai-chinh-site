@@ -151,8 +151,16 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               const data = settingsSnap.data();
               if (data.companyInfo) {
                 const info = { ...data.companyInfo };
+                let needsUpdate = false;
                 if (info.email === 'itc177@hotmail.com') {
                   info.email = 'itc717@hotmail.com';
+                  needsUpdate = true;
+                }
+                if (info.address !== COMPANY_INFO.address) {
+                  info.address = COMPANY_INFO.address;
+                  needsUpdate = true;
+                }
+                if (needsUpdate) {
                   updateDoc(settingsDocRef, { companyInfo: info }).catch(console.error);
                 }
                 setCompanyInfo(info);
@@ -198,7 +206,15 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             const vacanciesSnap = await getDocs(collection(db, 'vacancies'));
             if (!vacanciesSnap.empty) {
               const vList: JobVacancy[] = [];
-              vacanciesSnap.forEach(d => vList.push(d.data() as JobVacancy));
+              for (const d of vacanciesSnap.docs) {
+                const vData = d.data() as JobVacancy;
+                const localPreset = VACANCIES.find(x => x.id === vData.id);
+                if (localPreset && vData.isClosed !== localPreset.isClosed) {
+                  vData.isClosed = localPreset.isClosed;
+                  setDoc(doc(db, 'vacancies', vData.id), vData).catch(console.error);
+                }
+                vList.push(vData);
+              }
               setVacancies(vList);
             } else {
               // Seed Vacancies

@@ -85,7 +85,7 @@ export default function Gallery() {
           </h2>
           <div className="w-16 h-1 bg-brand-gold rounded-full mt-3"></div>
           <p className="text-slate-500 font-sans text-xs sm:text-sm max-w-xl mt-4 leading-relaxed">
-            Hình ảnh thật 100% được tập hợp tại xưởng sản xuất Cụm CN - Khu dân cư Nhị Xuân (Xuân Thới Sơn, TP.HCM). Quy trình vận hành kiểm tra nghiêm ngặt,... KCS khép kín, tuyệt mật theo triết lý bảo toàn thông tin tối cao.
+            Hình ảnh thật 100% được tập hợp tại nhà xưởng Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam. Toàn bộ quy trình vận hành và kiểm soát chất lượng KCS khép kín nghiêm ngặt tuân thủ hệ thống ISO 9001:2015.
           </p>
         </div>
 

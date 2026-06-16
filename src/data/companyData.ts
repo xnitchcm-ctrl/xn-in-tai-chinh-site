@@ -4,7 +4,7 @@ export const COMPANY_INFO = {
   name: 'XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH',
   parentCompany: 'CÔNG TY TNHH MTV XỔ SỐ KIẾN THIẾT TP.HCM',
   slogan: 'UY TÍN – CHẤT LƯỢNG – NHANH CHÓNG',
-  address: 'Lô A1 - A2 Đường A4, Cụm Công Nghiệp - Khu Đô Thị Mới Nhị Xuân, Ấp 5, Xã Xuân Thới Sơn, Hóc Môn, TP. Hồ Chí Minh',
+  address: 'Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam.',
   phone: '(028) 3595 0311 - 3595 0312',
   phoneDisplay: '(028) 3595 0311 - 3595 0312',
   fax: '(028) 3595 0818',

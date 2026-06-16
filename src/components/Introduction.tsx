@@ -43,7 +43,7 @@ export default function Introduction() {
       subtitle: 'Hơn 45 năm đồng hành và rạng danh cùng TP.Hồ Chí Minh hùng cường.',
       paragraphs: [
         'Thành lập từ cuối thập niên 1970 từ một xưởng in ấn đơn giản chuyên in phiếu công ích xã hội, xí nghiệp đã liên tục cải biến và sáp nhập vào hệ thống Công Ty TNHH MTV Xổ Số Kiến Thiết TP.HCM năm 1992.',
-        'Tọa lạc tại Cụm công nghiệp - Khu dân cư Nhị Xuân (Xã Xuân Thới Sơn, TP.HCM) quy mô diện tích xưởng trên 5,000m2, chúng tôi tự hào sở hữu hệ máy in Offset hiện đại cùng hệ thống quản lý chất lượng ISO 9001:2015 nhằm duy trì chất lượng ổn định và cải tiến liên tục sản xuất hàng năm.'
+        'Tọa lạc tại Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam, với quy mô diện tích xưởng trên 5,000m2, chúng tôi tự hào sở hữu hệ máy in Offset hiện đại cùng hệ thống quản lý chất lượng ISO 9001:2015 nhằm duy trì chất lượng ổn định và cải tiến liên tục sản xuất hàng năm.'
       ]
     }
   };

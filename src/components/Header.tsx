@@ -135,7 +135,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 font-semibold text-brand-gold">
               <MapPin className="w-3.5 h-3.5" />
-              Văn phòng sản xuất: Cụm CN Nhị Xuân, Xuân Thới Sơn, TP. Hồ Chí Minh
+              Văn phòng sản xuất: Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam.
             </span>
           </div>
         </div>
