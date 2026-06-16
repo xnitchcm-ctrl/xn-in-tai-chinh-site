@@ -233,8 +233,8 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
       <div 
         className={`w-full z-40 transition-all duration-300 ${
           isSticky 
-            ? 'fixed top-0 left-0 right-0 shadow-xl bg-brand-blue/95 backdrop-blur-md text-white py-2 z-50 animate-fadeIn border-b border-brand-blue' 
-            : 'bg-gradient-to-r from-brand-blue to-brand-blue-dark text-white'
+            ? 'fixed top-0 left-0 right-0 shadow-xl bg-[#0D4F9C]/95 backdrop-blur-md text-white py-2 z-50 animate-fadeIn border-b border-[#0D4F9C]' 
+            : 'bg-[#0D4F9C] text-white'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-14">
@@ -268,9 +268,9 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                 >
                   <button
                     onClick={() => handleNavClick(link.id)}
-                    className={`px-5 py-5 text-xs font-black font-display tracking-widest cursor-pointer transition-colors relative flex items-center gap-1 focus:outline-none h-full ${
+                    className={`px-5 py-5 text-xs font-black font-display tracking-widest cursor-pointer transition-colors relative flex items-center gap-1 focus:outline-none h-full hover:bg-white/8 ${
                       isActive 
-                        ? 'text-brand-gold' 
+                        ? 'text-brand-gold bg-white/5' 
                         : 'text-white/90 hover:text-brand-gold'
                     }`}
                   >
@@ -283,7 +283,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                     {isActive && (
                       <motion.div 
                         layoutId="navUnderline"
-                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-brand-gold"
+                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#F4C542]"
                         transition={{ type: 'spring', stiffness: 350, damping: 25 }}
                       />
                     )}

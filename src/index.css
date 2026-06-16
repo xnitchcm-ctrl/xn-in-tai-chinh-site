@@ -4,10 +4,14 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Montserrat", sans-serif;
   
-  --color-brand-blue: #0A3273;
-  --color-brand-blue-dark: #07224f;
-  --color-brand-gold: #DCA92A;
-  --color-brand-gold-dark: #b88616;
+  --color-brand-blue: #0D4F9C;
+  --color-brand-blue-dark: #1E63B5;
+  --color-brand-blue-light: #2F7DD1;
+  --color-brand-gold: #F4C542;
+  --color-brand-gold-dark: #dca315;
+  --color-brand-text: #153A6B;
+  --color-brand-bg: #F5F8FC;
+  --color-brand-red: #E53935;
 }
 
 @layer base {

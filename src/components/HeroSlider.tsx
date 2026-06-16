@@ -115,13 +115,14 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
       )}
 
       {/* 4. ACTUAL BACKGROUND CONTROLLER (Video loops vs Photorealistic Image Slider) */}
-      <div className="relative min-h-[820px] sm:min-h-[720px] lg:h-[750px] w-full flex items-center justify-center">
+      <div className="relative min-h-[820px] sm:min-h-[720px] lg:h-[750px] w-full flex items-center justify-center bg-gradient-to-br from-[#0D4F9C] via-[#1E63B5] to-[#2F7DD1]">
         
         {/* Full screen Video component */}
         {isVideoActive && !videoError && (
           <div className="absolute inset-0 w-full h-full overflow-hidden">
-            {/* Dark contrast backdrop guard to keep texts pristine */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-brand-blue-dark/85 to-slate-900/65 z-10"></div>
+            {/* Brighter 20% overlay on top of video */}
+            <div className="absolute inset-0 bg-black/20 z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0D4F9C]/40 via-[#1E63B5]/30 to-[#2F7DD1]/10 z-10"></div>
             
             <video
               ref={videoRef}
@@ -135,7 +136,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
                 setIsVideoActive(false);
               }}
               poster={slides[0].image}
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-80"
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-65"
             >
               <source src="https://assets.mixkit.co/videos/preview/mixkit-printing-machine-in-action-close-up-40453-large.mp4" type="video/mp4" />
               <source src="https://assets.mixkit.co/videos/preview/mixkit-printing-press-machine-printing-newspaper-41566-large.mp4" type="video/mp4" />
@@ -154,8 +155,9 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
               transition={{ duration: 0.8 }}
               className="absolute inset-0 w-full h-full"
             >
-              {/* Overlay with subtle warm lighting */}
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-blue-dark/95 via-brand-blue/80 to-black/60 z-10"></div>
+              {/* Brighter 20% overlay on top of slide images with corporate gradient blend */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0D4F9C]/80 via-[#1E63B5]/75 to-[#2F7DD1]/60 z-10"></div>
+              <div className="absolute inset-0 bg-black/20 z-10"></div>
               <img
                 src={slides[currentSlide].image}
                 alt={slides[currentSlide].title}

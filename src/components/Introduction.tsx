@@ -49,7 +49,7 @@ export default function Introduction() {
   };
 
   return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 relative overflow-hidden">
+    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-[#F5F8FC] relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
@@ -58,16 +58,16 @@ export default function Introduction() {
             
             {/* Outline section header */}
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold tracking-widest text-brand-gold uppercase font-display">
+              <span className="text-xs font-bold tracking-widest text-[#F4C542] uppercase font-display">
                 VỀ CHÚNG TÔI
               </span>
               <h2 className="text-3xl sm:text-4xl font-black font-display text-brand-blue tracking-tight leading-tight uppercase">
                 HƠN 45 NĂM KIẾN TẠO LÒNG TIN VÀ CHẤT LƯỢNG IN ẤN
               </h2>
-              <div className="w-20 h-1 bg-brand-gold rounded-full mt-2"></div>
+              <div className="w-20 h-1 bg-[#F4C542] rounded-full mt-2"></div>
             </div>
 
-            <p className="text-slate-600 font-sans leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-700 font-sans leading-relaxed text-sm sm:text-base">
               Nằm trong hệ thống cốt lõi của <strong className="text-brand-blue">{COMPANY_INFO.parentCompany}</strong>, Xí nghiệp In Tài Chính đã bền bỉ phục vụ nhu cầu in vé số và ấn chỉ bảo mật chất lượng cao trên toàn quốc suốt hơn 4 thập kỷ qua. Chúng tôi cam kết đem lại giá trị tối đa dựa trên hệ thống trang thiết bị in ấn thế hệ mới hiện đại, chính xác.
             </p>
 
@@ -80,7 +80,7 @@ export default function Introduction() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className="px-4 sm:px-6 py-3 font-display text-xs font-extrabold tracking-widest uppercase relative cursor-pointer focus:outline-none transition-colors duration-200 z-10"
-                    style={{ color: isActive ? '#0a3273' : '#64748b' }}
+                    style={{ color: isActive ? '#0D4F9C' : '#64748b' }}
                   >
                     {tab === 'mission' && 'Sứ Mệnh'}
                     {tab === 'vision' && 'Tầm Nhìn'}
@@ -90,7 +90,7 @@ export default function Introduction() {
                     {isActive && (
                       <motion.div
                         layoutId="activeTabUnderline"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F4C542]"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                       />
                     )}
@@ -157,7 +157,7 @@ export default function Introduction() {
                         </div>
 
                         {/* Paragraph 3 */}
-                        <div className="flex gap-3 p-3.5 bg-[#0a3273]/5 border border-[#0a3273]/10 rounded-xl">
+                        <div className="flex gap-3 p-3.5 bg-[#0D4F9C]/5 border border-[#0D4F9C]/10 rounded-xl">
                           <ShieldCheck className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
                           <p className="text-slate-700 font-medium leading-relaxed text-xs sm:text-[13px]">
                             {tabContents.mission.paragraphs[2]}
