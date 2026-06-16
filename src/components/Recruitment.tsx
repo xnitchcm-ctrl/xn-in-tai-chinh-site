@@ -122,7 +122,7 @@ export default function Recruitment() {
                             {job.department}
                           </span>
                           {isClosed && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-red-650 text-white text-[9.5px] font-bold uppercase tracking-wider shrink-0 shadow-sm animate-pulse">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-red-600 text-white text-[9.5px] font-bold uppercase tracking-wider shrink-0 shadow-sm animate-pulse">
                               <span>⛔</span> ĐÃ HẾT TUYỂN DỤNG
                             </span>
                           )}

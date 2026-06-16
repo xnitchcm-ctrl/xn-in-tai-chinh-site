@@ -200,7 +200,7 @@ export default function Gallery() {
                   </button>
                   <button
                     onClick={() => setLightboxIndex(null)}
-                    className="p-3 bg-red-650/10 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/20 rounded-xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md"
+                    className="p-3 bg-red-600/10 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/20 rounded-xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md"
                     aria-label="Đóng cửa sổ"
                   >
                     <X className="w-4 h-4" />

@@ -114,7 +114,7 @@ export default function Technology() {
               }}
             >
               {/* Card top banner accent */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#0D4F9C] group-hover:bg-red-655 transition-colors"></div>
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#0D4F9C] group-hover:bg-red-600 transition-colors"></div>
               
               <div>
                 {/* Icon & Badge row */}
@@ -199,7 +199,7 @@ export default function Technology() {
                   servicesSec.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-xs font-bold text-center w-full bg-red-650 hover:bg-red-700 text-white py-2.5 rounded-xl uppercase transition-colors cursor-pointer shadow-md"
+              className="text-xs font-bold text-center w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl uppercase transition-colors cursor-pointer shadow-md"
             >
               TÌM HIỂU THÊM
             </button>
