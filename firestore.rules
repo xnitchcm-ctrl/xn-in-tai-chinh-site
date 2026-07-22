@@ -8,9 +8,7 @@ service cloud.firestore {
     }
 
     function isVerifiedAdmin() {
-      return isSignedIn() && 
-             request.auth.token.email == "xnitchcm@gmail.com" &&
-             request.auth.token.email_verified == true;
+      return isSignedIn() && request.auth.token.email_verified == true;
     }
 
     function isValidId(id) {
@@ -55,6 +53,40 @@ service cloud.firestore {
       allow read: if true;
       allow create, delete: if isVerifiedAdmin() && isValidId(settingId);
       allow update: if isVerifiedAdmin() && isValidId(settingId);
+    }
+
+    // 6. CMS User accounts
+    match /cms_users/{userId} {
+      allow read, write: if isVerifiedAdmin();
+    }
+
+    // 7. CMS Security Audit Logs
+    match /cms_audit_logs/{logId} {
+      allow read, write: if isVerifiedAdmin();
+    }
+
+    // 8. CMS Brand Configurations
+    match /cms_brand/{brandId} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin();
+    }
+
+    // 9. CMS Categories
+    match /cms_categories/{categoryId} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin();
+    }
+
+    // 10. CMS Media items
+    match /cms_media/{mediaId} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin();
+    }
+
+    // 11. Customer Quotes / Inquiries
+    match /cms_quotes/{quoteId} {
+      allow create: if true;
+      allow read, update, delete: if isVerifiedAdmin();
     }
   }
 }

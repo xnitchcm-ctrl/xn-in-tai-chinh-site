@@ -147,6 +147,7 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
             </p>
             <p className="text-[10px] text-slate-500 mt-1.5 leading-relaxed">
               Bản quyền website thuộc về Xí Nghiệp In Tài Chính TP. Hồ Chí Minh. Nghiêm cấm sao chép, trích xuất dữ liệu hoặc giả mạo thiết kế hoa văn, ký hiệu, số sê-ri và các nội dung thuộc quyền quản lý của đơn vị dưới mọi hình thức.
+              <a href="/quan-tri/dang-nhap" className="ml-3 text-slate-400 hover:text-amber-400 font-bold underline transition-colors">Đăng Nhập CMS Quản Trị</a>
             </p>
           </div>
 

@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Phone, ArrowUp, ShieldCheck, Mail, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Phone, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+
+// Public Components
 import Header from './components/Header';
 import HeroSlider from './components/HeroSlider';
 import Introduction from './components/Introduction';
@@ -17,55 +20,75 @@ import Preloader from './components/Preloader';
 import OrgChart from './components/OrgChart';
 import { COMPANY_INFO } from './data/companyData';
 
-export default function App() {
-  const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('hero');
+// CMS Components
+import CMSLogin from './components/cms/CMSLogin';
+import CMSForgotPassword from './components/cms/CMSForgotPassword';
+import CMSLayout from './components/cms/CMSLayout';
+import CMSOverview from './components/cms/views/CMSOverview';
+import CMSPages from './components/cms/views/CMSPages';
+import CMSPosts from './components/cms/views/CMSPosts';
+import CMSCategories from './components/cms/views/CMSCategories';
+import CMSMedia from './components/cms/views/CMSMedia';
+import CMSBanners from './components/cms/views/CMSBanners';
+import CMSServices from './components/cms/views/CMSServices';
+import CMSTechnology from './components/cms/views/CMSTechnology';
+import CMSGallery from './components/cms/views/CMSGallery';
+import CMSRecruitment from './components/cms/views/CMSRecruitment';
+import CMSContacts from './components/cms/views/CMSContacts';
+import CMSBrand from './components/cms/views/CMSBrand';
+import CMSSEO from './components/cms/views/CMSSEO';
+import CMSUsers from './components/cms/views/CMSUsers';
+import CMSAuditLogs from './components/cms/views/CMSAuditLogs';
+import CMSSettings from './components/cms/views/CMSSettings';
+
+import { useCMS } from './context/CMSContext';
+
+// Protected Route Guard for CMS Admin Area
+function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
+  const { currentUser, isInitialized } = useCMS();
+
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen bg-[#F7FAFF] flex items-center justify-center p-4">
+        <div className="flex items-center gap-3 font-bold text-[#174A87]">
+          <div className="w-5 h-5 border-2 border-[#174A87] border-t-transparent rounded-full animate-spin" />
+          <span>Đang kiểm tra quyền truy cập hệ thống...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/quan-tri/dang-nhap" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+// Main Public Website View Component
+function PublicWebsite({ newsPage = false }: { newsPage?: boolean }) {
+  const [loading, setLoading] = useState(!newsPage);
+  const [activeSection, setActiveSection] = useState(newsPage ? 'news' : 'hero');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
-
-  // HTML5 History pathing state
-  const [currentPage, setCurrentPage] = useState<'home' | 'news'>(() => {
-    if (typeof window !== 'undefined' && window.location.pathname === '/tin-tuc-hoat-dong') {
-      return 'news';
-    }
-    return 'home';
-  });
   const [selectedNewsCategory, setSelectedNewsCategory] = useState<string | null>(null);
 
-  // Sync back/forward browser navigation buttons
-  useEffect(() => {
-    const handlePopState = () => {
-      if (window.location.pathname === '/tin-tuc-hoat-dong') {
-        setCurrentPage('news');
-        setActiveSection('news');
-      } else {
-        setCurrentPage('home');
-        setActiveSection('hero');
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  const navigate = useNavigate();
 
-  // IntersectionObserver to dynamically highlight active sticky menu link on scroll
   useEffect(() => {
     const sections = ['hero', 'about', 'org-chart', 'services', 'technology', 'qrcode-sec', 'gallery', 'recruitment', 'contact'];
     
     const handleScrollActiveLink = () => {
-      if (currentPage === 'news') {
-        setActiveSection('news');
-        return;
-      }
-      const scrollPos = window.scrollY + 200; // Offset for sticky menu height
-      
-      // Determine if back to top toggle is visible
+      if (newsPage) return;
+
       if (window.scrollY > 400) {
         setShowBackToTop(true);
       } else {
         setShowBackToTop(false);
       }
 
+      const scrollPos = window.scrollY + 200;
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
@@ -81,34 +104,33 @@ export default function App() {
 
     window.addEventListener('scroll', handleScrollActiveLink);
     return () => window.removeEventListener('scroll', handleScrollActiveLink);
-  }, [currentPage]);
+  }, [newsPage]);
 
-  // Standard smooth navigation trigger supporting paths pre-selected categories filters
   const handleNavigate = (sectionId: string, category?: string) => {
     if (sectionId === 'news') {
-      setCurrentPage('news');
       setSelectedNewsCategory(category || 'All');
-      setActiveSection('news');
-      window.history.pushState({}, '', '/tin-tuc-hoat-dong');
+      navigate('/tin-tuc-hoat-dong');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
-    // Switch to home root if clicked other menus
-    setCurrentPage('home');
-    window.history.pushState({}, '', '/');
-    setActiveSection(sectionId);
+    if (newsPage) {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' });
+        }
+      }, 150);
+      return;
+    }
 
-    setTimeout(() => {
-      const el = document.getElementById(sectionId);
-      if (el) {
-        const offsetTop = el.offsetTop - (sectionId === 'hero' ? 0 : 120); // Accounting for double-tier header
-        window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth',
-        });
-      }
-    }, 100);
+    setActiveSection(sectionId);
+    const el = document.getElementById(sectionId);
+    if (el) {
+      const offsetTop = el.offsetTop - (sectionId === 'hero' ? 0 : 120);
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
   };
 
   const handleOpenQuoteWithService = (serviceTitle: string) => {
@@ -121,44 +143,39 @@ export default function App() {
     setIsQuoteModalOpen(true);
   };
 
-  const handleCallHotline = () => {
-    window.location.href = `tel:${COMPANY_INFO.phone.replace(/\s+/g, '')}`;
-  };
-
   return (
     <>
-      <AnimatePresence mode="wait">
-        {loading && (
-          <Preloader key="preloader" onComplete={() => setLoading(false)} />
-        )}
-      </AnimatePresence>
+      {!newsPage && (
+        <AnimatePresence mode="wait">
+          {loading && (
+            <Preloader key="preloader" onComplete={() => setLoading(false)} />
+          )}
+        </AnimatePresence>
+      )}
 
-      <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden transition-all duration-300 ${
-        currentPage === 'news' ? 'bg-[#F8FBFF] text-slate-800' : 'bg-slate-50 text-slate-800'
-      }`}>
+      <div className="min-h-screen flex flex-col font-sans antialiased overflow-x-hidden bg-[#F7FAFF] text-slate-800">
         
-        {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
+        {/* Header Bar */}
         <Header 
           activeSection={activeSection} 
           onNavigate={handleNavigate} 
           openQuoteModal={handleOpenGeneralQuote} 
         />
 
-        {/* MAIN CONTAINER CONTENT SECTION */}
+        {/* Main Content */}
         <motion.main 
           initial={{ opacity: 0 }}
-          animate={{ opacity: loading ? 0 : 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
           className="flex-1 w-full flex flex-col"
         >
-          {currentPage === 'news' ? (
+          {newsPage ? (
             <NewsSection 
-              onBackToHome={() => handleNavigate('hero')}
+              onBackToHome={() => navigate('/')}
               preSelectedCategory={selectedNewsCategory}
             />
           ) : (
             <>
-              {/* 2. DYNAMICAL INTERACTIVE HERO SLIDER BANNER & FLOATING BADGES COLUMN */}
               <div id="hero">
                 <HeroSlider 
                   onLearnMore={handleNavigate} 
@@ -166,132 +183,163 @@ export default function App() {
                 />
               </div>
 
-              {/* 3. EXPERIENCE METRICS, TIMELINE AND TABS VISION/MISSION INTRODUCTION SECTION */}
               <motion.div 
                 id="about"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Introduction />
               </motion.div>
 
-              {/* SƠ ĐỒ TỔ CHỨC CORPORATE PREMIUM */}
               <OrgChart />
 
-              {/* 4. CHUYÊN NGHIỆP FIVE CORE SERVICE DIVISION & EXPANDABLE DETAILS PANELS */}
               <motion.div 
                 id="services"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Services onSelectServiceForQuote={handleOpenQuoteWithService} />
               </motion.div>
 
-              {/* 5. HEIDELBERG & KBA HIGH CAPACITY German MACHINERY SPEC viewer SECTION */}
               <motion.div 
                 id="technology"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Technology />
               </motion.div>
 
-              {/* QR CODE BẢO MẬT ĐA LỚP DOANH NGHIỆP IN ẤN */}
               <motion.div 
                 id="qrcode-sec"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <QRCodeProtection />
               </motion.div>
 
-              {/* 6. REALISTIC PLANT PICTURES AND SPECIFIC CERTIFICATES FILTERABLE GALLERY */}
               <motion.div 
                 id="gallery"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Gallery />
               </motion.div>
 
-              {/* 7. OPEN TALENT JOBS SYSTEM & CANDIDATE CV REGISTRATION FORM */}
               <motion.div 
                 id="recruitment"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Recruitment />
               </motion.div>
 
-              {/* 8. WORK COMMUNICATOR FEEDBACK RFQ BOARD & MAP */}
               <motion.div 
                 id="contact"
-                initial={{ opacity: 0, y: 35 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6 }}
               >
                 <Contact />
               </motion.div>
             </>
           )}
-
         </motion.main>
 
-        {/* 9. LICENSED STATE ENTERPRISE LEGAL FOOTER MARKER */}
         <CompanyFooter onNavigate={handleNavigate} />
 
-        {/* 10. ONLINE INQUIRY SPEC RFQ BOX DIALOG POP-WINDOW */}
         <QuoteModal 
           isOpen={isQuoteModalOpen} 
           onClose={() => setIsQuoteModalOpen(false)} 
           preselectedService={preselectedService} 
         />
 
-        {/* 11. FLOATING QUICK HELPMATE TOOLS (Zalo/Hotline and BackToTop) */}
+        {/* Floating Hotline / BackToTop Widget */}
         <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3.5">
-          
-          {/* Back To Top arrow visual widget */}
           {showBackToTop && (
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               aria-label="Về đầu trang"
-              className="w-11 h-11 bg-brand-gold text-brand-blue hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-amber-300"
+              className="w-11 h-11 bg-[#F5C542] text-[#174A87] hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all cursor-pointer border border-amber-300"
             >
               <ArrowUp className="w-5 h-5 font-black" />
             </button>
           )}
 
-          {/* Corporate direct rapid reached hotline phone widget */}
           <button
-            onClick={handleCallHotline}
+            onClick={() => window.location.href = `tel:${COMPANY_INFO.phone.replace(/\s+/g, '')}`}
             aria-label="Gọi điện thoại tư vấn ngay"
-            className="w-14 h-14 bg-gradient-to-tr from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer relative group"
+            className="w-14 h-14 bg-gradient-to-tr from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-all cursor-pointer relative group"
           >
-            {/* Wave radar pulse ring decor */}
-            <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointers-none z-0"></span>
+            <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointer-events-none z-0" />
             <Phone className="w-6 h-6 rotate-12 relative z-10" />
-            
-            <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-[#0F3268] text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-[#123A78] hidden sm:block">
+            <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-[#174A87] text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-[#123C70] hidden sm:block">
               Gọi: {COMPANY_INFO.phoneDisplay}
             </div>
           </button>
-
         </div>
 
       </div>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* PUBLIC ROUTES */}
+        <Route path="/" element={<PublicWebsite />} />
+        <Route path="/tin-tuc-hoat-dong" element={<PublicWebsite newsPage />} />
+
+        {/* CMS AUTHENTICATION ROUTES */}
+        <Route path="/quan-tri/dang-nhap" element={<CMSLogin />} />
+        <Route path="/quan-tri/quen-mat-khau" element={<CMSForgotPassword />} />
+        <Route path="/quan-tri/dat-lai-mat-khau" element={<CMSForgotPassword />} />
+
+        {/* CMS PROTECTED ADMIN PANEL */}
+        <Route
+          path="/quan-tri"
+          element={
+            <ProtectedAdminRoute>
+              <CMSLayout />
+            </ProtectedAdminRoute>
+          }
+        >
+          <Route index element={<Navigate to="/quan-tri/tong-quan" replace />} />
+          <Route path="tong-quan" element={<CMSOverview />} />
+          <Route path="trang" element={<CMSPages />} />
+          <Route path="bai-viet" element={<CMSPosts />} />
+          <Route path="danh-muc" element={<CMSCategories />} />
+          <Route path="hinh-anh" element={<CMSMedia />} />
+          <Route path="banner" element={<CMSBanners />} />
+          <Route path="dich-vu" element={<CMSServices />} />
+          <Route path="cong-nghe" element={<CMSTechnology />} />
+          <Route path="thu-vien" element={<CMSGallery />} />
+          <Route path="tuyen-dung" element={<CMSRecruitment />} />
+          <Route path="lien-he" element={<CMSContacts />} />
+          <Route path="thuong-hieu" element={<CMSBrand />} />
+          <Route path="seo" element={<CMSSEO />} />
+          <Route path="nguoi-dung" element={<CMSUsers />} />
+          <Route path="nhat-ky" element={<CMSAuditLogs />} />
+          <Route path="cai-dat" element={<CMSSettings />} />
+        </Route>
+
+        {/* FALLBACK CATCH-ALL REDIRECT */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

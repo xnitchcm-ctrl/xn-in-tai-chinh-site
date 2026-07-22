@@ -72,6 +72,38 @@
         "statistics": { "type": "array" }
       },
       "required": ["id", "companyInfo", "slides", "statistics"]
+    },
+    "CMSUser": {
+      "title": "CMSUser",
+      "description": "CMS system user account with role-based access control.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "fullName": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "admin", "editor", "author", "viewer"] },
+        "status": { "type": "string", "enum": ["active", "locked"] },
+        "twoFactorEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastLoginAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "fullName", "role", "status", "createdAt"]
+    },
+    "CMSAuditLog": {
+      "title": "CMSAuditLog",
+      "description": "Audit security log of user actions in the CMS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "target": { "type": "string" },
+        "details": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "userId", "userEmail", "action"]
     }
   },
   "firestore": {
@@ -94,6 +126,14 @@
     "/settings/{settingId}": {
       "schema": "SettingsConfig",
       "description": "Dynamic layout texts, slides and contacts."
+    },
+    "/cms_users/{userId}": {
+      "schema": "CMSUser",
+      "description": "CMS user account records."
+    },
+    "/cms_audit_logs/{logId}": {
+      "schema": "CMSAuditLog",
+      "description": "Audit activity tracking records."
     }
   }
 }
