@@ -28,7 +28,7 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
   ];
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-16 pb-8 border-t-4 border-brand-gold relative overflow-hidden">
+    <footer className="bg-[#00004D] text-slate-300 pt-16 pb-8 border-t-4 border-brand-gold relative overflow-hidden">
       {/* Structural layout decorations */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 blur-3xl rounded-full pointer-events-none"></div>
 

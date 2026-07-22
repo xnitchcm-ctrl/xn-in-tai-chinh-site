@@ -58,7 +58,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00004D]/80 p-4 overflow-y-auto">
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -82,7 +82,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
           <button
             onClick={onClose}
             aria-label="Đóng"
-            className="w-8 h-8 rounded-full bg-black/15 hover:bg-brand-gold text-white hover:text-brand-blue flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[#00004D]/20 hover:bg-brand-gold text-white hover:text-brand-blue flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

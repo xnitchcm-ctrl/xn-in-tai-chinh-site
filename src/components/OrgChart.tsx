@@ -21,7 +21,7 @@ export default function OrgChart() {
     role: 'BAN GIÁM ĐỐC',
     name: 'GIÁM ĐỐC',
     icon: <UserCheck className="w-6 h-6 text-brand-gold" />,
-    color: 'border-brand-gold/50 shadow-[0_0_25px_rgba(220,169,42,0.12)] bg-slate-900/90 hover:border-brand-gold hover:shadow-[0_0_30px_rgba(220,169,42,0.2)]'
+    color: 'border-brand-gold/50 shadow-[0_0_25px_rgba(220,169,42,0.12)] bg-[#0F3268]/90 hover:border-brand-gold hover:shadow-[0_0_30px_rgba(220,169,42,0.2)]'
   };
 
   // Deputy Director Node
@@ -29,7 +29,7 @@ export default function OrgChart() {
     role: 'BAN GIÁM ĐỐC',
     name: 'PHÓ GIÁM ĐỐC',
     icon: <Users className="w-6 h-6 text-blue-400" />,
-    color: 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.1)] bg-slate-900/90 hover:border-blue-450 hover:shadow-[0_0_25px_rgba(59,130,246,0.2)]'
+    color: 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.1)] bg-[#0F3268]/90 hover:border-blue-450 hover:shadow-[0_0_25px_rgba(59,130,246,0.2)]'
   };
 
   // 2 Administration Departments (Placed Bottom Left)
@@ -83,11 +83,11 @@ export default function OrgChart() {
   ];
 
   return (
-    <section id="org-chart" className="w-full bg-slate-950 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden select-none">
+    <section id="org-chart" className="w-full bg-[#123A78] py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden select-none">
       
       {/* Dynamic tech-grid background patterning */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-80" />
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/40 to-slate-950 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0F3268_1px,transparent_1px),linear-gradient(to_bottom,#0F3268_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#123A78] via-[#123A78]/40 to-[#123A78] pointer-events-none" />
 
       {/* Corporate high-end gold & deep blue ambient lighting highlights */}
       <span className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[130px] pointer-events-none" />
@@ -182,14 +182,14 @@ export default function OrgChart() {
             {/* Symmetrical Connector Lines System */}
             <div className="relative w-full h-12">
               {/* Center vertical node drop */}
-              <div className="absolute top-0 bottom-1/2 left-1/2 w-[2px] bg-slate-800" />
+              <div className="absolute top-0 bottom-1/2 left-1/2 w-[2px] bg-[#0D4F9C]/60" />
               {/* Horizontal crossbar line linking the two main branches */}
-              <div className="absolute top-1/2 left-[25%] right-[25%] h-[2px] bg-slate-800" />
+              <div className="absolute top-1/2 left-[25%] right-[25%] h-[2px] bg-[#0D4F9C]/60" />
               
               {/* Drop down line left (to Administration) */}
-              <div className="absolute top-1/2 bottom-0 left-[25%] w-[2px] bg-slate-800" />
+              <div className="absolute top-1/2 bottom-0 left-[25%] w-[2px] bg-[#0D4F9C]/60" />
               {/* Drop down line right (to Workshops) */}
-              <div className="absolute top-1/2 bottom-0 right-[25%] w-[2px] bg-slate-800" />
+              <div className="absolute top-1/2 bottom-0 right-[25%] w-[2px] bg-[#0D4F9C]/60" />
             </div>
           </div>
 
@@ -213,7 +213,7 @@ export default function OrgChart() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                    className={`flex items-center gap-4 p-5 rounded-xl border bg-slate-900/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
+                    className={`flex items-center gap-4 p-5 rounded-xl border bg-[#0F3268]/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
                   >
                     <div className="p-3.5 bg-emerald-500/10 rounded-lg text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-all duration-300 shrink-0">
                       {node.icon}
@@ -248,7 +248,7 @@ export default function OrgChart() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
-                    className={`flex items-center gap-3.5 p-5 rounded-xl border bg-slate-900/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
+                    className={`flex items-center gap-3.5 p-5 rounded-xl border bg-[#0F3268]/60 transition-all duration-300 group overflow-hidden ${node.glowColor}`}
                   >
                     <div className="p-3.5 bg-brand-gold/10 rounded-lg text-brand-gold group-hover:bg-brand-gold group-hover:text-slate-950 transition-all duration-300 shrink-0">
                       {node.icon}
@@ -283,11 +283,11 @@ export default function OrgChart() {
             viewport={{ once: true }}
             className="flex gap-4 relative"
           >
-            <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-brand-gold flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-lg shadow-brand-gold/10">
+            <div className="w-11 h-11 rounded-full bg-[#123A78] border-2 border-brand-gold flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-lg shadow-brand-gold/10">
               <UserCheck className="w-5 h-5" />
             </div>
             
-            <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-brand-gold/20 text-left">
+            <div className="flex-1 p-4 rounded-xl bg-[#0F3268]/90 border border-brand-gold/20 text-left">
               <span className="text-[8px] font-black tracking-widest text-brand-gold uppercase font-display">BAN GIÁM ĐỐC</span>
               <h3 className="text-base font-black text-white font-display mt-0.5">GIÁM ĐỐC</h3>
             </div>
@@ -300,11 +300,11 @@ export default function OrgChart() {
             viewport={{ once: true }}
             className="flex gap-4 relative"
           >
-            <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-blue-500/60 flex items-center justify-center text-blue-450 z-20 shrink-0 shadow-lg shadow-blue-500/10">
+            <div className="w-11 h-11 rounded-full bg-[#123A78] border-2 border-blue-500/60 flex items-center justify-center text-blue-450 z-20 shrink-0 shadow-lg shadow-blue-500/10">
               <Users className="w-5 h-5" />
             </div>
             
-            <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-blue-500/15 text-left">
+            <div className="flex-1 p-4 rounded-xl bg-[#0F3268]/90 border border-blue-500/15 text-left">
               <span className="text-[8px] font-black tracking-widest text-blue-450 uppercase font-display">BAN GIÁM ĐỐC</span>
               <h3 className="text-base font-black text-white font-display mt-0.5">PHÓ GIÁM ĐỐC</h3>
             </div>
@@ -322,11 +322,11 @@ export default function OrgChart() {
               viewport={{ once: true }}
               className="flex gap-4 relative"
             >
-              <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-slate-800 flex items-center justify-center text-emerald-400 z-20 shrink-0 shadow-md">
+              <div className="w-11 h-11 rounded-full bg-[#123A78] border-2 border-[#123A78]/60 flex items-center justify-center text-emerald-400 z-20 shrink-0 shadow-md">
                 {node.icon}
               </div>
 
-              <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
+              <div className="flex-1 p-4 rounded-xl bg-[#0F3268]/90 border border-[#123A78]/50 text-left">
                 <span className="text-[8px] font-extrabold text-emerald-400/85 uppercase block tracking-widest font-display leading-none mb-1">
                   {node.tag}
                 </span>
@@ -347,11 +347,11 @@ export default function OrgChart() {
               viewport={{ once: true }}
               className="flex gap-4 relative"
             >
-              <div className="w-11 h-11 rounded-full bg-slate-900 border-2 border-slate-800 flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-md">
+              <div className="w-11 h-11 rounded-full bg-[#123A78] border-2 border-[#123A78]/60 flex items-center justify-center text-brand-gold z-20 shrink-0 shadow-md">
                 {node.icon}
               </div>
 
-              <div className="flex-1 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
+              <div className="flex-1 p-4 rounded-xl bg-[#0F3268]/90 border border-[#123A78]/50 text-left">
                 <span className="text-[8px] font-extrabold text-brand-gold/85 uppercase block tracking-widest font-display leading-none mb-1">
                   {node.tag}
                 </span>

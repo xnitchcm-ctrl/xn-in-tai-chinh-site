@@ -134,7 +134,7 @@ export default function App() {
       </AnimatePresence>
 
       <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden transition-all duration-300 ${
-        currentPage === 'news' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-800'
+        currentPage === 'news' ? 'bg-[#123A78] text-white' : 'bg-slate-50 text-slate-800'
       }`}>
         
         {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}
@@ -284,7 +284,7 @@ export default function App() {
             <span className="absolute -inset-1.5 rounded-full bg-rose-600/35 animate-ping pointers-none z-0"></span>
             <Phone className="w-6 h-6 rotate-12 relative z-10" />
             
-            <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-slate-700 hidden sm:block">
+            <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-[#0F3268] text-white text-[11px] font-black tracking-wider px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md border border-[#123A78] hidden sm:block">
               Gọi: {COMPANY_INFO.phoneDisplay}
             </div>
           </button>

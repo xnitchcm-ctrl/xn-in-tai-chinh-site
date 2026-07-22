@@ -235,7 +235,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
   const sortedDisplayPosts = [...pinnedPosts, ...regularPosts];
 
   return (
-    <div id="dynamic-news-page" className="min-h-screen bg-slate-900 text-white pt-24 pb-20 relative">
+    <div id="dynamic-news-page" className="min-h-screen bg-[#123A78] text-white pt-24 pb-20 relative">
       <div className="absolute inset-0 bg-[radial-gradient(#ffffff04_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-40"></div>
       
       {/* Dynamic Glowing enterprise background graphics */}
@@ -245,7 +245,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Navigation Breadcrumb Line */}
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-400 font-display tracking-widest uppercase mb-6 select-none bg-slate-950/20 py-2.5 px-4 rounded-lg border border-slate-800/40 w-fit backdrop-blur-sm shadow-sm">
+        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-400 font-display tracking-widest uppercase mb-6 select-none bg-[#0F3268]/60 py-2.5 px-4 rounded-lg border border-[#123A78]/80 w-fit backdrop-blur-sm shadow-sm">
           <button onClick={onBackToHome} className="hover:text-brand-gold transition-colors flex items-center gap-1">
             TRANG CHỦ
           </button>
@@ -278,7 +278,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
         </div>
 
         {/* Secondary Navigation Filter Column & Action controllers */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10 bg-slate-950/45 p-4 rounded-xl border border-slate-800 backdrop-blur-sm">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10 bg-[#123A78]/60 p-4 rounded-xl border border-[#123A78]/80 backdrop-blur-sm">
           
           {/* Main categories scrollable list */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-thin scrollbar-thumb-amber-500 max-w-full">
@@ -320,7 +320,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                 placeholder="Tìm từ khóa tin..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2.5 pl-9 text-xs bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold focus:bg-slate-900 text-white placeholder-slate-500"
+                className="w-full px-4 py-2.5 pl-9 text-xs bg-[#0F3268] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold focus:bg-[#0F3268] text-white placeholder-slate-500"
               />
               <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
@@ -345,7 +345,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
             ) : (
               <button
                 onClick={() => setShowAdminLoginModal(true)}
-                className="px-4 py-2.5 bg-slate-900 border border-slate-800 hover:border-brand-gold/40 text-slate-300 hover:text-brand-gold text-xs font-black uppercase font-display rounded-lg transition-all cursor-pointer flex items-center gap-2"
+                className="px-4 py-2.5 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold/40 text-slate-300 hover:text-brand-gold text-xs font-black uppercase font-display rounded-lg transition-all cursor-pointer flex items-center gap-2"
               >
                 <Lock className="w-3.5 h-3.5 text-brand-gold" /> CMS Quản trị
               </button>
@@ -358,22 +358,22 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((idx) => (
-              <div key={idx} className="bg-slate-950/40 border border-slate-800 rounded-xl h-[420px] p-6 flex flex-col justify-between animate-pulse">
+              <div key={idx} className="bg-[#123A78]/50 border border-[#123A78]/80 rounded-xl h-[420px] p-6 flex flex-col justify-between animate-pulse">
                 <div className="space-y-4">
-                  <div className="h-44 bg-slate-800 rounded-lg w-full"></div>
-                  <div className="h-3 bg-slate-800 rounded w-1/4"></div>
-                  <div className="h-5 bg-slate-800 rounded w-5/6"></div>
-                  <div className="h-3 bg-slate-800 rounded w-full"></div>
-                  <div className="h-3 bg-slate-800 rounded w-2/3"></div>
+                  <div className="h-44 bg-[#0F3268] rounded-lg w-full"></div>
+                  <div className="h-3 bg-[#0F3268] rounded w-1/4"></div>
+                  <div className="h-5 bg-[#0F3268] rounded w-5/6"></div>
+                  <div className="h-3 bg-[#0F3268] rounded w-full"></div>
+                  <div className="h-3 bg-[#0F3268] rounded w-2/3"></div>
                 </div>
-                <div className="h-8 bg-slate-800 rounded w-1/3"></div>
+                <div className="h-8 bg-[#0F3268] rounded w-1/3"></div>
               </div>
             ))}
           </div>
         ) : (
           <>
             {filteredPosts.length === 0 ? (
-              <div className="text-center py-24 bg-slate-950/20 border border-slate-800 rounded-2xl">
+              <div className="text-center py-24 bg-[#123A78]/30 border border-[#123A78]/80 rounded-2xl">
                 <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
                 <h3 className="text-lg font-bold font-display uppercase tracking-wider">Không tìm thấy bài viết</h3>
                 <p className="text-xs text-slate-400 mt-2 max-w-md mx-auto">
@@ -397,11 +397,11 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.55 }}
-                    className="break-inside-avoid flex flex-col bg-slate-950 border border-slate-800/70 hover:border-brand-gold/30 hover:shadow-[0_0_30px_rgba(220,169,42,0.1)] rounded-2xl overflow-hidden transition-all duration-300 group relative"
+                    className="break-inside-avoid flex flex-col bg-[#123A78] border border-[#123A78]/80 hover:border-brand-gold/30 hover:shadow-[0_0_30px_rgba(220,169,42,0.1)] rounded-2xl overflow-hidden transition-all duration-300 group relative"
                   >
                     {/* Header Image or Pinned visual */}
-                    <div className="relative overflow-hidden h-48 sm:h-52 bg-slate-900 shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/15 to-transparent z-10"></div>
+                    <div className="relative overflow-hidden h-48 sm:h-52 bg-[#0F3268] shrink-0">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#123A78] via-[#123A78]/15 to-transparent z-10"></div>
                       
                       <img
                         src={post.imageUrl}
@@ -424,7 +424,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
 
                       {/* Video Embed Symbol Marker */}
                       {post.videoUrl && (
-                        <span className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-slate-900/80 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:scale-115 transition-transform cursor-pointer">
+                        <span className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:scale-115 transition-transform cursor-pointer">
                           <Video className="w-4 h-4 text-brand-gold" />
                         </span>
                       )}
@@ -458,7 +458,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                           </p>
                         )}
 
-                        <div className="w-full h-px bg-slate-800/60 my-2"></div>
+                        <div className="w-full h-px bg-[#0D4F9C]/30 my-2"></div>
 
                         {/* Description content */}
                         <p className="text-xs sm:text-xs text-slate-300 leading-relaxed font-normal hover:text-slate-200 duration-200 line-clamp-6">
@@ -467,7 +467,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       </div>
 
                       {/* Interaction footer actions of the post card */}
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-800/40">
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#0D4F9C]/30">
                         {/* Public Link button */}
                         <button 
                           onClick={() => alert(`Chi tiết bài viết: ${post.title}\n\nThống báo chuyên môn: ${post.content}`)}
@@ -481,14 +481,14 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => handleOpenEditForm(post)}
-                              className="p-1.5 bg-slate-905 hover:bg-blue-600/20 border border-slate-850 hover:border-blue-500 text-blue-400 hover:text-white rounded transition-all cursor-pointer text-xs"
+                              className="p-1.5 bg-[#00004D] hover:bg-blue-600/20 border border-[#123A78] hover:border-blue-500 text-blue-400 hover:text-white rounded transition-all cursor-pointer text-xs"
                               title="Chỉnh sửa bài báo"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => handleDeletePost(post.id, post.title)}
-                              className="p-1.5 bg-slate-905 hover:bg-rose-600/20 border border-slate-850 hover:border-rose-500 text-rose-400 hover:text-white rounded transition-all cursor-pointer text-xs"
+                              className="p-1.5 bg-[#00004D] hover:bg-rose-600/20 border border-[#123A78] hover:border-rose-500 text-rose-400 hover:text-white rounded transition-all cursor-pointer text-xs"
                               title="Xóa bài báo này"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -516,14 +516,14 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowAdminLoginModal(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm"
             />
             
             <motion.div
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
-              className="bg-slate-950 border border-brand-gold/30 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative z-10 p-6 text-white font-sans"
+              className="bg-[#0F3268] border border-brand-gold/30 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative z-10 p-6 text-white font-sans"
             >
               <div className="text-center mb-6">
                 <div className="w-12 h-12 bg-brand-gold/15 border border-brand-gold/20 rounded-full flex items-center justify-center mx-auto text-brand-gold mb-3">
@@ -543,7 +543,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     placeholder="Mật mã: 79 hoặc 12345"
                     value={adminPasscode}
                     onChange={(e) => setAdminPasscode(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-white text-sm"
+                    className="w-full px-4 py-3 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white text-sm"
                     autoFocus
                   />
                 </div>
@@ -558,7 +558,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   <button
                     type="button"
                     onClick={() => setShowAdminLoginModal(false)}
-                    className="flex-1 py-2.5 bg-slate-900 border border-slate-800 hover:bg-slate-850 rounded-lg text-xs font-bold font-display uppercase transition-colors cursor-pointer text-slate-300"
+                    className="flex-1 py-2.5 bg-[#123A78] border border-[#123A78]/80 hover:bg-[#0F3268] rounded-lg text-xs font-bold font-display uppercase transition-colors cursor-pointer text-slate-300"
                   >
                     HỦY
                   </button>
@@ -584,17 +584,17 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsFormModalOpen(false)}
-              className="fixed inset-0 bg-black/85 backdrop-blur-sm"
+              className="fixed inset-0 bg-[#00004D]/85 backdrop-blur-sm"
             />
 
             <motion.div
               initial={{ scale: 0.94, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.94, y: 20 }}
-              className="bg-slate-950 border border-brand-gold/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh] text-slate-100 font-sans"
+              className="bg-[#0F3268] border border-brand-gold/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh] text-slate-100 font-sans"
             >
               {/* Form heading */}
-              <div className="p-6 border-b border-slate-800 flex items-center justify-between text-white shrink-0">
+              <div className="p-6 border-b border-[#123A78]/80 flex items-center justify-between text-white shrink-0">
                 <div className="flex items-center gap-2.5">
                   <Settings className="w-5 h-5 text-brand-gold animate-spin" />
                   <h3 className="text-base sm:text-lg font-bold font-display uppercase tracking-widest text-[#DCA92A]">
@@ -622,7 +622,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-xs font-bold text-white uppercase font-display"
+                      className="w-full px-3 py-2.5 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs font-bold text-white uppercase font-display"
                     >
                       {NEWS_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>{cat}</option>
@@ -639,7 +639,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       value={formTitle}
                       onChange={(e) => setFormTitle(e.target.value)}
                       required
-                      className="w-full px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-semibold"
+                      className="w-full px-4 py-2 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-semibold"
                     />
                   </div>
 
@@ -653,12 +653,12 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     placeholder="Nhập đoạn mô tả ngắn dẫn xuất (hiển thị nghiêng bên dưới tiêu đề)..."
                     value={formSubtitle}
                     onChange={(e) => setFormSubtitle(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-xs text-white"
+                    className="w-full px-4 py-2.5 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs text-white"
                   />
                 </div>
 
                 {/* Form Image Cover Uploader / Field */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 rounded-xl bg-[#123A78]/60 border border-[#123A78]/80">
                   
                   {/* cover image input URL or Upload button */}
                   <div>
@@ -669,7 +669,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       placeholder="https://images.unsplash.com/..."
                       value={formImageUrl}
                       onChange={(e) => setFormImageUrl(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-3"
+                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-3"
                     />
 
                     {/* True Upload trigger input */}
@@ -683,7 +683,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     <button
                       type="button"
                       onClick={() => imageFileInputRef.current?.click()}
-                      className="w-full py-2 bg-slate-950 border border-slate-800 hover:border-brand-gold/40 text-xs font-bold text-slate-300 hover:text-brand-gold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-2 bg-[#0B2755] border border-[#123A78]/80 hover:border-brand-gold/40 text-xs font-bold text-slate-300 hover:text-brand-gold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                       {imageUploadLoading ? (
                         <div className="w-4 h-4 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
@@ -695,11 +695,11 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   </div>
 
                   {/* Attachment image preview frame */}
-                  <div className="h-28 sm:h-full bg-slate-950 rounded-lg overflow-hidden border border-slate-800/60 flex items-center justify-center relative">
+                  <div className="h-28 sm:h-full bg-[#123A78] rounded-lg overflow-hidden border border-[#123A78]/60 flex items-center justify-center relative">
                     {formImageUrl ? (
                       <img src={formImageUrl} className="w-full h-full object-cover" alt="Preview ảnh" referrerPolicy="no-referrer" />
                     ) : (
-                      <span className="text-[10px] text-slate-600 font-mono">CHƯA BẢO ĐỊNH ẢNH</span>
+                      <span className="text-[10px] text-slate-400 font-mono">CHƯA BẢO ĐỊNH ẢNH</span>
                     )}
                   </div>
 
@@ -716,7 +716,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       placeholder="Chừa trống nếu không đính kèm..."
                       value={formVideoUrl}
                       onChange={(e) => setFormVideoUrl(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-2"
+                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-2"
                     />
                     
                     {/* true video input file reference */}
@@ -730,7 +730,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     <button
                       type="button"
                       onClick={() => videoFileInputRef.current?.click()}
-                      className="w-full py-1.5 bg-slate-950 border border-slate-800 hover:border-brand-gold/40 text-[10px] font-bold text-slate-400 hover:text-brand-gold rounded-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                      className="w-full py-1.5 bg-[#0B2755] border border-[#123A78]/80 hover:border-brand-gold/40 text-[10px] font-bold text-slate-400 hover:text-brand-gold rounded-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       {videoUploadLoading ? (
                         <div className="w-3 h-3 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
@@ -749,7 +749,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       placeholder="Phòng Kinh doanh / Công đoàn..."
                       value={formAuthor}
                       onChange={(e) => setFormAuthor(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-white"
+                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white"
                     />
                     
                     {/* Pin checkpoint switcher */}
@@ -777,16 +777,16 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     onChange={(e) => setFormContent(e.target.value)}
                     required
                     rows={8}
-                    className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-sans"
+                    className="w-full px-4 py-3 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-sans"
                   />
                 </div>
 
                 {/* Action buttons footer */}
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3 shrink-0">
+                <div className="pt-4 border-t border-[#123A78]/80 flex items-center justify-end gap-3 shrink-0">
                   <button
                     type="button"
                     onClick={() => setIsFormModalOpen(false)}
-                    className="px-5 py-2.5 bg-slate-900 border border-slate-800 hover:bg-slate-850 text-xs font-bold font-display uppercase rounded-lg transition-colors cursor-pointer text-slate-400 hover:text-white"
+                    className="px-5 py-2.5 bg-[#0B2755] border border-[#123A78]/80 hover:bg-[#0F3268] text-xs font-bold font-display uppercase rounded-lg transition-colors cursor-pointer text-slate-400 hover:text-white"
                   >
                     HỦY BỎ
                   </button>

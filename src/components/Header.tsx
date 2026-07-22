@@ -120,7 +120,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
     <header className="w-full flex flex-col z-50 bg-white shadow-sm transition-all duration-300 relative">
       
       {/* 2.1 PRE-HEADER TRADING METRICS BAR */}
-      <div className="w-full bg-slate-900 border-b border-slate-800 py-2 px-4 sm:px-6 lg:px-8 text-xs text-slate-300 hidden md:block relative z-30">
+      <div className="w-full bg-[#123A78] border-b border-[#123A78]/30 py-2 px-4 sm:px-6 lg:px-8 text-xs text-slate-300 hidden md:block relative z-30">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2 font-medium text-slate-300">
@@ -150,7 +150,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
             {/* Round coat-of-arms graphic emblem */}
             <div className="relative w-14 h-14 bg-gradient-to-tr from-brand-blue to-blue-800 rounded-full flex flex-col items-center justify-center border-2 border-brand-gold shadow-md shrink-0">
               <div className="absolute top-1 text-[7px] font-black text-brand-gold leading-none tracking-wider">XỔ SỐ</div>
-              <div className="w-7 h-7 rounded-full border border-white/40 flex items-center justify-center font-display font-black text-white text-xs mt-1 shadow-inner bg-slate-950/20">
+              <div className="w-7 h-7 rounded-full border border-white/40 flex items-center justify-center font-display font-black text-white text-xs mt-1 shadow-inner bg-[#123A78]/30">
                 ITC
               </div>
               <div className="absolute bottom-1 text-[7px] font-bold text-slate-200 tracking-wider leading-none">TP.HCM</div>
@@ -449,7 +449,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 15 }}
                           transition={{ duration: 0.25, ease: 'easeOut' }}
-                          className="w-[330px] bg-slate-950 text-white rounded-xl shadow-2xl overflow-hidden border border-slate-800/80 p-4"
+                          className="w-[330px] bg-[#123A78] text-white rounded-xl shadow-2xl overflow-hidden border border-[#123A78]/80 p-4"
                         >
                           <div className="border-b border-white/10 pb-2 mb-2 flex items-center justify-between">
                             <h3 className="text-[10px] font-black tracking-widest text-[#DCA92A] uppercase font-display">CHUYÊN MỤC TIN TỨC - HOẠT ĐỘNG</h3>
@@ -530,7 +530,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-[100] lg:hidden"
+              className="fixed inset-0 bg-[#00004D]/70 backdrop-blur-md z-[100] lg:hidden"
             />
 
             {/* Premium Slate-dark Right Panel */}
@@ -539,7 +539,7 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0.95 }}
               transition={{ type: 'spring', damping: 28, stiffness: 240 }}
-              className="fixed right-0 top-0 bottom-0 w-[85%] max-w-[350px] bg-slate-950 text-white z-[101] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto lg:hidden border-l border-white/10"
+              className="fixed right-0 top-0 bottom-0 w-[85%] max-w-[350px] bg-[#123A78] text-white z-[101] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto lg:hidden border-l border-white/10"
             >
               <div>
                 {/* Drawer Header Brand Titles */}

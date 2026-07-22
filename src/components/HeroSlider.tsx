@@ -101,7 +101,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
   ];
 
   return (
-    <section className="relative w-full bg-slate-950 overflow-hidden text-white" id="hero-banner">
+    <section className="relative w-full bg-[#123A78] overflow-hidden text-white" id="hero-banner">
       
       {/* 1. LAYER UNDERLAY: DEEP CYBER GRADIENT VIGNETTE */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(10,50,115,0.45),transparent_60%)] z-10 pointer-events-none"></div>
@@ -121,7 +121,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         {isVideoActive && !videoError && (
           <div className="absolute inset-0 w-full h-full overflow-hidden">
             {/* Brighter 20% overlay on top of video */}
-            <div className="absolute inset-0 bg-black/20 z-10"></div>
+            <div className="absolute inset-0 bg-[#00004D]/20 z-10"></div>
             <div className="absolute inset-0 bg-gradient-to-r from-[#0D4F9C]/40 via-[#1E63B5]/30 to-[#2F7DD1]/10 z-10"></div>
             
             <video
@@ -157,7 +157,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
             >
               {/* Brighter 20% overlay on top of slide images with corporate gradient blend */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#0D4F9C]/80 via-[#1E63B5]/75 to-[#2F7DD1]/60 z-10"></div>
-              <div className="absolute inset-0 bg-black/20 z-10"></div>
+              <div className="absolute inset-0 bg-[#00004D]/20 z-10"></div>
               <img
                 src={slides[currentSlide].image}
                 alt={slides[currentSlide].title}
@@ -208,7 +208,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
 
               {/* Mobile/Tablet inline Highlight Block for QR & Digital tech */}
               <div className="block lg:hidden w-full mt-1">
-                <div className="bg-slate-950/80 backdrop-blur-md border border-brand-gold/30 rounded-lg p-4 shadow-xl">
+                <div className="bg-[#0F3268]/85 backdrop-blur-md border border-brand-gold/30 rounded-lg p-4 shadow-xl">
                   <div className="flex items-center gap-2 pb-2 border-b border-white/10 mb-2.5">
                     <Cpu className="w-4 h-4 text-brand-gold shrink-0 animate-pulse" />
                     <span className="text-xs font-black text-white uppercase tracking-wider font-display">🚀 CÔNG NGHỆ IN KTS HIỆN ĐẠI</span>
@@ -259,7 +259,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="relative bg-slate-950/85 backdrop-blur-md border border-brand-gold/30 rounded-xl p-6 shadow-2xl hover:border-brand-gold/50 transition-all duration-300 group overflow-hidden"
+                className="relative bg-[#0F3268]/85 backdrop-blur-md border border-brand-gold/30 rounded-xl p-6 shadow-2xl hover:border-brand-gold/50 transition-all duration-300 group overflow-hidden"
               >
                 {/* Ambient glowing radial effects */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -319,13 +319,13 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         </div>
 
         {/* 6. CORNER VIDEO BACKDROP CONTROL CENTER */}
-        <div className="absolute bottom-32 sm:bottom-28 right-4 sm:right-6 lg:right-8 z-30 flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10 shadow-lg">
+        <div className="absolute bottom-32 sm:bottom-28 right-4 sm:right-6 lg:right-8 z-30 flex items-center gap-2 bg-[#0F3268]/80 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10 shadow-lg">
           
           {/* Main system mode switcher */}
           <button
             onClick={handleToggleVideoMode}
             title={isVideoActive ? "Chuyển sang chế độ Slide ảnh" : "Bật video nghiệp vụ nhà máy"}
-            className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-black font-display px-2.5 py-1.5 rounded transition-all duration-150 cursor-pointer bg-slate-800 text-slate-200 hover:bg-brand-gold hover:text-brand-blue"
+            className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-black font-display px-2.5 py-1.5 rounded transition-all duration-150 cursor-pointer bg-[#123A78] text-slate-200 hover:bg-brand-gold hover:text-brand-blue"
           >
             {isVideoActive ? (
               <>
@@ -366,7 +366,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         <button
           onClick={prevSlide}
           aria-label="Slide trước"
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 bg-black/40 hover:bg-brand-gold hover:text-brand-blue border border-white/15 text-white rounded-full flex items-center justify-center transition-all cursor-pointer shadow-md hover:scale-105"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 bg-[#00004D]/40 hover:bg-brand-gold hover:text-brand-blue border border-white/15 text-white rounded-full flex items-center justify-center transition-all cursor-pointer shadow-md hover:scale-105"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -374,7 +374,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         <button
           onClick={nextSlide}
           aria-label="Slide sau"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 bg-black/40 hover:bg-brand-gold hover:text-brand-blue border border-white/15 text-white rounded-full flex items-center justify-center transition-all cursor-pointer shadow-md hover:scale-105"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 bg-[#00004D]/40 hover:bg-brand-gold hover:text-brand-blue border border-white/15 text-white rounded-full flex items-center justify-center transition-all cursor-pointer shadow-md hover:scale-105"
         >
           <ChevronRight className="w-5 h-5" />
         </button>

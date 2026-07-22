@@ -184,8 +184,8 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
               className="group flex flex-col bg-white border border-[#D8E4F5] rounded-2xl overflow-hidden hover:border-[#2F7DD1]/50 shadow-[0_8px_24px_rgba(13,79,156,0.08)] transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
             >
               {/* Image Frame with hover scaling zoom & security watermark effect */}
-              <div className="relative h-60 overflow-hidden bg-slate-950">
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-50 transition-opacity"></div>
+              <div className="relative h-60 overflow-hidden bg-[#123A78]">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#123A78]/80 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-50 transition-opacity"></div>
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#0D4F9C]/10 z-20 pointer-events-none transition-all duration-300"></div>
                 
                 {/* Security lines overlay representing precision */}
@@ -206,7 +206,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                 </div>
 
                 {/* Secure Badge Tag */}
-                <span className="absolute top-4 right-4 z-20 px-2.5 py-1 text-[9px] font-bold tracking-widest bg-slate-950/80 border border-brand-gold/30 text-brand-gold uppercase rounded backdrop-blur-sm">
+                <span className="absolute top-4 right-4 z-20 px-2.5 py-1 text-[9px] font-bold tracking-widest bg-[#00004D]/80 border border-brand-gold/30 text-brand-gold uppercase rounded backdrop-blur-sm">
                   SECURE AREA
                 </span>
               </div>
@@ -277,7 +277,7 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedService(null)}
-                className="fixed inset-0 bg-slate-950/80 z-40 backdrop-blur-sm"
+                className="fixed inset-0 bg-[#00004D]/80 z-40 backdrop-blur-sm"
               />
 
               <motion.div
@@ -288,8 +288,8 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                 className="relative w-full max-w-3xl bg-white text-[#153A6B] border border-[#D8E4F5] rounded-2xl shadow-2xl overflow-hidden z-50 my-8"
               >
                 {/* Top banner aspect with image */}
-                <div className="relative h-48 sm:h-64 md:h-72 w-full bg-slate-950">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/45 to-transparent z-10"></div>
+                <div className="relative h-48 sm:h-64 md:h-72 w-full bg-[#123A78]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#123A78]/90 via-[#123A78]/45 to-transparent z-10"></div>
                   <img
                     src={selectedService.image}
                     alt={selectedService.title}
@@ -298,14 +298,14 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
                   />
                   
                   {/* Floating tags */}
-                  <span className="absolute top-4 left-4 z-20 px-3 py-1 text-[10px] font-black tracking-widest bg-brand-gold text-slate-950 uppercase rounded font-display select-none">
+                  <span className="absolute top-4 left-4 z-20 px-3 py-1 text-[10px] font-black tracking-widest bg-brand-gold text-[#0D4F9C] uppercase rounded font-display select-none">
                     TIÊU CHUẨN AN TOÀN NHÀ NƯỚC
                   </span>
 
                   {/* Close Button top-right */}
                   <button
                     onClick={() => setSelectedService(null)}
-                    className="absolute top-4 right-4 z-30 w-10 h-10 bg-black/60 hover:bg-brand-gold text-white hover:text-slate-950 rounded-full flex items-center justify-center transition-colors cursor-pointer text-2xl font-light"
+                    className="absolute top-4 right-4 z-30 w-10 h-10 bg-[#00004D]/60 hover:bg-brand-gold text-white hover:text-[#0D4F9C] rounded-full flex items-center justify-center transition-colors cursor-pointer text-2xl font-light"
                     aria-label="Đóng"
                   >
                     &times;

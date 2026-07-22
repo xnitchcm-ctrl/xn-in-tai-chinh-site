@@ -130,7 +130,7 @@ export default function Gallery() {
                     setLightboxIndex(index);
                     setIsZoomed(false);
                   }}
-                  className={`break-inside-avoid relative overflow-hidden rounded-2xl border border-slate-250/70 bg-slate-900 group cursor-pointer shadow hover:shadow-2xl transition-all duration-300 ${aspectClass}`}
+                  className={`break-inside-avoid relative overflow-hidden rounded-2xl border border-slate-250/70 bg-[#123A78] group cursor-pointer shadow hover:shadow-2xl transition-all duration-300 ${aspectClass}`}
                 >
                   {/* Image tag with lazy support */}
                   <img
@@ -145,7 +145,7 @@ export default function Gallery() {
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand-gold or to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_8px_rgb(220,169,42)] absolute-scan" />
 
                   {/* Exquisite Double Masking gradient overlay */}
-                  <div className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent p-5 sm:p-6 flex flex-col justify-end z-20">
+                  <div className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-[#123A78]/90 via-[#123A78]/50 to-transparent p-5 sm:p-6 flex flex-col justify-end z-20">
                     
                     {/* Floating Meta */}
                     <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300">
@@ -164,7 +164,7 @@ export default function Gallery() {
                   </div>
 
                   {/* Absolute category tag spacer */}
-                  <span className="absolute top-3.5 right-3.5 bg-slate-950/60 backdrop-blur-md text-white/90 font-display font-medium text-[8px] tracking-widest uppercase py-1 px-2.5 rounded-full border border-white/10 opacity-75 group-hover:opacity-100 transition-opacity">
+                  <span className="absolute top-3.5 right-3.5 bg-[#00004D]/60 backdrop-blur-md text-white/90 font-display font-medium text-[8px] tracking-widest uppercase py-1 px-2.5 rounded-full border border-white/10 opacity-75 group-hover:opacity-100 transition-opacity">
                     Khu vực #0{index + 1}
                   </span>
                 </motion.div>
@@ -177,7 +177,7 @@ export default function Gallery() {
         <AnimatePresence>
           {lightboxIndex !== null && filteredItems[lightboxIndex] && (
             <div 
-              className="fixed inset-0 z-[200] flex flex-col justify-between bg-slate-950/98 backdrop-blur-2xl p-4 sm:p-6 select-none"
+              className="fixed inset-0 z-[200] flex flex-col justify-between bg-[#00004D]/98 backdrop-blur-2xl p-4 sm:p-6 select-none"
               onClick={() => setLightboxIndex(null)}
             >
               {/* top Navigation header */}
@@ -218,14 +218,14 @@ export default function Gallery() {
                 <button
                   onClick={prevImage}
                   aria-label="Hình trước"
-                  className="absolute left-2 sm:left-4 z-[220] w-12 h-12 sm:w-14 sm:h-14 bg-slate-900/60 hover:bg-brand-gold hover:text-brand-blue border border-white/10 text-white rounded-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md group"
+                  className="absolute left-2 sm:left-4 z-[220] w-12 h-12 sm:w-14 sm:h-14 bg-[#0F3268]/80 hover:bg-brand-gold hover:text-brand-blue border border-white/10 text-white rounded-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md group"
                 >
                   <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                 </button>
                 <button
                   onClick={nextImage}
                   aria-label="Hình kế"
-                  className="absolute right-2 sm:right-4 z-[220] w-12 h-12 sm:w-14 sm:h-14 bg-slate-900/60 hover:bg-brand-gold hover:text-brand-blue border border-white/10 text-white rounded-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md group"
+                  className="absolute right-2 sm:right-4 z-[220] w-12 h-12 sm:w-14 sm:h-14 bg-[#0F3268]/80 hover:bg-brand-gold hover:text-brand-blue border border-white/10 text-white rounded-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md group"
                 >
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
@@ -260,7 +260,7 @@ export default function Gallery() {
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Meta block */}
-                <div className="bg-slate-900/60 border border-white/5 rounded-2xl p-4 max-w-2xl mx-auto backdrop-blur-md">
+                <div className="bg-[#0F3268]/80 border border-white/5 rounded-2xl p-4 max-w-2xl mx-auto backdrop-blur-md">
                   <p className="text-[10px] font-black text-brand-gold tracking-widest uppercase font-display mb-1 flex items-center justify-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
                     CAM CHẾT KHÔNG GIAN BẢO MẬT KHÉP KÍN

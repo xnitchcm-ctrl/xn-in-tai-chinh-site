@@ -53,7 +53,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         y: -100,
         transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } 
       }}
-      className="fixed inset-0 bg-slate-950 z-[1000] flex flex-col items-center justify-center text-white select-none overflow-hidden"
+      className="fixed inset-0 bg-[#123A78] z-[1000] flex flex-col items-center justify-center text-white select-none overflow-hidden"
     >
       {/* Background radial soft high-tech corporate blue lighting */}
       <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(10,50,115,0.3),transparent_70%)] pointer-events-none" />
@@ -122,7 +122,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </motion.div>
 
         {/* Custom Progress Bar with CMYK Linear Gradient and glowing shadow */}
-        <div className="w-64 h-2 bg-slate-900 border border-white/10 rounded-full overflow-hidden mb-6 relative shadow-[inset_0_1px_3px_rgba(0,0,0,0.4)]">
+        <div className="w-64 h-2 bg-[#0F3268] border border-white/10 rounded-full overflow-hidden mb-6 relative shadow-[inset_0_1px_3px_rgba(0,0,0,0.4)]">
           <motion.div 
             className="h-full rounded-full transition-all duration-75"
             style={{

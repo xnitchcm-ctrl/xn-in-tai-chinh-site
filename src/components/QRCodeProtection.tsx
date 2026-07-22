@@ -39,9 +39,9 @@ export default function QRCodeProtection() {
   };
 
   return (
-    <section id="qrcode-sec" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-950 text-white relative overflow-hidden">
+    <section id="qrcode-sec" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#123A78] text-white relative overflow-hidden">
       {/* Visual cyber mesh wallpaper decor */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0F3268_1px,transparent_1px),linear-gradient(to_bottom,#0F3268_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30"></div>
       
       {/* Decorative gradient glow spots */}
       <div className="absolute top-1/4 left-10 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -90,7 +90,7 @@ export default function QRCodeProtection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch mb-16">
           
           {/* Column 1: Core Technology (Left - 6 columns) */}
-          <div className="lg:col-span-6 flex flex-col justify-between bg-slate-900/60 border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-slate-800/80 transition-all duration-300 relative group">
+          <div className="lg:col-span-6 flex flex-col justify-between bg-[#0F3268]/60 border border-white/10 rounded-2xl p-6 sm:p-8 hover:border-[#123A78]/80 transition-all duration-300 relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
             
             <div className="relative z-10 flex flex-col gap-6">
@@ -149,7 +149,7 @@ export default function QRCodeProtection() {
           </div>
 
           {/* Column 2: System Benefits tabbed view (Right - 6 columns) */}
-          <div className="lg:col-span-6 flex flex-col bg-slate-900/60 border border-white/10 rounded-2xl p-6 sm:p-8 flex-1">
+          <div className="lg:col-span-6 flex flex-col bg-[#0F3268]/60 border border-white/10 rounded-2xl p-6 sm:p-8 flex-1">
             <div className="flex flex-col gap-4">
               
               <div className="flex items-center gap-2 pb-4 border-b border-white/10">
@@ -160,7 +160,7 @@ export default function QRCodeProtection() {
               </div>
 
               {/* Tab Selector Buttons */}
-              <div className="grid grid-cols-3 gap-2 p-1.5 bg-slate-950/70 rounded-xl border border-white/5">
+              <div className="grid grid-cols-3 gap-2 p-1.5 bg-[#123A78]/70 rounded-xl border border-white/5">
                 {(Object.keys(tabBenefits) as Array<keyof typeof tabBenefits>).map((tab) => (
                   <button
                     key={tab}
@@ -177,7 +177,7 @@ export default function QRCodeProtection() {
               </div>
 
               {/* Tab Content rendering area */}
-              <div className="p-4 rounded-xl bg-slate-950/40 border border-white/5 flex flex-col gap-4 min-h-[240px] justify-between">
+              <div className="p-4 rounded-xl bg-[#123A78]/40 border border-white/5 flex flex-col gap-4 min-h-[240px] justify-between">
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     {tabBenefits[activeTab].icon}
@@ -211,7 +211,7 @@ export default function QRCodeProtection() {
 
         {/* Big visual Highlight strip requested */}
         <div className="w-full">
-          <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-r from-red-950 via-slate-900 to-red-950 border border-red-500/25 shadow-xl shadow-red-950/20 text-center relative overflow-hidden group hover:border-red-500/40 transition-all duration-300">
+          <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-r from-red-950 via-[#0F3268] to-red-950 border border-red-500/25 shadow-xl shadow-red-950/20 text-center relative overflow-hidden group hover:border-red-500/40 transition-all duration-300">
             <div className="absolute top-0 left-0 w-2 h-full bg-brand-gold"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
               <span className="flex h-2.5 w-2.5 relative shrink-0">

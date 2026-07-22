@@ -191,8 +191,8 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
             isDragging 
               ? 'border-brand-gold bg-amber-500/10' 
               : value 
-                ? 'border-emerald-500/40 bg-zinc-900/60' 
-                : 'border-slate-700 bg-slate-900/40 hover:border-brand-gold/40'
+                ? 'border-emerald-500/40 bg-[#0F3268]/60' 
+                : 'border-[#123A78] bg-[#0F3268]/40 hover:border-brand-gold/40'
           }`}
         >
           {value ? (
@@ -231,7 +231,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-[#123A78] text-white flex flex-col items-center justify-center gap-4">
         <Activity className="w-10 h-10 text-brand-gold animate-spin" />
         <p className="text-sm font-display tracking-widest font-black text-amber-100 uppercase">Đang đồng bộ cơ sở dữ liệu CMS...</p>
       </div>
@@ -241,14 +241,14 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
   // --- RENDER 1: AUTHENTICATION INTERFACE (Email/Password Login) ---
   if (!isAdmin) {
     return (
-      <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center relative p-4 overflow-hidden">
+      <div className="min-h-screen w-full bg-[#123A78] flex items-center justify-center relative p-4 overflow-hidden">
         
         {/* Decorative Grid Overlays */}
         <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent shadow-[0_0_15px_rgba(34,211,238,0.3)] animate-scanline z-0 pointer-events-none"></div>
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-brand-blue/15 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <div className="relative z-10 w-full max-w-md bg-slate-900/90 border border-amber-500/20 rounded-2xl shadow-2xl p-8 backdrop-blur-xl">
+        <div className="relative z-10 w-full max-w-md bg-[#0F3268]/90 border border-amber-500/20 rounded-2xl shadow-2xl p-8 backdrop-blur-xl">
           
           <div className="flex flex-col items-center text-center gap-3.5 mb-8">
             <div className="w-14 h-14 rounded-full bg-brand-blue flex items-center justify-center border border-amber-300">
@@ -280,7 +280,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="xnitchcm@gmail.com"
-                className="px-4 py-3 bg-slate-950 border border-slate-700 focus:border-brand-gold text-white rounded-lg text-xs tracking-wider outline-none font-mono"
+                className="px-4 py-3 bg-[#123A78] border border-slate-700 focus:border-brand-gold text-white rounded-lg text-xs tracking-wider outline-none font-mono"
               />
             </div>
 
@@ -292,7 +292,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="px-4 py-3 bg-slate-950 border border-slate-700 focus:border-brand-gold text-white rounded-lg text-xs tracking-wider outline-none font-mono"
+                className="px-4 py-3 bg-[#123A78] border border-slate-700 focus:border-brand-gold text-white rounded-lg text-xs tracking-wider outline-none font-mono"
               />
               <span className="text-[9px] text-slate-400">Tài khoản in nghiệp vụ bảo mật được tạo tức thì tại lượt đăng nhập đầu tiên.</span>
             </div>
@@ -315,7 +315,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
             <button
               type="button"
               onClick={onBackToHome}
-              className="mt-1 w-full py-2.5 bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs tracking-widest font-display font-medium rounded transition ease-all"
+              className="mt-1 w-full py-2.5 bg-[#0B2755] text-slate-300 hover:bg-[#0F3268] text-xs tracking-widest font-display font-medium rounded transition ease-all"
             >
               QUAY VỀ TRANG CHỦ
             </button>
@@ -337,10 +337,10 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
   // --- RENDER 2: MASTER ADMIN DASHBOARD MANAGER ---
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#123A78] text-slate-100 flex flex-col font-sans">
       
       {/* 1. ADMIN GLOBAL HEADER PANEL */}
-      <header className="bg-slate-900 border-b border-amber-500/10 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 z-40 sticky top-0 backdrop-blur-md">
+      <header className="bg-[#0F3268] border-b border-amber-500/10 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 z-40 sticky top-0 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-tr from-amber-500 to-amber-300 rounded-lg text-brand-blue shrink-0">
             <Settings className="w-5 h-5 animate-spin-slow" />
@@ -361,7 +361,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToHome}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] uppercase font-bold tracking-wider rounded font-display transition cursor-pointer flex items-center gap-1.5"
+            className="px-4 py-2 bg-[#0B2755] hover:bg-[#0F3268] text-slate-300 text-[10px] uppercase font-bold tracking-wider rounded font-display transition cursor-pointer flex items-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> XEM TRANG CHỦ
           </button>
@@ -397,7 +397,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('general')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'general' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'general' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <Globe className="w-4 h-4" /> 1. Thông tin chung
@@ -406,7 +406,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('slides')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'slides' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'slides' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <ImageIcon className="w-4 h-4" /> 2. Banner/Slideshow
@@ -415,7 +415,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('services')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'services' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'services' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <Layers className="w-4 h-4" /> 3. Dịch Vụ In Ấn
@@ -424,7 +424,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('news')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'news' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'news' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <FileText className="w-4 h-4" /> 4. Tin tức & Hoạt động
@@ -433,7 +433,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('recruitment')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'recruitment' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'recruitment' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <Briefcase className="w-4 h-4" /> 5. Tuyển dụng
@@ -442,7 +442,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
           <button
             onClick={() => setActiveTab('gallery')}
             className={`px-4 py-3 rounded-lg text-left text-xs uppercase tracking-widest font-extrabold font-display transition-all cursor-pointer flex items-center gap-3 ${
-              activeTab === 'gallery' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-800'
+              activeTab === 'gallery' ? 'bg-brand-gold text-brand-blue shadow-md' : 'bg-[#0F3268]/60 hover:bg-[#0F3268] text-slate-300 hover:text-white border border-[#123A78]/60'
             }`}
           >
             <ImageIcon className="w-4 h-4" /> 6. Thư Viện ảnh
@@ -450,7 +450,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
         </aside>
 
         {/* 3. CORE SUB-PANELS CONTENT FRAME */}
-        <main className="flex-1 bg-slate-900/50 border border-slate-800 rounded-2xl p-5 sm:p-7 backdrop-blur-md">
+        <main className="flex-1 bg-[#0F3268]/50 border border-[#123A78]/80 rounded-2xl p-5 sm:p-7 backdrop-blur-md">
           
           {/* TAB 1: GENERAL INFO (Contact and General Slogans) */}
           {activeTab === 'general' && (
@@ -477,7 +477,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="text"
                     value={localCompanyInfo.name}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, name: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
                   />
                 </div>
 
@@ -487,7 +487,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="text"
                     value={localCompanyInfo.parentCompany}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, parentCompany: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
                   />
                 </div>
 
@@ -497,7 +497,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="text"
                     value={localCompanyInfo.slogan}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, slogan: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
                   />
                 </div>
 
@@ -507,7 +507,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="text"
                     value={localCompanyInfo.website}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, website: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
                   />
                 </div>
 
@@ -517,7 +517,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="text"
                     value={localCompanyInfo.phone}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, phone: e.target.value, phoneDisplay: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs leading-none"
                   />
                 </div>
 
@@ -527,7 +527,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     type="email"
                     disabled
                     value={localCompanyInfo.email}
-                    className="px-3.5 py-2.5 bg-slate-950/60 border border-slate-800 text-slate-400 rounded outline-none text-xs leading-none"
+                    className="px-3.5 py-2.5 bg-[#123A78]/60 border border-[#123A78]/80 text-slate-400 rounded outline-none text-xs leading-none"
                   />
                   <span className="text-[9px] text-slate-500">Mặc định form gửi trực tiếp về Gmail: <strong>{localCompanyInfo.email}</strong> theo yêu cầu.</span>
                 </div>
@@ -538,14 +538,14 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                     rows={2}
                     value={localCompanyInfo.address}
                     onChange={(e) => setLocalCompanyInfo({ ...localCompanyInfo, address: e.target.value })}
-                    className="px-3.5 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none focus:border-brand-gold text-xs font-sans"
+                    className="px-3.5 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none focus:border-brand-gold text-xs font-sans"
                   />
                 </div>
 
               </div>
 
               {/* STATS EDIT MODULE IN TAB 1 */}
-              <div className="flex items-center justify-between border-t border-slate-800 pt-6 mt-4 pb-3">
+              <div className="flex items-center justify-between border-t border-[#123A78]/80 pt-6 mt-4 pb-3">
                 <div>
                   <h3 className="text-xs font-display font-black tracking-wider text-white uppercase">SỐ LIỆU THỐNG KÊ (KPI HOẠT ĐỘNG)</h3>
                   <p className="text-[11px] text-slate-400">Các chỉ số hiển thị tại trang giới thiệu doanh nghiệp</p>
@@ -560,7 +560,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {localStatistics.map((stat, i) => (
-                  <div key={i} className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col gap-2">
+                  <div key={i} className="p-4 bg-[#123A78] border border-[#123A78]/80 rounded-xl flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-brand-gold">CHỈ SỐ {i + 1}</span>
                     </div>
@@ -574,7 +574,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           updated[i].value = e.target.value;
                           setLocalStatistics(updated);
                         }}
-                        className="px-3 py-2 bg-slate-900 border border-slate-800 text-center font-bold tracking-wider text-brand-gold rounded outline-none"
+                        className="px-3 py-2 bg-[#0F3268] border border-[#123A78]/80 text-center font-bold tracking-wider text-brand-gold rounded outline-none"
                       />
                       <input
                         type="text"
@@ -585,7 +585,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           updated[i].label = e.target.value;
                           setLocalStatistics(updated);
                         }}
-                        className="px-3 py-2 bg-slate-900 border border-slate-800 text-xs rounded outline-none"
+                        className="px-3 py-2 bg-[#0F3268] border border-[#123A78]/80 text-xs rounded outline-none"
                       />
                     </div>
                     <textarea
@@ -597,7 +597,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         updated[i].desc = e.target.value;
                         setLocalStatistics(updated);
                       }}
-                      className="px-3 py-2 bg-slate-900 border border-slate-800 text-[11px] rounded outline-none font-sans"
+                      className="px-3 py-2 bg-[#0F3268] border border-[#123A78]/80 text-[11px] rounded outline-none font-sans"
                     />
                   </div>
                 ))}
@@ -625,7 +625,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               <div className="flex flex-col gap-8">
                 {localSlides.map((slide, i) => (
-                  <div key={slide.id} className="p-5 bg-slate-950 border border-slate-800 rounded-xl flex flex-col lg:flex-row gap-5">
+                  <div key={slide.id} className="p-5 bg-[#123A78] border border-[#123A78]/80 rounded-xl flex flex-col lg:flex-row gap-5">
                     
                     {/* Thumbnail preview / Drag upload column */}
                     <div className="lg:w-1/3 flex flex-col gap-3">
@@ -655,7 +655,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                               updated[i].badgeText = e.target.value;
                               setLocalSlides(updated);
                             }}
-                            className="px-3.5 py-2 bg-slate-900 border border-slate-800 text-white rounded outline-none"
+                            className="px-3.5 py-2 bg-[#0F3268] border border-[#123A78]/80 text-white rounded outline-none"
                           />
                         </div>
 
@@ -669,7 +669,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                               updated[i].targetId = e.target.value;
                               setLocalSlides(updated);
                             }}
-                            className="px-3.5 py-2 bg-slate-900 border border-slate-800 text-white rounded outline-none"
+                            className="px-3.5 py-2 bg-[#0F3268] border border-[#123A78]/80 text-white rounded outline-none"
                           />
                         </div>
                       </div>
@@ -684,7 +684,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                             updated[i].title = e.target.value;
                             setLocalSlides(updated);
                           }}
-                          className="px-3.5 py-2 bg-slate-900 border border-slate-800 text-white rounded outline-none"
+                          className="px-3.5 py-2 bg-[#0F3268] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -698,7 +698,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                             updated[i].subtitle = e.target.value;
                             setLocalSlides(updated);
                           }}
-                          className="px-3.5 py-2 bg-slate-900 border border-slate-800 text-white rounded outline-none font-sans leading-relaxed"
+                          className="px-3.5 py-2 bg-[#0F3268] border border-[#123A78]/80 text-white rounded outline-none font-sans leading-relaxed"
                         />
                       </div>
 
@@ -741,15 +741,15 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               <div className="grid grid-cols-1 gap-4">
                 {services.map((item) => (
-                  <div key={item.id} className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between gap-4 font-sans">
+                  <div key={item.id} className="p-4 bg-[#123A78] border border-[#123A78]/80 rounded-xl flex items-center justify-between gap-4 font-sans">
                     <div className="flex items-center gap-4">
                       {item.image && (
-                        <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded border border-slate-800" referrerPolicy="no-referrer" />
+                        <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded border border-[#123A78]/80" referrerPolicy="no-referrer" />
                       )}
                       <div>
                         <h3 className="text-sm font-bold text-white">{item.title}</h3>
                         <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{item.shortDesc}</p>
-                        <span className="text-[9px] px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 font-mono mt-1 inline-block">ID: {item.id}</span>
+                        <span className="text-[9px] px-2 py-0.5 rounded bg-[#0F3268] border border-[#123A78]/80 text-slate-400 font-mono mt-1 inline-block">ID: {item.id}</span>
                       </div>
                     </div>
 
@@ -759,7 +759,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           setEditingService(item);
                           setIsServiceModalOpen(true);
                         }}
-                        className="p-2 bg-slate-900 border border-slate-800 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
+                        className="p-2 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
                         title="Chỉnh sửa dịch vụ"
                       >
                         <Edit className="w-4 h-4" />
@@ -787,9 +787,9 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               {/* SERVICE WORK MODAL MODIFIER */}
               {isServiceModalOpen && editingService && (
-                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-                  <div className="bg-slate-900 border border-amber-500/10 rounded-2xl p-6 w-full max-w-2xl text-xs flex flex-col gap-4 max-h-[90vh] overflow-y-auto font-sans shadow-2xl">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+                  <div className="bg-[#0F3268] border border-amber-500/10 rounded-2xl p-6 w-full max-w-2xl text-xs flex flex-col gap-4 max-h-[90vh] overflow-y-auto font-sans shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-[#123A78]/80 pb-3">
                       <h3 className="text-sm font-display font-black text-brand-gold uppercase">CHI TIẾT MỤC DỊCH VỤ</h3>
                       <button onClick={() => { setIsServiceModalOpen(false); setEditingService(null); }} className="text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
@@ -802,7 +802,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           type="text"
                           value={editingService.title}
                           onChange={(e) => setEditingService({ ...editingService, title: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -813,7 +813,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingService.iconName}
                           placeholder="Ticket / Cpu / FileSpreadsheet"
                           onChange={(e) => setEditingService({ ...editingService, iconName: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none font-mono"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none font-mono"
                         />
                       </div>
 
@@ -823,7 +823,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           type="text"
                           value={editingService.shortDesc}
                           onChange={(e) => setEditingService({ ...editingService, shortDesc: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -833,7 +833,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           rows={3}
                           value={editingService.longDesc}
                           onChange={(e) => setEditingService({ ...editingService, longDesc: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none font-sans"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none font-sans"
                         />
                       </div>
 
@@ -846,7 +846,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                       </div>
 
                       {/* Bullets lists */}
-                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-slate-800 pt-3">
+                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-[#123A78]/80 pt-3">
                         <span className="font-bold tracking-wider text-slate-300">ĐẶC ĐIỂM CHUYÊN MÔN (BULLETS):</span>
                         {editingService.bullets.map((bullet, idx) => (
                           <div key={idx} className="flex items-center gap-2">
@@ -859,7 +859,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                                 b[idx] = e.target.value;
                                 setEditingService({ ...editingService, bullets: b });
                               }}
-                              className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 text-white rounded outline-none text-[11px]"
+                              className="flex-1 px-3 py-1.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none text-[11px]"
                             />
                             <button
                               type="button"
@@ -876,7 +876,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         <button
                           type="button"
                           onClick={() => setEditingService({ ...editingService, bullets: [...editingService.bullets, ''] })}
-                          className="mt-1 py-1.5 border border-slate-800 text-slate-300 rounded font-bold hover:bg-slate-950 transition"
+                          className="mt-1 py-1.5 border border-[#123A78]/80 text-slate-300 rounded font-bold hover:bg-[#123A78] transition"
                         >
                           + THÊM BULLET ĐẶC ĐIỂM
                         </button>
@@ -884,11 +884,11 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-slate-800 pt-4 mt-2">
+                    <div className="flex justify-end gap-3 border-t border-[#123A78]/80 pt-4 mt-2">
                       <button
                         type="button"
                         onClick={() => { setIsServiceModalOpen(false); setEditingService(null); }}
-                        className="px-4 py-2 bg-slate-800 text-slate-300 rounded font-extrabold uppercase hover:bg-slate-700 font-display transition"
+                        className="px-4 py-2 bg-[#0B2755] text-slate-300 rounded font-extrabold uppercase hover:bg-[#0F3268] font-display transition"
                       >
                         ĐÓNG
                       </button>
@@ -952,17 +952,17 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
               </div>
 
               {/* Search or Quick count */}
-              <div className="p-3 bg-slate-950 rounded-lg text-slate-400 text-[10px] flex justify-between tracking-widest font-mono">
+              <div className="p-3 bg-[#123A78] rounded-lg text-slate-400 text-[10px] flex justify-between tracking-widest font-mono">
                 <span>TẬP HỢP: {news.length} BÀI ĐĂNG</span>
                 <span>DANH MỤC BIẾN THIÊN REALTIME</span>
               </div>
 
               <div className="grid grid-cols-1 gap-4">
                 {news.map((item) => (
-                  <div key={item.id} className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between gap-4">
+                  <div key={item.id} className="p-4 bg-[#123A78] border border-[#123A78]/80 rounded-xl flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4 min-w-0">
                       {item.imageUrl && (
-                        <img src={item.imageUrl} alt={item.title} className="w-16 h-12 object-cover rounded border border-slate-800 shrink-0" referrerPolicy="no-referrer" />
+                        <img src={item.imageUrl} alt={item.title} className="w-16 h-12 object-cover rounded border border-[#123A78]/80 shrink-0" referrerPolicy="no-referrer" />
                       )}
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -984,7 +984,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           setEditingNews(item);
                           setIsNewsModalOpen(true);
                         }}
-                        className="p-2 bg-slate-900 border border-slate-800 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
+                        className="p-2 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
                         title="Sửa bài viết"
                       >
                         <Edit className="w-4 h-4" />
@@ -1012,9 +1012,9 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               {/* NEWS ARTICLE WORK MODAL EDITOR */}
               {isNewsModalOpen && editingNews && (
-                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-                  <div className="bg-slate-900 border border-amber-500/10 rounded-2xl p-6 w-full max-w-3xl text-xs flex flex-col gap-4 max-h-[92vh] overflow-y-auto font-sans shadow-2xl">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+                  <div className="bg-[#0F3268] border border-amber-500/10 rounded-2xl p-6 w-full max-w-3xl text-xs flex flex-col gap-4 max-h-[92vh] overflow-y-auto font-sans shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-[#123A78]/80 pb-3">
                       <h3 className="text-sm font-display font-black text-brand-gold uppercase">BIÊN TẬP BÀI VIẾT</h3>
                       <button onClick={() => { setIsNewsModalOpen(false); setEditingNews(null); }} className="text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
@@ -1029,7 +1029,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           placeholder="Bổ sung dây chuyền in bảo mật thế hệ mới..."
                           required
                           onChange={(e) => setEditingNews({ ...editingNews, title: e.target.value })}
-                          className="px-3 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1040,7 +1040,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingNews.subtitle}
                           placeholder="Một đoạn mô tả ngắn hiển thị tại danh sách tin tức..."
                           onChange={(e) => setEditingNews({ ...editingNews, subtitle: e.target.value })}
-                          className="px-3 py-2.5 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1049,7 +1049,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         <select
                           value={editingNews.category}
                           onChange={(e) => setEditingNews({ ...editingNews, category: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-slate-200 rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-slate-200 rounded outline-none"
                         >
                           <option value="Hoạt động sản xuất">Hoạt động sản xuất</option>
                           <option value="Hoạt động đoàn thể">Hoạt động đoàn thể</option>
@@ -1067,7 +1067,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingNews.author}
                           placeholder="Phòng Tổ chức - Hành chính"
                           onChange={(e) => setEditingNews({ ...editingNews, author: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1087,11 +1087,11 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           placeholder="Mô tả cụ thể diễn tiến sự kiện tài chính hay cơ học..."
                           required
                           onChange={(e) => setEditingNews({ ...editingNews, content: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none font-sans leading-relaxed"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none font-sans leading-relaxed"
                         />
                       </div>
 
-                      <div className="flex items-center gap-2 col-span-1 sm:col-span-2 mt-2 bg-slate-950 p-3 rounded-lg border border-slate-800">
+                      <div className="flex items-center gap-2 col-span-1 sm:col-span-2 mt-2 bg-[#123A78] p-3 rounded-lg border border-[#123A78]/80">
                         <input
                           type="checkbox"
                           id="isPinnedCheck"
@@ -1104,11 +1104,11 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-slate-800 pt-4 mt-2">
+                    <div className="flex justify-end gap-3 border-t border-[#123A78]/80 pt-4 mt-2">
                       <button
                         type="button"
                         onClick={() => { setIsNewsModalOpen(false); setEditingNews(null); }}
-                        className="px-4 py-2 bg-slate-800 text-slate-300 rounded font-extrabold uppercase hover:bg-slate-700 font-display transition"
+                        className="px-4 py-2 bg-[#0B2755] text-slate-300 rounded font-extrabold uppercase hover:bg-[#0F3268] font-display transition"
                       >
                         HỦY BỎ
                       </button>
@@ -1172,7 +1172,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               <div className="grid grid-cols-1 gap-4">
                 {vacancies.map((item) => (
-                  <div key={item.id} className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between gap-4 font-sans">
+                  <div key={item.id} className="p-4 bg-[#123A78] border border-[#123A78]/80 rounded-xl flex items-center justify-between gap-4 font-sans">
                     <div>
                       <h3 className="text-xs font-bold text-white uppercase">{item.title}</h3>
                       <p className="text-[10px] text-slate-400 mt-0.5">Bộ phận: {item.department} | Lương: {item.salary}</p>
@@ -1185,7 +1185,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           setEditingVacancy(item);
                           setIsVacancyModalOpen(true);
                         }}
-                        className="p-2 bg-slate-900 border border-slate-800 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
+                        className="p-2 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold/60 text-slate-300 hover:text-brand-gold rounded transition"
                         title="Sửa tin tuyển dụng"
                       >
                         <Edit className="w-4 h-4" />
@@ -1212,9 +1212,9 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               {/* VACANCY TIMELINE MODIFIER COMPONENT */}
               {isVacancyModalOpen && editingVacancy && (
-                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-                  <div className="bg-slate-900 border border-amber-500/10 rounded-2xl p-6 w-full max-w-2xl text-xs flex flex-col gap-4 max-h-[90vh] overflow-y-auto font-sans shadow-2xl">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+                  <div className="bg-[#0F3268] border border-amber-500/10 rounded-2xl p-6 w-full max-w-2xl text-xs flex flex-col gap-4 max-h-[90vh] overflow-y-auto font-sans shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-[#123A78]/80 pb-3">
                       <h3 className="text-sm font-display font-black text-brand-gold uppercase">BIÊN SOẠN CHỈ TIÊU TUYỂN DỤNG</h3>
                       <button onClick={() => { setIsVacancyModalOpen(false); setEditingVacancy(null); }} className="text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
@@ -1228,7 +1228,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingVacancy.title}
                           required
                           onChange={(e) => setEditingVacancy({ ...editingVacancy, title: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1239,7 +1239,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingVacancy.department}
                           placeholder="Xưởng in ấn"
                           onChange={(e) => setEditingVacancy({ ...editingVacancy, department: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1250,7 +1250,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingVacancy.type}
                           placeholder="Toàn thời gian (Cố định)"
                           onChange={(e) => setEditingVacancy({ ...editingVacancy, type: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1261,7 +1261,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingVacancy.salary}
                           placeholder="12,000,000 - 15,000,000 VNĐ"
                           onChange={(e) => setEditingVacancy({ ...editingVacancy, salary: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1272,12 +1272,12 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingVacancy.deadline}
                           placeholder="30/06/2026"
                           onChange={(e) => setEditingVacancy({ ...editingVacancy, deadline: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
                       {/* Requirements bullets */}
-                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-slate-800 pt-3">
+                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-[#123A78]/80 pt-3">
                         <span className="font-bold tracking-wider text-slate-300">YÊU CẦU CÔNG VIỆC:</span>
                         {editingVacancy.requirements.map((req, idx) => (
                           <div key={idx} className="flex items-center gap-2">
@@ -1289,7 +1289,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                                 r[idx] = e.target.value;
                                 setEditingVacancy({ ...editingVacancy, requirements: r });
                               }}
-                              className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 text-white rounded outline-none text-[11px]"
+                              className="flex-1 px-3 py-1.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none text-[11px]"
                             />
                             <button
                               type="button"
@@ -1306,14 +1306,14 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         <button
                           type="button"
                           onClick={() => setEditingVacancy({ ...editingVacancy, requirements: [...editingVacancy.requirements, ''] })}
-                          className="mt-1 py-1.5 border border-slate-800 text-slate-300 rounded font-bold hover:bg-slate-950 transition"
+                          className="mt-1 py-1.5 border border-[#123A78]/80 text-slate-300 rounded font-bold hover:bg-[#123A78] transition"
                         >
                           + THÊM YÊU CẦU TIÊU CHUẨN
                         </button>
                       </div>
 
                       {/* Benefits bullets */}
-                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-slate-800 pt-3">
+                      <div className="flex flex-col gap-2 col-span-1 sm:col-span-2 border-t border-[#123A78]/80 pt-3">
                         <span className="font-bold tracking-wider text-slate-300 font-display">CHẾ ĐỘ PHÚC LỢI HÈ:</span>
                         {editingVacancy.benefits.map((ben, idx) => (
                           <div key={idx} className="flex items-center gap-2">
@@ -1325,7 +1325,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                                 b[idx] = e.target.value;
                                 setEditingVacancy({ ...editingVacancy, benefits: b });
                               }}
-                              className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 text-white rounded outline-none text-[11px]"
+                              className="flex-1 px-3 py-1.5 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none text-[11px]"
                             />
                             <button
                               type="button"
@@ -1342,7 +1342,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         <button
                           type="button"
                           onClick={() => setEditingVacancy({ ...editingVacancy, benefits: [...editingVacancy.benefits, ''] })}
-                          className="mt-1 py-1.5 border border-slate-800 text-slate-300 rounded font-bold hover:bg-slate-900 transition"
+                          className="mt-1 py-1.5 border border-[#123A78]/80 text-slate-300 rounded font-bold hover:bg-[#0F3268] transition"
                         >
                           + THÊM PHÚC LỢI DOANH NGHIỆP
                         </button>
@@ -1350,11 +1350,11 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-slate-800 pt-4 mt-2">
+                    <div className="flex justify-end gap-3 border-t border-[#123A78]/80 pt-4 mt-2">
                       <button
                         type="button"
                         onClick={() => { setIsVacancyModalOpen(false); setEditingVacancy(null); }}
-                        className="px-4 py-2 bg-slate-800 text-slate-300 rounded font-extrabold uppercase hover:bg-slate-700 font-display transition"
+                        className="px-4 py-2 bg-[#0B2755] text-slate-300 rounded font-extrabold uppercase hover:bg-[#0F3268] font-display transition"
                       >
                         HỦY
                       </button>
@@ -1414,20 +1414,20 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {gallery.map((item) => (
-                  <div key={item.id} className="relative group rounded-xl border border-slate-800 bg-slate-950 overflow-hidden shadow-md flex flex-col">
+                  <div key={item.id} className="relative group rounded-xl border border-[#123A78]/80 bg-[#123A78] overflow-hidden shadow-md flex flex-col">
                     <img src={item.image} alt={item.title} className="w-full h-28 object-cover group-hover:scale-105 transition duration-300" referrerPolicy="no-referrer" />
-                    <div className="p-2.5 flex-1 flex flex-col justify-between gap-1 bg-slate-950 font-sans">
+                    <div className="p-2.5 flex-1 flex flex-col justify-between gap-1 bg-[#123A78] font-sans">
                       <p className="font-bold text-[11px] text-white truncate">{item.title}</p>
                       <span className="text-[8px] font-black tracking-widest text-brand-gold font-display uppercase">{item.category}</span>
                     </div>
 
-                    <div className="absolute top-2 right-2 flex gap-1 bg-slate-950/80 p-1 rounded-lg border border-slate-800 opacity-90">
+                    <div className="absolute top-2 right-2 flex gap-1 bg-[#00004D]/80 p-1 rounded-lg border border-[#123A78]/80 opacity-90">
                       <button
                         onClick={() => {
                           setEditingGallery(item);
                           setIsGalleryModalOpen(true);
                         }}
-                        className="p-1 bg-slate-900 border border-slate-700 hover:border-brand-gold text-slate-300 hover:text-brand-gold rounded transition"
+                        className="p-1 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold text-slate-300 hover:text-brand-gold rounded transition"
                       >
                         <Edit className="w-3.5 h-3.5" />
                       </button>
@@ -1453,9 +1453,9 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
               {/* GALLERY MODIFY WINDOWS MODAL */}
               {isGalleryModalOpen && editingGallery && (
-                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                  <div className="bg-slate-900 border border-amber-500/10 rounded-2xl p-6 w-full max-w-lg text-xs flex flex-col gap-4 font-sans shadow-2xl">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                  <div className="bg-[#0F3268] border border-amber-500/10 rounded-2xl p-6 w-full max-w-lg text-xs flex flex-col gap-4 font-sans shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-[#123A78]/80 pb-3">
                       <h3 className="text-sm font-display font-black text-brand-gold uppercase">BIÊN SOẠN THƯ VIỆN HÌNH ẢNH</h3>
                       <button onClick={() => { setIsGalleryModalOpen(false); setEditingGallery(null); }} className="text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
@@ -1469,7 +1469,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                           value={editingGallery.title}
                           placeholder="Màng co niêm phong đai kiện..."
                           onChange={(e) => setEditingGallery({ ...editingGallery, title: e.target.value })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         />
                       </div>
 
@@ -1478,7 +1478,7 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
                         <select
                           value={editingGallery.category}
                           onChange={(e) => setEditingGallery({ ...editingGallery, category: e.target.value as any })}
-                          className="px-3 py-2 bg-slate-950 border border-slate-800 text-white rounded outline-none"
+                          className="px-3 py-2 bg-[#123A78] border border-[#123A78]/80 text-white rounded outline-none"
                         >
                           <option value="all">Tất cả bài trí (all)</option>
                           <option value="machinery">Thiết bị máy móc (machinery)</option>
@@ -1496,11 +1496,11 @@ export default function AdminPanel({ onBackToHome }: { onBackToHome: () => void 
 
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-slate-800 pt-4 mt-2">
+                    <div className="flex justify-end gap-3 border-t border-[#123A78]/80 pt-4 mt-2">
                       <button
                         type="button"
                         onClick={() => { setIsGalleryModalOpen(false); setEditingGallery(null); }}
-                        className="px-4 py-2 bg-slate-800 text-slate-300 rounded font-extrabold uppercase hover:bg-slate-700 font-display transition"
+                        className="px-4 py-2 bg-[#0B2755] text-slate-300 rounded font-extrabold uppercase hover:bg-[#0F3268] font-display transition"
                       >
                         ĐÓNG
                       </button>
