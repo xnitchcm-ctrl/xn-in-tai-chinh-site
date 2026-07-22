@@ -134,7 +134,7 @@ export default function App() {
       </AnimatePresence>
 
       <div className={`min-h-screen flex flex-col font-sans antialiased overflow-x-hidden transition-all duration-300 ${
-        currentPage === 'news' ? 'bg-[#123A78] text-white' : 'bg-slate-50 text-slate-800'
+        currentPage === 'news' ? 'bg-[#F8FBFF] text-slate-800' : 'bg-slate-50 text-slate-800'
       }`}>
         
         {/* 1. DOUBLE-TIER CORPOREATE HEADER NAVIGATION BAR */}

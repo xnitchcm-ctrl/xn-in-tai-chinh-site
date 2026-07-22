@@ -235,59 +235,62 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
   const sortedDisplayPosts = [...pinnedPosts, ...regularPosts];
 
   return (
-    <div id="dynamic-news-page" className="min-h-screen bg-[#123A78] text-white pt-24 pb-20 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(#ffffff04_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-40"></div>
+    <div id="dynamic-news-page" className="min-h-screen bg-[#F8FBFF] text-slate-800 pt-24 pb-20 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(#174A8715_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-60"></div>
       
-      {/* Dynamic Glowing enterprise background graphics */}
-      <div className="absolute top-24 left-1/4 w-96 h-96 bg-[#DCA92A]/5 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute top-[40%] right-10 w-[450px] h-[450px] bg-[#0A3273]/20 rounded-full blur-[150px] pointer-events-none"></div>
+      {/* Dynamic Glowing subtle background graphics */}
+      <div className="absolute top-24 left-1/4 w-96 h-96 bg-[#174A87]/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-[40%] right-10 w-[450px] h-[450px] bg-[#F5C542]/10 rounded-full blur-[150px] pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Navigation Breadcrumb Line */}
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-400 font-display tracking-widest uppercase mb-6 select-none bg-[#0F3268]/60 py-2.5 px-4 rounded-lg border border-[#123A78]/80 w-fit backdrop-blur-sm shadow-sm">
-          <button onClick={onBackToHome} className="hover:text-brand-gold transition-colors flex items-center gap-1">
+        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#4B637D] font-display tracking-widest uppercase mb-6 select-none bg-white py-2.5 px-4 rounded-xl border border-[#DCE7F2] w-fit shadow-sm">
+          <button onClick={onBackToHome} className="hover:text-[#174A87] transition-colors flex items-center gap-1">
             TRANG CHỦ
           </button>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-brand-gold font-bold">TIN TỨC & HOẠT ĐỘNG XÍ NGHIỆP</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[#7B8FA4]" />
+          <span className="text-[#174A87] font-bold">TIN TỨC & HOẠT ĐỘNG XÍ NGHIỆP</span>
         </div>
 
-        {/* Hero Section Banner layout */}
-        <div className="bg-[#0A3273]/40 border border-brand-gold/25 rounded-2xl p-8 sm:p-12 mb-12 relative overflow-hidden shadow-2xl backdrop-blur-md">
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#051c41] via-[#0A3273]/30 to-[#DCA92A]/5 opacity-60"></div>
+        {/* Hero Section Banner layout - Corporate Blue Gradient Banner */}
+        <div 
+          style={{ background: 'linear-gradient(135deg, #123F7A, #1C5CA8)' }}
+          className="border border-[#1C5CA8]/30 rounded-2xl p-8 sm:p-12 mb-10 relative overflow-hidden shadow-xl text-white"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:12px_12px] pointer-events-none"></div>
           
           <div className="relative z-10 max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-gold/15 border border-brand-gold/30 rounded-full text-[10px] uppercase font-black tracking-widest text-brand-gold font-display mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#F5C542]/20 border border-[#F5C542]/40 rounded-full text-[10px] uppercase font-black tracking-widest text-[#F5C542] font-display mb-5">
               <Sparkles className="w-3.5 h-3.5 animate-bounce" /> Xổ số kiến thiết thành phố hồ chí minh
             </div>
             
-            <h1 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-white mb-4 uppercase leading-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white mb-4 uppercase leading-tight">
               TIN TỨC & HOẠT ĐỘNG XÍ NGHIỆP
             </h1>
             
-            <div className="w-20 h-1 bg-brand-gold rounded-full mb-5"></div>
+            <div className="w-20 h-1 bg-[#F5C542] rounded-full mb-5"></div>
             
-            <p className="text-slate-200 font-sans text-sm sm:text-base leading-relaxed">
+            <p className="text-blue-100 font-sans text-sm sm:text-base leading-relaxed max-w-3xl">
               Cập nhật hoạt động sản xuất, công nghệ in bảo mật, công tác đoàn thể và các thông báo nổi bật.
             </p>
           </div>
 
           {/* Golden security accents */}
-          <div className="absolute right-0 bottom-0 top-0 w-1/3 bg-gradient-to-l from-brand-gold/5 via-transparent to-transparent pointer-events-none hidden md:block"></div>
+          <div className="absolute right-0 bottom-0 top-0 w-1/3 bg-gradient-to-l from-[#F5C542]/10 via-transparent to-transparent pointer-events-none hidden md:block"></div>
         </div>
 
         {/* Secondary Navigation Filter Column & Action controllers */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10 bg-[#123A78]/60 p-4 rounded-xl border border-[#123A78]/80 backdrop-blur-sm">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10 bg-white p-4 rounded-2xl border border-[#DCE7F2] shadow-[0_4px_20px_rgba(20,67,120,0.06)]">
           
           {/* Main categories scrollable list */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-thin scrollbar-thumb-amber-500 max-w-full">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-thin scrollbar-thumb-amber-500 max-w-full">
             <button
               onClick={() => setFilterCategory('All')}
-              className={`px-4 py-2.5 rounded-lg text-xs font-black tracking-wider uppercase font-display whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase font-display whitespace-nowrap transition-all cursor-pointer ${
                 filterCategory === 'All'
-                  ? 'bg-brand-gold text-slate-950 font-extrabold shadow-md'
-                  : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[#F5C542] text-[#173B63] font-extrabold shadow-sm'
+                  : 'bg-[#EEF4FB] text-[#315B85] hover:bg-[#E2EDFA] hover:text-[#174A87]'
               }`}
             >
               TẤT CẢ ({newsList.length})
@@ -298,10 +301,10 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                 <button
                   key={cat}
                   onClick={() => setFilterCategory(cat)}
-                  className={`px-4 py-2.5 rounded-lg text-xs font-black tracking-wider uppercase font-display whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase font-display whitespace-nowrap transition-all cursor-pointer ${
                     filterCategory === cat
-                      ? 'bg-brand-gold text-slate-950 font-extrabold shadow-md'
-                      : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white'
+                      ? 'bg-[#F5C542] text-[#173B63] font-extrabold shadow-sm'
+                      : 'bg-[#EEF4FB] text-[#315B85] hover:bg-[#E2EDFA] hover:text-[#174A87]'
                   }`}
                 >
                   {cat} ({count})
@@ -314,15 +317,15 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0 justify-end">
             
             {/* Search Input Box */}
-            <div className="relative w-full sm:w-56 leading-none">
+            <div className="relative w-full sm:w-60 leading-none">
               <input
                 type="text"
                 placeholder="Tìm từ khóa tin..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2.5 pl-9 text-xs bg-[#0F3268] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold focus:bg-[#0F3268] text-white placeholder-slate-500"
+                className="w-full px-4 py-2.5 pl-9 text-xs bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] focus:bg-white text-[#294E73] placeholder-[#7B8FA4] transition-all"
               />
-              <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-[#7B8FA4] absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
 
             {/* Admin CMS switch */}
@@ -330,13 +333,13 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={handleOpenCreateForm}
-                  className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black uppercase font-display rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 shadow-md"
+                  className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase font-display rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
                 >
                   <Plus className="w-3.5 h-3.5 font-bold" /> Đăng tin mới
                 </button>
                 <button
                   onClick={() => setIsAdminMode(false)}
-                  className="p-2.5 bg-brand-gold/10 hover:bg-brand-gold/25 border border-brand-gold/30 text-brand-gold rounded-lg text-xs transition-colors cursor-pointer"
+                  className="p-2.5 bg-[#EEF5FC] hover:bg-amber-500/10 border border-[#DCE7F2] text-[#174A87] hover:text-amber-600 rounded-xl text-xs transition-colors cursor-pointer"
                   title="Thoát chế độ Quản trị CMS"
                 >
                   <Unlock className="w-4 h-4" />
@@ -345,9 +348,9 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
             ) : (
               <button
                 onClick={() => setShowAdminLoginModal(true)}
-                className="px-4 py-2.5 bg-[#0F3268] border border-[#123A78]/80 hover:border-brand-gold/40 text-slate-300 hover:text-brand-gold text-xs font-black uppercase font-display rounded-lg transition-all cursor-pointer flex items-center gap-2"
+                className="px-4 py-2.5 bg-[#EEF5FC] border border-[#DCE7F2] hover:bg-[#174A87] hover:text-white hover:border-[#174A87] text-[#174A87] text-xs font-black uppercase font-display rounded-xl transition-all cursor-pointer flex items-center gap-2"
               >
-                <Lock className="w-3.5 h-3.5 text-brand-gold" /> CMS Quản trị
+                <Lock className="w-3.5 h-3.5 text-[#F5C542]" /> CMS Quản trị
               </button>
             )}
 
@@ -358,36 +361,36 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((idx) => (
-              <div key={idx} className="bg-[#123A78]/50 border border-[#123A78]/80 rounded-xl h-[420px] p-6 flex flex-col justify-between animate-pulse">
+              <div key={idx} className="bg-white border border-[#E3ECF7] rounded-2xl h-[420px] p-6 flex flex-col justify-between animate-pulse shadow-sm">
                 <div className="space-y-4">
-                  <div className="h-44 bg-[#0F3268] rounded-lg w-full"></div>
-                  <div className="h-3 bg-[#0F3268] rounded w-1/4"></div>
-                  <div className="h-5 bg-[#0F3268] rounded w-5/6"></div>
-                  <div className="h-3 bg-[#0F3268] rounded w-full"></div>
-                  <div className="h-3 bg-[#0F3268] rounded w-2/3"></div>
+                  <div className="h-44 bg-[#EEF5FC] rounded-xl w-full"></div>
+                  <div className="h-3 bg-[#EEF5FC] rounded w-1/4"></div>
+                  <div className="h-5 bg-[#EEF5FC] rounded w-5/6"></div>
+                  <div className="h-3 bg-[#EEF5FC] rounded w-full"></div>
+                  <div className="h-3 bg-[#EEF5FC] rounded w-2/3"></div>
                 </div>
-                <div className="h-8 bg-[#0F3268] rounded w-1/3"></div>
+                <div className="h-8 bg-[#EEF5FC] rounded w-1/3"></div>
               </div>
             ))}
           </div>
         ) : (
           <>
             {filteredPosts.length === 0 ? (
-              <div className="text-center py-24 bg-[#123A78]/30 border border-[#123A78]/80 rounded-2xl">
-                <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-                <h3 className="text-lg font-bold font-display uppercase tracking-wider">Không tìm thấy bài viết</h3>
-                <p className="text-xs text-slate-400 mt-2 max-w-md mx-auto">
+              <div className="text-center py-24 bg-white border border-[#DCE7F2] rounded-2xl shadow-sm">
+                <AlertCircle className="w-12 h-12 text-[#7B8FA4] mx-auto mb-4" />
+                <h3 className="text-lg font-bold font-display uppercase tracking-wider text-[#173F72]">Không tìm thấy bài viết</h3>
+                <p className="text-xs text-[#5B6F85] mt-2 max-w-md mx-auto">
                   Hãy điều chỉnh lại thông số chuyên mục lọc hoặc cụm từ tìm kiếm của bạn để hiển thị chuẩn xác.
                 </p>
                 <button 
                   onClick={() => { setFilterCategory('All'); setSearchQuery(''); }}
-                  className="mt-6 px-4 py-2 bg-brand-gold hover:bg-white text-slate-950 rounded text-xs px-5 py-2 font-black uppercase font-display transition-colors cursor-pointer"
+                  className="mt-6 px-5 py-2.5 bg-[#174A87] hover:bg-[#123C70] text-white rounded-xl text-xs font-black uppercase font-display transition-colors cursor-pointer shadow-sm"
                 >
                   Xóa lọc dữ liệu
                 </button>
               </div>
             ) : (
-              /* PREMIUM MASONRY NEWS LAYOUT */
+              /* PREMIUM MASONRY NEWS LAYOUT - LIGHT CLEAN CARDS */
               <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 [column-fill:balance]">
                 {sortedDisplayPosts.map((post) => (
                   <motion.article
@@ -397,11 +400,11 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.55 }}
-                    className="break-inside-avoid flex flex-col bg-[#123A78] border border-[#123A78]/80 hover:border-brand-gold/30 hover:shadow-[0_0_30px_rgba(220,169,42,0.1)] rounded-2xl overflow-hidden transition-all duration-300 group relative"
+                    className="break-inside-avoid flex flex-col bg-white border border-[#E3ECF7] hover:border-[#174A87]/30 shadow-[0_8px_24px_rgba(20,67,120,0.08)] hover:shadow-[0_12px_32px_rgba(20,67,120,0.14)] rounded-2xl overflow-hidden transition-all duration-300 group relative"
                   >
                     {/* Header Image or Pinned visual */}
-                    <div className="relative overflow-hidden h-48 sm:h-52 bg-[#0F3268] shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#123A78] via-[#123A78]/15 to-transparent z-10"></div>
+                    <div className="relative overflow-hidden h-48 sm:h-52 bg-[#EEF5FC] shrink-0">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10 pointer-events-none"></div>
                       
                       <img
                         src={post.imageUrl}
@@ -411,67 +414,67 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       />
 
                       {/* Floating Category Tag */}
-                      <span className="absolute top-4 left-4 z-20 px-2.5 py-1 text-[9px] font-bold tracking-wider bg-[#0A3273] text-white uppercase rounded border border-blue-500/30">
+                      <span className="absolute top-4 left-4 z-20 px-2.5 py-1 text-[10px] font-bold tracking-wider bg-[#174A87] text-white uppercase rounded shadow-sm border border-[#174A87]/20">
                         {post.category}
                       </span>
 
                       {/* Display Pin state banner */}
                       {post.isPinned && (
-                        <div className="absolute top-4 right-4 z-25 flex items-center gap-1 bg-brand-gold text-slate-950 px-2.5 py-1 text-[9px] font-black uppercase rounded shadow-lg">
-                          <Pin className="w-3 h-3 fill-slate-950" /> GHIM NỔI BẬT
+                        <div className="absolute top-4 right-4 z-25 flex items-center gap-1 bg-[#F5C542] text-[#173B63] px-2.5 py-1 text-[10px] font-black uppercase rounded shadow-md">
+                          <Pin className="w-3 h-3 fill-[#173B63]" /> GHIM NỔI BẬT
                         </div>
                       )}
 
                       {/* Video Embed Symbol Marker */}
                       {post.videoUrl && (
-                        <span className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-[#00004D]/80 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:scale-115 transition-transform cursor-pointer">
-                          <Video className="w-4 h-4 text-brand-gold" />
+                        <span className="absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center border border-white/30 hover:scale-110 transition-transform cursor-pointer">
+                          <Video className="w-4 h-4 text-[#F5C542]" />
                         </span>
                       )}
                     </div>
 
                     {/* Content Details Block */}
-                    <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                    <div className="p-6 flex-1 flex flex-col justify-between gap-4">
                       <div className="space-y-3.5">
                         
                         {/* Meta lines */}
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] text-slate-400 font-mono">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-[#7B8FA4] font-medium">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                            <Calendar className="w-3.5 h-3.5 text-[#7B8FA4]" />
                             {new Date(post.createdAt).toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' })}
                           </span>
                           <span className="flex items-center gap-1 truncate max-w-[150px]">
-                            <User className="w-3.5 h-3.5 text-slate-500" />
+                            <User className="w-3.5 h-3.5 text-[#7B8FA4]" />
                             {post.author || 'XN In Tài Chính'}
                           </span>
                         </div>
 
                         {/* Heading */}
-                        <h3 className="text-base sm:text-lg font-bold font-display leading-snug text-white tracking-tight group-hover:text-brand-gold transition-colors duration-300">
+                        <h3 className="text-base sm:text-lg font-bold font-display leading-snug text-[#173F72] tracking-tight group-hover:text-[#174A87] transition-colors duration-300">
                           {post.title}
                         </h3>
 
                         {/* Short Subtitle */}
                         {post.subtitle && (
-                          <p className="text-xs text-slate-200 mt-1 italic font-light leading-relaxed">
+                          <p className="text-xs text-[#5B6F85] mt-1 italic font-normal leading-relaxed">
                             {post.subtitle}
                           </p>
                         )}
 
-                        <div className="w-full h-px bg-[#0D4F9C]/30 my-2"></div>
+                        <div className="w-full h-px bg-[#E3ECF7] my-2"></div>
 
                         {/* Description content */}
-                        <p className="text-xs sm:text-xs text-slate-300 leading-relaxed font-normal hover:text-slate-200 duration-200 line-clamp-6">
+                        <p className="text-xs sm:text-xs text-[#5B6F85] leading-relaxed font-normal hover:text-[#294E73] transition-colors duration-200 line-clamp-6">
                           {post.content}
                         </p>
                       </div>
 
                       {/* Interaction footer actions of the post card */}
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#0D4F9C]/30">
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#E3ECF7]">
                         {/* Public Link button */}
                         <button 
                           onClick={() => alert(`Chi tiết bài viết: ${post.title}\n\nThống báo chuyên môn: ${post.content}`)}
-                          className="text-[10px] font-black uppercase text-brand-gold hover:text-white transition-colors tracking-widest flex items-center gap-1 cursor-pointer font-display"
+                          className="text-[11px] font-black uppercase text-[#174A87] hover:text-[#123C70] transition-colors tracking-widest flex items-center gap-1 cursor-pointer font-display"
                         >
                           Xem chi tiết <ChevronRight className="w-4 h-4" />
                         </button>
@@ -481,14 +484,14 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => handleOpenEditForm(post)}
-                              className="p-1.5 bg-[#00004D] hover:bg-blue-600/20 border border-[#123A78] hover:border-blue-500 text-blue-400 hover:text-white rounded transition-all cursor-pointer text-xs"
+                              className="p-1.5 bg-[#EEF5FC] hover:bg-[#174A87] border border-[#DCE7F2] text-[#174A87] hover:text-white rounded-lg transition-all cursor-pointer text-xs"
                               title="Chỉnh sửa bài báo"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => handleDeletePost(post.id, post.title)}
-                              className="p-1.5 bg-[#00004D] hover:bg-rose-600/20 border border-[#123A78] hover:border-rose-500 text-rose-400 hover:text-white rounded transition-all cursor-pointer text-xs"
+                              className="p-1.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer text-xs"
                               title="Xóa bài báo này"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -516,40 +519,40 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowAdminLoginModal(false)}
-              className="fixed inset-0 bg-[#00004D]/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
             
             <motion.div
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
-              className="bg-[#0F3268] border border-brand-gold/30 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative z-10 p-6 text-white font-sans"
+              className="bg-white border border-[#DCE7F2] rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative z-10 p-6 text-[#173F72] font-sans"
             >
               <div className="text-center mb-6">
-                <div className="w-12 h-12 bg-brand-gold/15 border border-brand-gold/20 rounded-full flex items-center justify-center mx-auto text-brand-gold mb-3">
+                <div className="w-12 h-12 bg-[#EEF5FC] border border-[#DCE7F2] rounded-full flex items-center justify-center mx-auto text-[#174A87] mb-3">
                   <Lock className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold font-display uppercase tracking-widest text-[#DCA92A]">XÁC THỰC QUẢN TRỊ CMS</h3>
-                <p className="text-[11px] text-slate-400 mt-1 max-w-[280px] mx-auto">
+                <h3 className="text-lg font-bold font-display uppercase tracking-widest text-[#173F72]">XÁC THỰC QUẢN TRỊ CMS</h3>
+                <p className="text-[11px] text-[#5B6F85] mt-1 max-w-[280px] mx-auto">
                   Nhập mật mã để kích hoạt quyền đăng tin, sửa bài và ghim văn kiện bảo mật.
                 </p>
               </div>
 
               <form onSubmit={handleAdminAuth} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Mật mã truy cập</label>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Mật mã truy cập</label>
                   <input
                     type="password"
                     placeholder="Mật mã: 79 hoặc 12345"
                     value={adminPasscode}
                     onChange={(e) => setAdminPasscode(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white text-sm"
+                    className="w-full px-4 py-3 bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] focus:bg-white text-[#294E73] text-sm"
                     autoFocus
                   />
                 </div>
 
                 {adminError && (
-                  <p className="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 p-2 rounded text-center">
+                  <p className="text-[11px] text-rose-600 bg-rose-50 border border-rose-200 p-2 rounded-lg text-center font-medium">
                     {adminError}
                   </p>
                 )}
@@ -558,13 +561,13 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   <button
                     type="button"
                     onClick={() => setShowAdminLoginModal(false)}
-                    className="flex-1 py-2.5 bg-[#123A78] border border-[#123A78]/80 hover:bg-[#0F3268] rounded-lg text-xs font-bold font-display uppercase transition-colors cursor-pointer text-slate-300"
+                    className="flex-1 py-2.5 bg-[#EEF5FC] border border-[#DCE7F2] hover:bg-[#E2EDFA] rounded-xl text-xs font-bold font-display uppercase transition-colors cursor-pointer text-[#315B85]"
                   >
                     HỦY
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-brand-gold text-slate-950 hover:bg-white hover:text-brand-blue rounded-lg text-xs font-black font-display uppercase transition-all cursor-pointer shadow-md"
+                    className="flex-1 py-2.5 bg-[#F5C542] text-[#173B63] hover:bg-[#174A87] hover:text-white rounded-xl text-xs font-black font-display uppercase transition-all cursor-pointer shadow-sm"
                   >
                     KÍCH HOẠT
                   </button>
@@ -584,27 +587,27 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsFormModalOpen(false)}
-              className="fixed inset-0 bg-[#00004D]/85 backdrop-blur-sm"
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
 
             <motion.div
               initial={{ scale: 0.94, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.94, y: 20 }}
-              className="bg-[#0F3268] border border-brand-gold/30 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh] text-slate-100 font-sans"
+              className="bg-white border border-[#DCE7F2] rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh] text-[#173F72] font-sans"
             >
               {/* Form heading */}
-              <div className="p-6 border-b border-[#123A78]/80 flex items-center justify-between text-white shrink-0">
+              <div className="p-6 border-b border-[#E3ECF7] flex items-center justify-between shrink-0 bg-[#F8FBFF]">
                 <div className="flex items-center gap-2.5">
-                  <Settings className="w-5 h-5 text-brand-gold animate-spin" />
-                  <h3 className="text-base sm:text-lg font-bold font-display uppercase tracking-widest text-[#DCA92A]">
+                  <Settings className="w-5 h-5 text-[#174A87] animate-spin" />
+                  <h3 className="text-base sm:text-lg font-bold font-display uppercase tracking-widest text-[#173F72]">
                     {editingPost ? 'CẬP NHẬT BÀI VIẾT DOANH NGHIỆP' : 'SOẠN THẢO BẢN TIN TRUYỀN THÔNG MỚI'}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsFormModalOpen(false)}
-                  className="p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer text-slate-400 hover:text-white"
+                  className="p-1 hover:bg-[#EEF5FC] rounded-full transition-colors cursor-pointer text-[#7B8FA4] hover:text-[#173F72]"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -618,11 +621,11 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   
                   {/* Category dropdown Selection */}
                   <div className="sm:col-span-1">
-                    <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">CHUYÊN MỤC TIN</label>
+                    <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">CHUYÊN MỤC TIN</label>
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs font-bold text-white uppercase font-display"
+                      className="w-full px-3 py-2.5 bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-xs font-bold text-[#173F72] uppercase font-display"
                     >
                       {NEWS_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>{cat}</option>
@@ -632,14 +635,14 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
 
                   {/* Title input */}
                   <div className="sm:col-span-2">
-                    <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Tiêu đề bài viết (*)</label>
+                    <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Tiêu đề bài viết (*)</label>
                     <input
                       type="text"
                       placeholder="Nhập tiêu đề chính hiển thị..."
                       value={formTitle}
                       onChange={(e) => setFormTitle(e.target.value)}
                       required
-                      className="w-full px-4 py-2 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-semibold"
+                      className="w-full px-4 py-2 bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-xs leading-relaxed text-[#173F72] font-semibold"
                     />
                   </div>
 
@@ -647,29 +650,29 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
 
                 {/* Subtitle / Short description */}
                 <div>
-                  <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Mô tả tóm tắt nội dung (Slogan, chú ý)</label>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Mô tả tóm tắt nội dung (Slogan, chú ý)</label>
                   <input
                     type="text"
                     placeholder="Nhập đoạn mô tả ngắn dẫn xuất (hiển thị nghiêng bên dưới tiêu đề)..."
                     value={formSubtitle}
                     onChange={(e) => setFormSubtitle(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs text-white"
+                    className="w-full px-4 py-2.5 bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-xs text-[#294E73]"
                   />
                 </div>
 
                 {/* Form Image Cover Uploader / Field */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 rounded-xl bg-[#123A78]/60 border border-[#123A78]/80">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 rounded-xl bg-[#F8FBFF] border border-[#DCE7F2]">
                   
                   {/* cover image input URL or Upload button */}
                   <div>
-                    <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Ảnh bìa bài báo (URL hoặc Tải lên)</label>
+                    <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Ảnh bìa bài báo (URL hoặc Tải lên)</label>
                     
                     <input
                       type="text"
                       placeholder="https://images.unsplash.com/..."
                       value={formImageUrl}
                       onChange={(e) => setFormImageUrl(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-3"
+                      className="w-full px-4 py-2 text-xs bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-[#294E73] mb-3"
                     />
 
                     {/* True Upload trigger input */}
@@ -683,10 +686,10 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     <button
                       type="button"
                       onClick={() => imageFileInputRef.current?.click()}
-                      className="w-full py-2 bg-[#0B2755] border border-[#123A78]/80 hover:border-brand-gold/40 text-xs font-bold text-slate-300 hover:text-brand-gold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-2 bg-[#EEF5FC] border border-[#DCE7F2] hover:bg-[#174A87] hover:text-white text-xs font-bold text-[#174A87] rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                       {imageUploadLoading ? (
-                        <div className="w-4 h-4 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-[#174A87] border-t-transparent rounded-full animate-spin"></div>
                       ) : (
                         <Upload className="w-3.5 h-3.5" />
                       )}
@@ -695,11 +698,11 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   </div>
 
                   {/* Attachment image preview frame */}
-                  <div className="h-28 sm:h-full bg-[#123A78] rounded-lg overflow-hidden border border-[#123A78]/60 flex items-center justify-center relative">
+                  <div className="h-28 sm:h-full bg-[#EEF5FC] rounded-xl overflow-hidden border border-[#DCE7F2] flex items-center justify-center relative">
                     {formImageUrl ? (
                       <img src={formImageUrl} className="w-full h-full object-cover" alt="Preview ảnh" referrerPolicy="no-referrer" />
                     ) : (
-                      <span className="text-[10px] text-slate-400 font-mono">CHƯA BẢO ĐỊNH ẢNH</span>
+                      <span className="text-[10px] text-[#7B8FA4] font-mono">CHƯA BẢO ĐỊNH ẢNH</span>
                     )}
                   </div>
 
@@ -710,13 +713,13 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                   
                   {/* Video embed URL */}
                   <div>
-                    <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Video đính kèm (URL mp4 hoặc mẫu)</label>
+                    <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Video đính kèm (URL mp4 hoặc mẫu)</label>
                     <input
                       type="text"
                       placeholder="Chừa trống nếu không đính kèm..."
                       value={formVideoUrl}
                       onChange={(e) => setFormVideoUrl(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white mb-2"
+                      className="w-full px-4 py-2 text-xs bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-[#294E73] mb-2"
                     />
                     
                     {/* true video input file reference */}
@@ -730,10 +733,10 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                     <button
                       type="button"
                       onClick={() => videoFileInputRef.current?.click()}
-                      className="w-full py-1.5 bg-[#0B2755] border border-[#123A78]/80 hover:border-brand-gold/40 text-[10px] font-bold text-slate-400 hover:text-brand-gold rounded-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                      className="w-full py-1.5 bg-[#EEF5FC] border border-[#DCE7F2] hover:bg-[#174A87] hover:text-white text-[10px] font-bold text-[#174A87] rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       {videoUploadLoading ? (
-                        <div className="w-3 h-3 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-3 h-3 border-2 border-[#174A87] border-t-transparent rounded-full animate-spin"></div>
                       ) : (
                         <Video className="w-3 h-3" />
                       )}
@@ -743,13 +746,13 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
 
                   {/* Author or agency */}
                   <div>
-                    <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Tác giả biên soạn / Ban phòng ban</label>
+                    <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Tác giả biên soạn / Ban phòng ban</label>
                     <input
                       type="text"
                       placeholder="Phòng Kinh doanh / Công đoàn..."
                       value={formAuthor}
                       onChange={(e) => setFormAuthor(e.target.value)}
-                      className="w-full px-4 py-2 text-xs bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-white"
+                      className="w-full px-4 py-2 text-xs bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-[#294E73]"
                     />
                     
                     {/* Pin checkpoint switcher */}
@@ -758,10 +761,10 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                         type="checkbox"
                         checked={formIsPinned}
                         onChange={(e) => setFormIsPinned(e.target.checked)}
-                        className="w-3.5 h-3.5 accent-brand-gold rounded"
+                        className="w-3.5 h-3.5 accent-[#174A87] rounded"
                       />
-                      <span className="text-[11px] font-bold text-slate-300 font-display uppercase tracking-wider flex items-center gap-1">
-                        <Pin className="w-3.5 h-3.5 text-brand-gold fill-brand-gold" /> Ghim bài báo này lên hàng nổi bật
+                      <span className="text-[11px] font-bold text-[#173F72] font-display uppercase tracking-wider flex items-center gap-1">
+                        <Pin className="w-3.5 h-3.5 text-[#F5C542] fill-[#F5C542]" /> Ghim bài báo này lên hàng nổi bật
                       </span>
                     </div>
                   </div>
@@ -770,29 +773,29 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
 
                 {/* Content text area body details */}
                 <div>
-                  <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-2 font-display">Nội dung văn bản chi tiết (*)</label>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#4B637D] mb-2 font-display">Nội dung văn bản chi tiết (*)</label>
                   <textarea
                     placeholder="Viết nội dung bản tin, hoạt động sản xuất, kỹ thuật số, công nghệ mới tại đây..."
                     value={formContent}
                     onChange={(e) => setFormContent(e.target.value)}
                     required
                     rows={8}
-                    className="w-full px-4 py-3 bg-[#123A78] border border-[#123A78]/80 rounded-lg focus:outline-none focus:border-brand-gold text-xs leading-relaxed text-white font-sans"
+                    className="w-full px-4 py-3 bg-[#F4F8FD] border border-[#D7E4F2] rounded-xl focus:outline-none focus:border-[#174A87] text-xs leading-relaxed text-[#294E73] font-sans"
                   />
                 </div>
 
                 {/* Action buttons footer */}
-                <div className="pt-4 border-t border-[#123A78]/80 flex items-center justify-end gap-3 shrink-0">
+                <div className="pt-4 border-t border-[#E3ECF7] flex items-center justify-end gap-3 shrink-0">
                   <button
                     type="button"
                     onClick={() => setIsFormModalOpen(false)}
-                    className="px-5 py-2.5 bg-[#0B2755] border border-[#123A78]/80 hover:bg-[#0F3268] text-xs font-bold font-display uppercase rounded-lg transition-colors cursor-pointer text-slate-400 hover:text-white"
+                    className="px-5 py-2.5 bg-[#EEF5FC] border border-[#DCE7F2] hover:bg-[#E2EDFA] text-xs font-bold font-display uppercase rounded-xl transition-colors cursor-pointer text-[#315B85]"
                   >
                     HỦY BỎ
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-brand-gold text-slate-950 hover:bg-white hover:text-brand-blue text-xs font-black font-display uppercase rounded-lg transition-all cursor-pointer shadow-md flex items-center gap-1.5"
+                    className="px-6 py-2.5 bg-[#F5C542] text-[#173B63] hover:bg-[#174A87] hover:text-white text-xs font-black font-display uppercase rounded-xl transition-all cursor-pointer shadow-sm flex items-center gap-1.5"
                   >
                     {editingPost ? 'CẬP NHẬT BÀI' : 'ĐĂNG BẢN TIN'}
                   </button>
