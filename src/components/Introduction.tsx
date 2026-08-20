@@ -13,7 +13,7 @@ export default function Introduction() {
       title: '🎯 SỨ MỆNH PHÁT TRIỂN',
       subtitle: 'Sản xuất và in ấn tài chính chuyên nghiệp, định hướng hiện đại hóa công nghệ.',
       paragraphs: [
-        'Xí nghiệp In Tài Chính TP. Hồ Chí Minh thực hiện nhiệm vụ sản xuất và in ấn vé số kiến thiết, vé số cào, chứng từ và các ấn phẩm phục vụ ngành tài chính trên hệ thống thiết bị in hiện đại.',
+        'Xí nghiệp In Tài Chính TP. Hồ Chí Minh thực hiện nhiệm vụ sản xuất và in ấn vé số kiến thiết, vé số cào.',
         'Đơn vị không ngừng ứng dụng công nghệ in kỹ thuật số biến đổi dữ liệu, tích hợp QR Code và các giải pháp quản lý thông tin nhằm nâng cao chất lượng sản phẩm, hỗ trợ công tác kiểm tra, xác thực và quản lý dữ liệu hiệu quả.',
         'Với định hướng phát triển ổn định và hiện đại, xí nghiệp luôn chú trọng chất lượng in ấn, tiến độ sản xuất và khả năng đáp ứng nhu cầu ngày càng cao của thị trường.'
       ]
@@ -24,7 +24,7 @@ export default function Introduction() {
       subtitle: 'Đơn vị in tài chính và công nghệ cao, phát triển hệ thống sản xuất thông minh.',
       paragraphs: [
         'Trở thành đơn vị in tài chính và in công nghệ cao uy tín, hiện đại, từng bước phát triển hệ thống sản xuất thông minh, ứng dụng công nghệ số và dữ liệu biến đổi trong ngành in.',
-        'Định hướng mở rộng lĩnh vực sản xuất bao bì tự động bằng hệ thống máy móc hiện đại, nâng cao chất lượng sản phẩm, tối ưu năng suất và đáp ứng nhu cầu phát triển của thị trường in ấn trong thời đại chuyển đổi số.'
+        'Định hướng phát triển các sản phẩm in bảo mật, in dữ liệu biến đổi và các giải pháp in công nghệ cao; đẩy mạnh tự động hóa, ứng dụng trí tuệ nhân tạo và chuyển đổi số nhằm nâng cao chất lượng, tối ưu năng suất và đáp ứng yêu cầu ngày càng cao của khách hàng.'
       ]
     },
     values: {

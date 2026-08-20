@@ -1,8 +1,8 @@
 import { ServiceItem, TechnologyItem, GalleryItem, JobVacancy } from '../types';
 
 export const COMPANY_INFO = {
-  name: 'XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH',
-  parentCompany: 'CÔNG TY TNHH MTV XỔ SỐ KIẾN THIẾT TP.HCM',
+  name: 'XÍ NGHIỆP IN TÀI CHÍNH',
+  parentCompany: 'CÔNG TY TNHH MTV XỔ SỐ KIẾN THIẾT THÀNH PHỐ HỒ CHÍ MINH',
   slogan: 'UY TÍN – CHẤT LƯỢNG – NHANH CHÓNG',
   address: 'Lô A1-A2 Đường A, Cụm Công Nghiệp - Khu dân cư Nhị Xuân, Ấp 25, Xã Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam.',
   phone: '(028) 3595 0311 - 3595 0312',
@@ -167,7 +167,7 @@ export const VACANCIES: JobVacancy[] = [
     isClosed: true,
     department: 'Phòng Kỹ thuật & Công nghệ In',
     type: 'Toàn thời gian (Cố định)',
-    salary: '15,000,000 - 25,000,000 VNĐ / Tháng',
+    salary: 'Mức lương thỏa thuận',
     deadline: '30/06/2026',
     requirements: [
       'Tốt nghiệp chuyên ngành Kỹ sư Công nghệ In',
@@ -195,7 +195,7 @@ export const VACANCIES: JobVacancy[] = [
     isClosed: true,
     department: 'Phân Xưởng Chế Bản',
     type: 'Toàn thời gian',
-    salary: '12,000,000 - 18,000,000 VNĐ / Tháng',
+    salary: 'Mức lương thỏa thuận',
     deadline: '15/07/2026',
     requirements: [
       'Thành thạo Adobe Illustrator, Photoshop',

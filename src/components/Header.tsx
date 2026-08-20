@@ -145,26 +145,17 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
       <div className="w-full py-4 px-4 sm:px-6 lg:px-8 bg-white border-b border-amber-100/45 relative z-30">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           
-          {/* Logo brand configuration with official coat of arms colors */}
-          <div className="flex items-center gap-4 select-none cursor-pointer" onClick={() => handleNavClick('hero')}>
-            {/* Round coat-of-arms graphic emblem */}
-            <div className="relative w-14 h-14 bg-gradient-to-tr from-brand-blue to-blue-800 rounded-full flex flex-col items-center justify-center border-2 border-brand-gold shadow-md shrink-0">
-              <div className="absolute top-1 text-[7px] font-black text-brand-gold leading-none tracking-wider">XỔ SỐ</div>
-              <div className="w-7 h-7 rounded-full border border-white/40 flex items-center justify-center font-display font-black text-white text-xs mt-1 shadow-inner bg-[#123A78]/30">
-                ITC
-              </div>
-              <div className="absolute bottom-1 text-[7px] font-bold text-slate-200 tracking-wider leading-none">TP.HCM</div>
-            </div>
-
+          {/* Logo brand configuration without left graphic icon as requested */}
+          <div className="flex items-center select-none cursor-pointer text-center md:text-left" onClick={() => handleNavClick('hero')}>
             {/* Logo captions */}
             <div>
-              <p className="text-[10px] font-bold tracking-widest text-slate-500 font-display">
+              <p className="text-[11px] sm:text-xs font-bold tracking-wider text-slate-600 font-display uppercase">
                 {COMPANY_INFO.parentCompany}
               </p>
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-black text-brand-blue font-display tracking-tight leading-none uppercase mt-0.5">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-brand-blue font-display tracking-tight leading-none uppercase mt-1">
                 {COMPANY_INFO.name}
               </h1>
-              <div className="flex items-center gap-2 mt-1.5">
+              <div className="flex items-center justify-center md:justify-start gap-2 mt-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>

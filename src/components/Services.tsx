@@ -156,8 +156,6 @@ export default function Services({ onSelectServiceForQuote }: ServicesProps) {
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#D8E4F5]"></div>
               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#D8E4F5]"></div>
               
-              <p className="text-[10px] font-black tracking-widest text-[#0D4F9C] font-display uppercase">Slogan Nổi Bật</p>
-              
               <div className="flex flex-col gap-2 my-1">
                 <span className="text-2xl sm:text-3xl font-black font-display tracking-widest text-[#0D4F9C] uppercase">UY TÍN</span>
                 <span className="text-2xl sm:text-3xl font-black font-display tracking-widest text-[#1E63B5] uppercase">CHẤT LƯỢNG</span>

@@ -27,7 +27,7 @@ export default function CMSRecruitment() {
     type: 'Toàn thời gian',
     quantity: '02 người',
     deadline: '2026-08-30',
-    salary: 'Thỏa thuận theo năng lực',
+    salary: 'Mức lương thỏa thuận',
     requirements: ['']
   });
 
@@ -42,7 +42,7 @@ export default function CMSRecruitment() {
       type: 'Toàn thời gian',
       quantity: '02 người',
       deadline: '2026-08-30',
-      salary: 'Thỏa thuận hấp dẫn',
+      salary: 'Mức lương thỏa thuận',
       requirements: ['Tốt nghiệp trung cấp/cao đẳng chuyên ngành In ấn / Cơ khí', 'Có kinh nghiệm vận hành máy in Offset Komori / Heidelberg từ 1 năm']
     });
     setIsEditing(true);

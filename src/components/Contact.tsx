@@ -161,7 +161,7 @@ export default function Contact() {
                     <Mail className="w-5 h-5 text-[#F4C542]" />
                   </div>
                   <div>
-                    <h4 className="font-black font-display text-[10px] tracking-widest uppercase text-white/90">Email giao thiệp sê-ri:</h4>
+                    <h4 className="font-black font-display text-[10px] tracking-widest uppercase text-white/90">Email:</h4>
                     <p id="contact-email-text" className="text-white mt-1 leading-none font-sans font-bold text-xs sm:text-sm hover:text-[#F4C542] transition-colors" style={{ color: '#FFFFFF', fontWeight: 700 }}>
                       {COMPANY_INFO.email}
                     </p>
