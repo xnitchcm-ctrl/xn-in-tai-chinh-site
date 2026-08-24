@@ -71,6 +71,7 @@ export interface CMSContextType {
   registerUser: (email: string, password: string, fullName: string, role: UserRole) => Promise<{ success: boolean; error?: string }>;
   logoutAdmin: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string }>;
+  updateUserPassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
   updateUserRole: (uid: string, newRole: UserRole) => Promise<void>;
   toggleUserStatus: (uid: string, currentStatus: 'active' | 'locked') => Promise<void>;
   deleteUserAccount: (uid: string) => Promise<void>;
@@ -609,8 +610,25 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Password reset request
   const requestPasswordReset = async (email: string): Promise<{ success: boolean; error?: string }> => {
     if (supabase && isSupabaseConfigured) {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      const redirectUrl = typeof window !== 'undefined' && window.location?.origin
+        ? `${window.location.origin}/admin/reset-password`
+        : '/admin/reset-password';
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: redirectUrl
+      });
       if (error) return { success: false, error: error.message };
+      return { success: true };
+    }
+    return { success: true };
+  };
+
+  // Password reset update
+  const updateUserPassword = async (newPassword: string): Promise<{ success: boolean; error?: string }> => {
+    if (supabase && isSupabaseConfigured) {
+      const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) return { success: false, error: error.message };
+      await addAuditLog('Cập nhật mật khẩu', 'Authentication', 'Người dùng cập nhật mật khẩu mới qua link khôi phục');
       return { success: true };
     }
     return { success: true };
@@ -1010,6 +1028,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         registerUser,
         logoutAdmin,
         requestPasswordReset,
+        updateUserPassword,
         updateUserRole,
         toggleUserStatus,
         deleteUserAccount,

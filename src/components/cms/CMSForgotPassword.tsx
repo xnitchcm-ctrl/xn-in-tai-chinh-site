@@ -5,29 +5,22 @@ import {
   KeyRound, 
   Mail, 
   ArrowLeft, 
-  ShieldCheck, 
   AlertCircle, 
   CheckCircle2, 
-  Lock, 
-  Eye, 
-  EyeOff,
-  ArrowRight
+  Send,
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 
 export default function CMSForgotPassword() {
-  const { requestPasswordReset, confirmPasswordResetWithOTP, companyInfo } = useCMS();
+  const { requestPasswordReset, companyInfo } = useCMS();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState<'request' | 'reset'>('request');
   const [email, setEmail] = useState('xnitchcm@gmail.com');
-  const [otpCode, setOtpCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPass, setShowPass] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isSent, setIsSent] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
   const handleRequestSubmit = async (e: React.FormEvent) => {
@@ -37,36 +30,14 @@ export default function CMSForgotPassword() {
     setLoading(true);
 
     try {
-      await requestPasswordReset(email);
-      setSuccessMsg(`Mã OTP đặt lại mật khẩu đã được gửi thành công đến email: ${email}`);
-      setStep('reset');
+      const res = await requestPasswordReset(email);
+      if (!res.success) {
+        throw new Error(res.error || 'Không thể gửi yêu cầu khôi phục mật khẩu.');
+      }
+      setIsSent(true);
+      setSuccessMsg(`Đã gửi liên kết khôi phục mật khẩu đến email: ${email}`);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Không thể gửi yêu cầu khôi phục. Vui lòng kiểm tra địa chỉ email.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResetSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg('');
-    setSuccessMsg('');
-
-    if (newPassword !== confirmPassword) {
-      setErrorMsg('Xác nhận mật khẩu mới không trùng khớp.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      await confirmPasswordResetWithOTP(email, otpCode, newPassword);
-      setSuccessMsg('Đặt lại mật khẩu thành công! Vui lòng đăng nhập bằng mật khẩu mới.');
-      setTimeout(() => {
-        navigate('/quan-tri/dang-nhap');
-      }, 1500);
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Mã OTP không đúng hoặc đã hết hạn.');
+      setErrorMsg(err.message || 'Không thể gửi email khôi phục. Vui lòng kiểm tra lại địa chỉ email.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +66,7 @@ export default function CMSForgotPassword() {
         </div>
 
         <Link
-          to="/quan-tri/dang-nhap"
+          to="/admin/login"
           className="inline-flex items-center gap-2 text-xs font-bold text-[#174A87] hover:text-[#123C70] bg-white px-4 py-2 rounded-lg border border-[#DCE7F2] shadow-sm transition-all"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
@@ -114,15 +85,19 @@ export default function CMSForgotPassword() {
 
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-14 h-14 bg-[#174A87]/10 text-[#174A87] rounded-2xl mb-4 border border-[#174A87]/15">
-              <KeyRound className="w-7 h-7 text-[#174A87]" />
+              {isSent ? (
+                <Mail className="w-7 h-7 text-[#174A87]" />
+              ) : (
+                <KeyRound className="w-7 h-7 text-[#174A87]" />
+              )}
             </div>
             <h2 className="text-xl font-black text-[#173F72] font-display uppercase tracking-tight">
-              {step === 'request' ? 'Quên Mật Khẩu Truy Cập' : 'Đặt Lai Mật Khẩu Mới'}
+              {isSent ? 'Kiểm Tra Email Của Bạn' : 'Quên Mật Khẩu Truy Cập'}
             </h2>
             <p className="text-xs text-slate-500 mt-2 font-normal leading-relaxed">
-              {step === 'request'
-                ? 'Nhập địa chỉ email quản trị đã đăng ký để nhận mã OTP xác minh qua hệ thống.'
-                : 'Nhập mã OTP 6 chữ số vừa nhận được cùng mật khẩu mới của bạn.'}
+              {isSent
+                ? 'Hệ thống đã gửi liên kết đặt lại mật khẩu an toàn đến hộp thư của bạn.'
+                : 'Nhập địa chỉ email quản trị để nhận liên kết khôi phục mật khẩu trực tiếp.'}
             </p>
           </div>
 
@@ -152,7 +127,7 @@ export default function CMSForgotPassword() {
             )}
           </AnimatePresence>
 
-          {step === 'request' ? (
+          {!isSent ? (
             <form onSubmit={handleRequestSubmit} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold text-[#173F72] uppercase tracking-wider mb-2">
@@ -178,79 +153,49 @@ export default function CMSForgotPassword() {
                 type="submit"
                 className="w-full py-3.5 px-6 rounded-xl bg-[#174A87] hover:bg-[#123C70] text-white font-bold text-xs uppercase tracking-wider font-display shadow-lg shadow-[#174A87]/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                {loading ? 'Đang gửi mã OTP...' : 'Gửi Mã Xác Thực OTP'}
+                {loading ? (
+                  <span>Đang gửi email...</span>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Gửi Liên Kết Khôi Phục</span>
+                  </>
+                )}
               </motion.button>
             </form>
           ) : (
-            <form onSubmit={handleResetSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-[#173F72] uppercase tracking-wider mb-1.5">
-                  Mã OTP 6 Chữ Số
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={otpCode}
-                  onChange={(e) => setOtpCode(e.target.value)}
-                  placeholder="Nhập 123456"
-                  className="w-full px-4 py-3 text-xs bg-[#F7FAFF] border border-[#DCE7F2] rounded-xl font-mono text-center tracking-widest text-slate-800 font-bold focus:outline-none focus:border-[#174A87]"
-                />
-                <p className="text-[10px] text-slate-400 mt-1">Gợi ý thử nghiệm: Nhập <code className="font-mono text-slate-700 font-bold">123456</code> hoặc <code className="font-mono text-slate-700 font-bold">888888</code></p>
+            <div className="space-y-4">
+              <div className="p-4 bg-[#F8FBFF] rounded-xl border border-[#DCE7F2] text-xs text-slate-600 space-y-2 leading-relaxed">
+                <p>
+                  Vui lòng mở hộp thư <strong className="text-[#174A87]">{email}</strong> và nhấp vào nút <strong className="text-slate-800">"Reset Password"</strong> trong email để tạo mật khẩu mới.
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  *Lưu ý: Nếu không thấy email trong Hộp thư đến (Inbox), vui lòng kiểm tra thêm mục Thư rác (Spam) hoặc Quảng cáo.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-[#173F72] uppercase tracking-wider mb-1.5">
-                  Mật khẩu mới
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPass ? 'text' : 'password'}
-                    required
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Mật khẩu mới tối thiểu 6 ký tự"
-                    className="w-full pl-11 pr-11 py-3 text-xs bg-[#F7FAFF] border border-[#DCE7F2] rounded-xl focus:outline-none focus:border-[#174A87]"
-                  />
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                  <button
-                    type="button"
-                    onClick={() => setShowPass(!showPass)}
-                    className="p-1.5 text-slate-400 hover:text-slate-600 absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSent(false)}
+                  className="flex-1 py-3 px-4 rounded-xl border border-[#DCE7F2] hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Gửi lại email</span>
+                </button>
+                <Link
+                  to="/admin/login"
+                  className="flex-1 py-3 px-4 rounded-xl bg-[#174A87] hover:bg-[#123C70] text-white text-xs font-bold text-center uppercase tracking-wider font-display shadow transition-all flex items-center justify-center gap-1.5"
+                >
+                  <span>Đến Đăng Nhập</span>
+                </Link>
               </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#173F72] uppercase tracking-wider mb-1.5">
-                  Xác nhận mật khẩu mới
-                </label>
-                <input
-                  type={showPass ? 'text' : 'password'}
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Nhập lại mật khẩu mới"
-                  className="w-full px-4 py-3 text-xs bg-[#F7FAFF] border border-[#DCE7F2] rounded-xl focus:outline-none focus:border-[#174A87]"
-                />
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={loading}
-                type="submit"
-                className="w-full py-3.5 px-6 rounded-xl bg-[#174A87] hover:bg-[#123C70] text-white font-bold text-xs uppercase tracking-wider font-display shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer mt-4"
-              >
-                {loading ? 'Đang cập nhật...' : 'Xác Nhận Đặt Lai Mật Khẩu'}
-              </motion.button>
-            </form>
+            </div>
           )}
 
           <div className="mt-8 pt-6 border-t border-[#DCE7F2] text-center">
             <Link
-              to="/quan-tri/dang-nhap"
+              to="/admin/login"
               className="text-xs font-bold text-[#174A87] hover:underline inline-flex items-center gap-1.5"
             >
               <ArrowLeft className="w-3.5 h-3.5" />

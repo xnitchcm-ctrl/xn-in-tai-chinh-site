@@ -23,6 +23,7 @@ import { COMPANY_INFO } from './data/companyData';
 // CMS Components
 import CMSLogin from './components/cms/CMSLogin';
 import CMSForgotPassword from './components/cms/CMSForgotPassword';
+import CMSResetPassword from './components/cms/CMSResetPassword';
 import CMSLayout from './components/cms/CMSLayout';
 import CMSOverview from './components/cms/views/CMSOverview';
 import CMSPages from './components/cms/views/CMSPages';
@@ -322,9 +323,11 @@ export default function App() {
         {/* CMS AUTHENTICATION ROUTES */}
         <Route path="/admin/login" element={<CMSLogin />} />
         <Route path="/admin/forgot-password" element={<CMSForgotPassword />} />
+        <Route path="/admin/reset-password" element={<CMSResetPassword />} />
         <Route path="/quan-tri/dang-nhap" element={<CMSLogin />} />
         <Route path="/quan-tri/quen-mat-khau" element={<CMSForgotPassword />} />
-        <Route path="/quan-tri/dat-lai-mat-khau" element={<CMSForgotPassword />} />
+        <Route path="/quan-tri/dat-lai-mat-khau" element={<CMSResetPassword />} />
+        <Route path="/quan-tri/reset-password" element={<CMSResetPassword />} />
 
         {/* CMS PROTECTED ADMIN PANEL */}
         <Route
