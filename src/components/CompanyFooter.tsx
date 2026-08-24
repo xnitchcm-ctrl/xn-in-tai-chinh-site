@@ -1,4 +1,4 @@
-import { Building, Phone, Mail, MapPin, ChevronUp, Globe, ShieldCheck } from 'lucide-react';
+import { Building, Phone, Mail, MapPin, ChevronUp, Globe, ShieldCheck, Lock } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
 interface FooterProps {
@@ -141,24 +141,35 @@ export default function CompanyFooter({ onNavigate }: FooterProps) {
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-500">
           
           {/* Legal texts */}
-          <div className="text-center md:text-left">
+          <div className="text-center md:text-left flex-1">
             <p className="font-semibold text-slate-400 uppercase tracking-wide">
               &copy; 2026 XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH. Đơn vị trực thuộc Công Ty TNHH MTV Xổ Số Kiến Thiết TP. Hồ Chí Minh.
             </p>
             <p className="text-[10px] text-slate-500 mt-1.5 leading-relaxed">
               Bản quyền website thuộc về Xí Nghiệp In Tài Chính TP. Hồ Chí Minh. Nghiêm cấm sao chép, trích xuất dữ liệu hoặc giả mạo thiết kế hoa văn, ký hiệu, số sê-ri và các nội dung thuộc quyền quản lý của đơn vị dưới mọi hình thức.
-              <a href="/quan-tri/dang-nhap" className="ml-3 text-slate-400 hover:text-amber-400 font-bold underline transition-colors">Đăng Nhập CMS Quản Trị</a>
             </p>
           </div>
 
-          {/* Scroll back to top circle */}
-          <button
-            onClick={handleBackToTop}
-            className="w-10 h-10 bg-white/5 hover:bg-brand-gold text-slate-400 hover:text-brand-blue rounded-full flex items-center justify-center transition-all cursor-pointer shadow hover:scale-105 group border border-white/5 hover:border-brand-gold"
-            aria-label="Lên đầu trang"
-          >
-            <ChevronUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-          </button>
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Prominent CMS Button */}
+            <a
+              href="/admin"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-[#F5C542] text-white hover:text-[#174A87] font-bold text-xs uppercase tracking-wider font-display border border-white/20 hover:border-[#F5C542] shadow-sm hover:shadow transition-all group cursor-pointer"
+              title="Truy cập Hệ thống Quản trị Nội dung CMS Supabase"
+            >
+              <Lock className="w-3.5 h-3.5 text-[#F5C542] group-hover:text-[#174A87] transition-colors" />
+              <span>CMS QUẢN TRỊ</span>
+            </a>
+
+            {/* Scroll back to top circle */}
+            <button
+              onClick={handleBackToTop}
+              className="w-10 h-10 bg-white/5 hover:bg-brand-gold text-slate-400 hover:text-brand-blue rounded-full flex items-center justify-center transition-all cursor-pointer shadow hover:scale-105 group border border-white/5 hover:border-brand-gold"
+              aria-label="Lên đầu trang"
+            >
+              <ChevronUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+          </div>
 
         </div>
 

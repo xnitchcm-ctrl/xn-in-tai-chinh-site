@@ -25,7 +25,8 @@ import {
   Eye,
   AlertCircle
 } from 'lucide-react';
-import { newsService, NewsPost, NEWS_CATEGORIES, DEFAULT_MOCK_NEWS } from '../utils/firebase';
+import { newsService, NewsPost, NEWS_CATEGORIES } from '../utils/firebase';
+import { getSupabaseClient, isSupabaseConfigured } from '../utils/supabase';
 
 interface NewsSectionProps {
   onBackToHome: () => void;
@@ -38,6 +39,9 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
   const [filterCategory, setFilterCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   
+  // Selected article for full detail viewing modal
+  const [selectedArticle, setSelectedArticle] = useState<NewsPost | null>(null);
+
   // ADMIN & CMS States
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
@@ -64,16 +68,55 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
   const [imageUploadLoading, setImageUploadLoading] = useState(false);
   const [videoUploadLoading, setVideoUploadLoading] = useState(false);
 
-  // Load and bootstrap initial collection
+  // Fetch only published news from Supabase news_articles
+  const fetchPublishedNews = async () => {
+    setLoading(true);
+    const supabase = getSupabaseClient();
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('news_articles')
+          .select('*')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Lỗi khi đọc tin tức published từ Supabase:', error);
+        } else if (data) {
+          const mapped: NewsPost[] = data.map((item: any) => ({
+            id: item.id,
+            title: item.title || '',
+            subtitle: item.summary || '',
+            content: item.content || '',
+            category: item.category || 'Hoạt động sản xuất',
+            imageUrl: item.image || '/src/assets/images/printing_hero_1779242674142.png',
+            videoUrl: item.video_url || undefined,
+            isPinned: Boolean(item.featured),
+            author: item.author || 'Ban Biên Tập',
+            status: item.status || 'published',
+            rejectionReason: item.reject_reason || '',
+            createdBy: item.author_id,
+            reviewedBy: item.reviewed_by,
+            publishedAt: item.published_at,
+            viewsCount: item.views || 0,
+            createdAt: item.created_at || new Date().toISOString()
+          }));
+          setNewsList(mapped);
+          setLoading(false);
+          return;
+        }
+      } catch (e) {
+        console.warn('Lỗi kết nối Supabase news:', e);
+      }
+    }
+
+    setNewsList([]);
+    setLoading(false);
+  };
+
+  // Initial load
   useEffect(() => {
-    const initNews = async () => {
-      setLoading(true);
-      await newsService.bootstrap();
-      const docs = await newsService.getAllNews();
-      setNewsList(docs);
-      setLoading(false);
-    };
-    initNews();
+    fetchPublishedNews();
   }, []);
 
   // Sync passed category filter on navigation triggers
@@ -473,7 +516,7 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                       <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#E3ECF7]">
                         {/* Public Link button */}
                         <button 
-                          onClick={() => alert(`Chi tiết bài viết: ${post.title}\n\nThống báo chuyên môn: ${post.content}`)}
+                          onClick={() => setSelectedArticle(post)}
                           className="text-[11px] font-black uppercase text-[#174A87] hover:text-[#123C70] transition-colors tracking-widest flex items-center gap-1 cursor-pointer font-display"
                         >
                           Xem chi tiết <ChevronRight className="w-4 h-4" />
@@ -802,6 +845,87 @@ export default function NewsSection({ onBackToHome, preSelectedCategory = null }
                 </div>
 
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ARTICLE DETAIL FULL READER MODAL */}
+      <AnimatePresence>
+        {selectedArticle && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto"
+            >
+              {/* Modal Header Bar */}
+              <div className="px-6 py-4 border-b border-[#E3ECF7] flex items-center justify-between bg-[#F8FBFF] shrink-0">
+                <span className="px-3 py-1 bg-[#174A87] text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
+                  {selectedArticle.category}
+                </span>
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="p-1.5 rounded-full hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Content Body */}
+              <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6">
+                {/* Title */}
+                <h1 className="text-xl sm:text-2xl font-black text-[#173F72] font-display leading-tight">
+                  {selectedArticle.title}
+                </h1>
+
+                {/* Meta info */}
+                <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 pb-4 border-b border-slate-100">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4 text-[#174A87]" />
+                    {new Date(selectedArticle.createdAt).toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <User className="w-4 h-4 text-[#174A87]" />
+                    {selectedArticle.author || 'XN In Tài Chính'}
+                  </span>
+                </div>
+
+                {/* Image */}
+                {selectedArticle.imageUrl && (
+                  <div className="rounded-2xl overflow-hidden bg-slate-100 border border-[#DCE7F2]">
+                    <img 
+                      src={selectedArticle.imageUrl} 
+                      alt={selectedArticle.title} 
+                      className="w-full max-h-96 object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                )}
+
+                {/* Subtitle */}
+                {selectedArticle.subtitle && (
+                  <p className="text-sm font-semibold text-slate-700 italic bg-blue-50/60 p-4 rounded-xl border border-blue-100/60">
+                    {selectedArticle.subtitle}
+                  </p>
+                )}
+
+                {/* Full Article Content */}
+                <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line space-y-4">
+                  {selectedArticle.content}
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-[#E3ECF7] bg-[#F8FBFF] flex justify-end shrink-0">
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="px-5 py-2 bg-[#174A87] hover:bg-[#123C70] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm"
+                >
+                  Đóng bài viết
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

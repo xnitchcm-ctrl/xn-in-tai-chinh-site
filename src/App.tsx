@@ -52,16 +52,31 @@ function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen bg-[#F7FAFF] flex items-center justify-center p-4">
         <div className="flex items-center gap-3 font-bold text-[#174A87]">
           <div className="w-5 h-5 border-2 border-[#174A87] border-t-transparent rounded-full animate-spin" />
-          <span>Đang kiểm tra quyền truy cập hệ thống...</span>
+          <span>Đang kiểm tra quyền truy cập hệ thống Supabase CMS...</span>
         </div>
       </div>
     );
   }
 
   if (!currentUser) {
-    return <Navigate to="/quan-tri/dang-nhap" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
+  return <>{children}</>;
+}
+
+// Role-based Route Guard to block Editor from accessing Admin/Approver routes
+function RoleGuard({ 
+  children, 
+  allowedRoles = ['super_admin', 'admin'] 
+}: { 
+  children: React.ReactNode; 
+  allowedRoles?: string[];
+}) {
+  const { currentUser } = useCMS();
+  if (currentUser && !allowedRoles.includes(currentUser.role)) {
+    return <Navigate to="/admin/tong-quan" replace />;
+  }
   return <>{children}</>;
 }
 
@@ -305,37 +320,46 @@ export default function App() {
         <Route path="/tin-tuc-hoat-dong" element={<PublicWebsite newsPage />} />
 
         {/* CMS AUTHENTICATION ROUTES */}
+        <Route path="/admin/login" element={<CMSLogin />} />
+        <Route path="/admin/forgot-password" element={<CMSForgotPassword />} />
         <Route path="/quan-tri/dang-nhap" element={<CMSLogin />} />
         <Route path="/quan-tri/quen-mat-khau" element={<CMSForgotPassword />} />
         <Route path="/quan-tri/dat-lai-mat-khau" element={<CMSForgotPassword />} />
 
         {/* CMS PROTECTED ADMIN PANEL */}
         <Route
-          path="/quan-tri"
+          path="/admin"
           element={
             <ProtectedAdminRoute>
               <CMSLayout />
             </ProtectedAdminRoute>
           }
         >
-          <Route index element={<Navigate to="/quan-tri/tong-quan" replace />} />
+          <Route index element={<Navigate to="/admin/tong-quan" replace />} />
           <Route path="tong-quan" element={<CMSOverview />} />
-          <Route path="trang" element={<CMSPages />} />
           <Route path="bai-viet" element={<CMSPosts />} />
-          <Route path="danh-muc" element={<CMSCategories />} />
-          <Route path="hinh-anh" element={<CMSMedia />} />
-          <Route path="banner" element={<CMSBanners />} />
-          <Route path="dich-vu" element={<CMSServices />} />
-          <Route path="cong-nghe" element={<CMSTechnology />} />
           <Route path="thu-vien" element={<CMSGallery />} />
-          <Route path="tuyen-dung" element={<CMSRecruitment />} />
-          <Route path="lien-he" element={<CMSContacts />} />
-          <Route path="thuong-hieu" element={<CMSBrand />} />
-          <Route path="seo" element={<CMSSEO />} />
-          <Route path="nguoi-dung" element={<CMSUsers />} />
-          <Route path="nhat-ky" element={<CMSAuditLogs />} />
-          <Route path="cai-dat" element={<CMSSettings />} />
+          <Route path="hinh-anh" element={<CMSMedia />} />
+
+          {/* APPROVER & ADMIN ROUTES (Blocked for Editor) */}
+          <Route path="danh-muc" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSCategories /></RoleGuard>} />
+          <Route path="trang" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSPages /></RoleGuard>} />
+          <Route path="banner" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSBanners /></RoleGuard>} />
+          <Route path="dich-vu" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSServices /></RoleGuard>} />
+          <Route path="cong-nghe" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSTechnology /></RoleGuard>} />
+          <Route path="tuyen-dung" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSRecruitment /></RoleGuard>} />
+          <Route path="lien-he" element={<RoleGuard allowedRoles={['super_admin', 'admin', 'approver']}><CMSContacts /></RoleGuard>} />
+
+          {/* ADMIN ONLY ROUTES (Blocked for Editor & Approver) */}
+          <Route path="thuong-hieu" element={<RoleGuard allowedRoles={['super_admin', 'admin']}><CMSBrand /></RoleGuard>} />
+          <Route path="seo" element={<RoleGuard allowedRoles={['super_admin', 'admin']}><CMSSEO /></RoleGuard>} />
+          <Route path="nguoi-dung" element={<RoleGuard allowedRoles={['super_admin', 'admin']}><CMSUsers /></RoleGuard>} />
+          <Route path="nhat-ky" element={<RoleGuard allowedRoles={['super_admin', 'admin']}><CMSAuditLogs /></RoleGuard>} />
+          <Route path="cai-dat" element={<RoleGuard allowedRoles={['super_admin', 'admin']}><CMSSettings /></RoleGuard>} />
         </Route>
+
+        {/* ALIAS FOR /quan-tri */}
+        <Route path="/quan-tri/*" element={<Navigate to="/admin" replace />} />
 
         {/* FALLBACK CATCH-ALL REDIRECT */}
         <Route path="*" element={<Navigate to="/" replace />} />

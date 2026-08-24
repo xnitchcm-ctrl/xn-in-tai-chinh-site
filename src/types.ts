@@ -57,7 +57,9 @@ export interface QuoteRequest {
 }
 
 // --- CMS RBAC & USER SYSTEM ---
-export type UserRole = 'super_admin' | 'admin' | 'editor' | 'author' | 'viewer';
+export type UserRole = 'admin' | 'approver' | 'editor' | 'super_admin';
+
+export type ArticleWorkflowStatus = 'draft' | 'pending_review' | 'published' | 'rejected' | 'hidden';
 
 export interface CMSUser {
   uid: string;
@@ -65,7 +67,7 @@ export interface CMSUser {
   fullName: string;
   role: UserRole;
   status: 'active' | 'locked';
-  twoFactorEnabled: boolean;
+  twoFactorEnabled?: boolean;
   twoFactorSecret?: string;
   createdAt: string;
   lastLoginAt?: string;

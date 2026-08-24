@@ -1,21 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged, 
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail
-} from 'firebase/auth';
-import { 
-  collection, 
-  getDocs, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  getDoc,
-  updateDoc
-} from 'firebase/firestore';
-import { auth, db, isFirebaseAvailable, handleFirestoreError, OperationType, NewsPost, newsService } from '../utils/firebase';
+  getSupabaseClient, 
+  isSupabaseConfigured, 
+  Profile, 
+  NewsArticle, 
+  SupabaseGalleryItem, 
+  AuditLogItem,
+  slugify
+} from '../utils/supabase';
 import { COMPANY_INFO, STATISTICS, SERVICE_ITEMS, TECHNOLOGIES, GALLERY_ITEMS, VACANCIES } from '../data/companyData';
 import { 
   ServiceItem, 
@@ -30,10 +22,11 @@ import {
   CMSMedia, 
   CMSAuditLog, 
   CMSSession,
-  QuoteRequest 
+  QuoteRequest,
+  ArticleWorkflowStatus
 } from '../types';
+import { NewsPost, DEFAULT_MOCK_NEWS, NEWS_CATEGORIES } from '../utils/firebase';
 
-// Slide structure representing hero banners
 export interface HeroSlide {
   id: string;
   image: string;
@@ -44,6 +37,7 @@ export interface HeroSlide {
 }
 
 export interface CMSContextType {
+  // Public data state (synced with Supabase if available)
   companyInfo: typeof COMPANY_INFO;
   statistics: typeof STATISTICS;
   slides: HeroSlide[];
@@ -61,18 +55,44 @@ export interface CMSContextType {
   auditLogs: CMSAuditLog[];
   activeSessions: CMSSession[];
   
+  // Status & Auth
   loading: boolean;
+  isInitialized: boolean;
   currentUser: CMSUser | null;
   isAdmin: boolean;
+  isApprover: boolean;
+  isEditor: boolean;
+  userRole: UserRole | null;
   adminEmail: string | null;
-  firebaseConnected: boolean;
+  supabaseConnected: boolean;
   
-  // Auth Operations
-  loginAdmin: (email: string, password: string, otpCode?: string) => Promise<{ requires2FA?: boolean }>;
+  // Supabase Auth & Account operations
+  loginAdmin: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  registerUser: (email: string, password: string, fullName: string, role: UserRole) => Promise<{ success: boolean; error?: string }>;
   logoutAdmin: () => Promise<void>;
-  requestPasswordReset: (email: string) => Promise<void>;
-  confirmPasswordResetWithOTP: (email: string, otp: string, newPass: string) => Promise<void>;
-  hasPermission: (permission: string) => boolean;
+  requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string }>;
+  updateUserRole: (uid: string, newRole: UserRole) => Promise<void>;
+  toggleUserStatus: (uid: string, currentStatus: 'active' | 'locked') => Promise<void>;
+  deleteUserAccount: (uid: string) => Promise<void>;
+  
+  // Role & Permissions check
+  hasPermission: (permission: 'manage_users' | 'publish_post' | 'review_post' | 'edit_post' | 'upload_media' | 'manage_gallery') => boolean;
+  
+  // Storage & Upload
+  uploadMediaFile: (file: File, folder?: string) => Promise<string>;
+  
+  // News Article Workflow
+  saveNewsPost: (post: Partial<NewsPost>) => Promise<NewsPost>;
+  submitNewsForReview: (id: string) => Promise<void>;
+  approveAndPublishNews: (id: string) => Promise<void>;
+  rejectNewsPost: (id: string, reason: string) => Promise<void>;
+  hideNewsPost: (id: string) => Promise<void>;
+  deleteNewsPost: (id: string) => Promise<void>;
+  
+  // Gallery Management with ordering & replacement
+  saveGalleryItem: (item: GalleryItem, status?: ArticleWorkflowStatus) => Promise<void>;
+  reorderGalleryItems: (items: GalleryItem[]) => Promise<void>;
+  deleteGalleryItem: (id: string) => Promise<void>;
   
   // Content Updaters
   saveCompanyInfo: (info: typeof COMPANY_INFO) => Promise<void>;
@@ -80,44 +100,26 @@ export interface CMSContextType {
   saveSlides: (slides: HeroSlide[]) => Promise<void>;
   saveBrand: (brand: CMSBrand) => Promise<void>;
   saveSEO: (seo: CMSSEO) => Promise<void>;
-  
-  // Entity Updaters
   saveService: (service: ServiceItem) => Promise<void>;
   deleteService: (id: string) => Promise<void>;
-  
   saveTechnology: (tech: TechnologyItem) => Promise<void>;
   deleteTechnology: (id: string) => Promise<void>;
-
-  saveGalleryItem: (item: GalleryItem) => Promise<void>;
-  deleteGalleryItem: (id: string) => Promise<void>;
-  
   saveVacancy: (vacancy: JobVacancy) => Promise<void>;
   deleteVacancy: (id: string) => Promise<void>;
-  
-  saveNewsPost: (post: Omit<NewsPost, 'id'> & { id?: string }) => Promise<NewsPost>;
-  deleteNewsPost: (id: string) => Promise<void>;
-
   saveCategory: (category: CMSCategory) => Promise<void>;
   deleteCategory: (id: string) => Promise<void>;
-
   saveMedia: (media: CMSMedia) => Promise<void>;
   deleteMedia: (id: string) => Promise<void>;
-
   saveQuote: (quote: QuoteRequest) => Promise<void>;
   deleteQuote: (id: string) => Promise<void>;
-
-  saveUser: (user: CMSUser) => Promise<void>;
-  toggleLockUser: (uid: string) => Promise<void>;
-  deleteUser: (uid: string) => Promise<void>;
-
+  
+  // Audit Logs
   addAuditLog: (action: string, target: string, details: string, status?: 'success' | 'failure') => Promise<void>;
-  revokeSession: (sessionId: string) => Promise<void>;
-  revokeAllSessions: () => Promise<void>;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
 
-// Default Hero Banner Slides
+// Default Seed Data
 const DEFAULT_SLIDES: HeroSlide[] = [
   {
     id: 'slide-1',
@@ -145,7 +147,6 @@ const DEFAULT_SLIDES: HeroSlide[] = [
   }
 ];
 
-// Default Brand Config
 const DEFAULT_BRAND: CMSBrand = {
   id: 'brand-config',
   desktopLogoUrl: '',
@@ -165,7 +166,6 @@ const DEFAULT_BRAND: CMSBrand = {
   textColor: '#173F72'
 };
 
-// Default SEO Config
 const DEFAULT_SEO: CMSSEO = {
   id: 'seo-config',
   siteTitle: 'XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH',
@@ -176,10 +176,9 @@ const DEFAULT_SEO: CMSSEO = {
   ogDescription: 'Chuyên in vé số kiến thiết, vé số cào bảo mật và chứng từ ngành tài chính.',
   ogImage: '/src/assets/images/printing_hero_1779242674142.png',
   canonicalUrl: 'https://www.xskthcm.com',
-  robotsTxt: 'User-agent: *\nAllow: /\nDisallow: /quan-tri/'
+  robotsTxt: 'User-agent: *\nAllow: /\nDisallow: /admin/'
 };
 
-// Default Initial Categories
 const DEFAULT_CATEGORIES: CMSCategory[] = [
   { id: 'cat-1', name: 'Hoạt động sản xuất', slug: 'hoat-dong-san-xuat', type: 'post', description: 'Cập nhật tiến độ kỹ thuật, dây chuyền và KCS', createdAt: new Date().toISOString() },
   { id: 'cat-2', name: 'Hoạt động đoàn thể', slug: 'hoat-dong-doan-the', type: 'post', description: 'Đại hội công đoàn, phong trào đoàn thanh niên', createdAt: new Date().toISOString() },
@@ -189,34 +188,30 @@ const DEFAULT_CATEGORIES: CMSCategory[] = [
   { id: 'cat-6', name: 'Văn hoá doanh nghiệp', slug: 'van-hoa-doanh-nghiep', type: 'post', description: 'Hoạt động cộng đồng và giá trị cốt lõi', createdAt: new Date().toISOString() }
 ];
 
-// Seed Initial Admin Users
-const DEFAULT_USERS: CMSUser[] = [
+const INITIAL_LOCAL_USERS: CMSUser[] = [
   {
-    uid: 'user-superadmin',
-    email: 'xnitchcm@gmail.com',
-    fullName: 'Quản Trị Viên Cao Cấp (Super Admin)',
-    role: 'super_admin',
+    uid: 'demo-admin-id',
+    email: 'admin@intaichinh.vn',
+    fullName: 'Quản Trị Viên Trưởng',
+    role: 'admin',
     status: 'active',
-    twoFactorEnabled: false,
     createdAt: new Date().toISOString(),
     lastLoginAt: new Date().toISOString()
   },
   {
-    uid: 'user-admin',
-    email: 'admin@xskthcm.com',
-    fullName: 'Quản Trị Nội Dung (Admin)',
-    role: 'admin',
+    uid: 'demo-approver-id',
+    email: 'duyetbai@intaichinh.vn',
+    fullName: 'Người Duyệt Bài & Xuất Bản',
+    role: 'approver',
     status: 'active',
-    twoFactorEnabled: false,
     createdAt: new Date().toISOString()
   },
   {
-    uid: 'user-editor',
-    email: 'bientap@xskthcm.com',
-    fullName: 'Biên Tập Viên Tin Tức',
+    uid: 'demo-editor-id',
+    email: 'bientap@intaichinh.vn',
+    fullName: 'Biên Tập Viên Nội Dung',
     role: 'editor',
     status: 'active',
-    twoFactorEnabled: false,
     createdAt: new Date().toISOString()
   }
 ];
@@ -233,664 +228,753 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [categories, setCategories] = useState<CMSCategory[]>(DEFAULT_CATEGORIES);
   const [mediaList, setMediaList] = useState<CMSMedia[]>([]);
   const [quotes, setQuotes] = useState<QuoteRequest[]>([]);
-  const [users, setUsers] = useState<CMSUser[]>(DEFAULT_USERS);
+  const [users, setUsers] = useState<CMSUser[]>(INITIAL_LOCAL_USERS);
   const [brand, setBrand] = useState<CMSBrand>(DEFAULT_BRAND);
   const [seo, setSEO] = useState<CMSSEO>(DEFAULT_SEO);
   const [auditLogs, setAuditLogs] = useState<CMSAuditLog[]>([]);
   const [activeSessions, setActiveSessions] = useState<CMSSession[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [currentUser, setCurrentUser] = useState<CMSUser | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminEmail, setAdminEmail] = useState<string | null>(null);
+  const [supabaseConnected, setSupabaseConnected] = useState(isSupabaseConfigured);
 
-  // Initialize and Sync
-  useEffect(() => {
-    let unsubsAuth: (() => void) | null = null;
+  const supabase = getSupabaseClient();
 
-    const bootstrapAllData = async () => {
-      setLoading(true);
-      
-      // Check Auth State
-      if (isFirebaseAvailable && auth) {
-        unsubsAuth = onAuthStateChanged(auth, async (user) => {
-          if (user && user.email) {
-            const foundUser = users.find(u => u.email.toLowerCase() === user.email?.toLowerCase()) || {
-              uid: user.uid,
-              email: user.email,
-              fullName: user.displayName || user.email.split('@')[0],
-              role: user.email === 'xnitchcm@gmail.com' ? 'super_admin' : 'admin',
-              status: 'active',
-              twoFactorEnabled: false,
-              createdAt: new Date().toISOString()
-            };
-            setCurrentUser(foundUser as CMSUser);
-            setIsAdmin(true);
-            setAdminEmail(user.email);
-            
-            // Record active session
-            const newSession: CMSSession = {
-              id: `sess-${Date.now()}`,
-              userId: user.uid,
-              userEmail: user.email,
-              deviceName: 'Trình duyệt Web (Desktop/Mobile)',
-              browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Trình duyệt Web',
-              ipAddress: '127.0.0.1 (Local Container)',
-              createdAt: new Date().toISOString(),
-              lastActiveAt: new Date().toISOString(),
-              isCurrent: true
-            };
-            setActiveSessions([newSession]);
-          } else {
-            setCurrentUser(null);
-            setIsAdmin(false);
-            setAdminEmail(null);
-            setActiveSessions([]);
-          }
-        });
-      } else {
-        // LocalStorage fallback auth check
-        const isLocalAdmin = localStorage.getItem('local_admin_signed_in') === 'true';
-        const savedUserStr = localStorage.getItem('cms_current_user');
-        if (isLocalAdmin && savedUserStr) {
-          try {
-            const parsedUser = JSON.parse(savedUserStr);
-            setCurrentUser(parsedUser);
-            setIsAdmin(true);
-            setAdminEmail(parsedUser.email);
-          } catch {
-            const defaultSuper = DEFAULT_USERS[0];
-            setCurrentUser(defaultSuper);
-            setIsAdmin(true);
-            setAdminEmail(defaultSuper.email);
-          }
-        } else if (isLocalAdmin) {
-          const defaultSuper = DEFAULT_USERS[0];
-          setCurrentUser(defaultSuper);
-          setIsAdmin(true);
-          setAdminEmail(defaultSuper.email);
-        } else {
-          setCurrentUser(null);
-          setIsAdmin(false);
-          setAdminEmail(null);
-        }
+  // Helper: map Supabase Profile to CMSUser
+  const mapProfileToUser = (p: any): CMSUser => ({
+    uid: p.id,
+    email: p.email,
+    fullName: p.full_name || p.email?.split('@')[0] || 'Người dùng',
+    role: (p.role as UserRole) || 'editor',
+    status: p.status || 'active',
+    avatarUrl: p.avatar_url,
+    createdAt: p.created_at || new Date().toISOString(),
+    lastLoginAt: p.updated_at
+  });
+
+  // Helper: map Supabase news_articles row to NewsPost
+  const mapArticleFromDb = (item: any): NewsPost => ({
+    id: item.id,
+    title: item.title || '',
+    subtitle: item.summary || '',
+    content: item.content || '',
+    category: item.category || 'Hoạt động sản xuất',
+    imageUrl: item.image || '/src/assets/images/printing_hero_1779242674142.png',
+    videoUrl: item.video_url || undefined,
+    isPinned: Boolean(item.featured),
+    author: item.author || 'Ban Biên Tập',
+    status: (item.status as ArticleWorkflowStatus) || 'draft',
+    rejectionReason: item.reject_reason || '',
+    createdBy: item.author_id,
+    reviewedBy: item.reviewed_by,
+    publishedAt: item.published_at,
+    viewsCount: item.views || 0,
+    createdAt: item.created_at || new Date().toISOString()
+  });
+
+  // Dedicated helper to refresh news from Supabase news_articles
+  const loadNewsFromSupabase = async (): Promise<NewsPost[]> => {
+    if (!supabase) return [];
+    const { data: newsData, error: newsErr } = await supabase
+      .from('news_articles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (newsErr) {
+      console.error('Lỗi khi đọc bảng news_articles từ Supabase:', newsErr);
+      throw new Error(`Lỗi tải dữ liệu Supabase: ${newsErr.message}`);
+    }
+
+    const mappedNews: NewsPost[] = (newsData || []).map(mapArticleFromDb);
+    setNews(mappedNews);
+    return mappedNews;
+  };
+
+  // Fetch Supabase data when connected
+  const loadSupabaseData = async () => {
+    if (!supabase) return;
+    try {
+      // 1. Fetch News
+      await loadNewsFromSupabase();
+
+      // 2. Fetch Gallery
+      const { data: galleryData, error: galErr } = await supabase
+        .from('gallery_items')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (!galErr && galleryData && galleryData.length > 0) {
+        const mappedGal: GalleryItem[] = galleryData.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          category: item.category,
+          image: item.image_url
+        }));
+        setGallery(mappedGal);
       }
 
-      try {
-        // 1. Fetch News
-        await newsService.bootstrap();
-        const newsList = await newsService.getAllNews();
-        setNews(newsList);
+      // 3. Fetch Profiles / Users
+      const { data: profilesData, error: profErr } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        // 2. Load CMS settings and collections
-        if (isFirebaseAvailable && db) {
-          try {
-            const settingsDocRef = doc(db, 'settings', 'config');
-            const settingsSnap = await getDoc(settingsDocRef);
-            
-            if (settingsSnap.exists()) {
-              const data = settingsSnap.data();
-              if (data.companyInfo) setCompanyInfo(data.companyInfo);
-              if (data.statistics) setStatistics(data.statistics);
-              if (data.slides) setSlides(data.slides);
-              if (data.brand) setBrand(data.brand);
-              if (data.seo) setSEO(data.seo);
+      if (!profErr && profilesData && profilesData.length > 0) {
+        setUsers(profilesData.map(mapProfileToUser));
+      }
+
+      // 4. Fetch Audit Logs
+      const { data: logsData, error: logErr } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (!logErr && logsData && logsData.length > 0) {
+        setAuditLogs(logsData.map((l: any) => ({
+          id: l.id,
+          timestamp: l.created_at,
+          userId: l.user_id || 'unknown',
+          userEmail: l.user_email || 'unknown',
+          userName: l.user_name || 'Hệ thống',
+          userRole: (l.user_role as UserRole) || 'editor',
+          action: l.action,
+          target: l.target,
+          details: l.details || '',
+          ipAddress: 'Supabase Server',
+          userAgent: 'Web App',
+          status: l.status || 'success'
+        })));
+      }
+
+      setSupabaseConnected(true);
+    } catch (err: any) {
+      console.error('Supabase load data error:', err);
+    }
+  };
+
+  // Auth state listener
+  useEffect(() => {
+    const initAuth = async () => {
+      setLoading(true);
+      if (supabase && isSupabaseConfigured) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            // Load user profile
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single();
+
+            if (profile) {
+              setCurrentUser(mapProfileToUser(profile));
             } else {
-              await setDoc(settingsDocRef, {
-                companyInfo: COMPANY_INFO,
-                statistics: STATISTICS,
-                slides: DEFAULT_SLIDES,
-                brand: DEFAULT_BRAND,
-                seo: DEFAULT_SEO
+              setCurrentUser({
+                uid: session.user.id,
+                email: session.user.email || '',
+                fullName: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Quản Trị Viên',
+                role: (session.user.user_metadata?.role as UserRole) || 'admin',
+                status: 'active',
+                createdAt: session.user.created_at
               });
             }
-
-            // Load Services
-            const servicesSnap = await getDocs(collection(db, 'services'));
-            if (!servicesSnap.empty) {
-              const sList: ServiceItem[] = [];
-              servicesSnap.forEach(d => sList.push(d.data() as ServiceItem));
-              setServices(sList);
-            }
-
-            // Load Gallery
-            const gallerySnap = await getDocs(collection(db, 'gallery'));
-            if (!gallerySnap.empty) {
-              const gList: GalleryItem[] = [];
-              gallerySnap.forEach(d => gList.push(d.data() as GalleryItem));
-              setGallery(gList);
-            }
-
-            // Load Vacancies
-            const vacanciesSnap = await getDocs(collection(db, 'vacancies'));
-            if (!vacanciesSnap.empty) {
-              const vList: JobVacancy[] = [];
-              vacanciesSnap.forEach(d => vList.push(d.data() as JobVacancy));
-              setVacancies(vList);
-            }
-
-            // Load Users
-            const usersSnap = await getDocs(collection(db, 'cms_users'));
-            if (!usersSnap.empty) {
-              const uList: CMSUser[] = [];
-              usersSnap.forEach(d => uList.push(d.data() as CMSUser));
-              setUsers(uList);
-            }
-
-            // Load Audit Logs
-            const logsSnap = await getDocs(collection(db, 'cms_audit_logs'));
-            if (!logsSnap.empty) {
-              const lList: CMSAuditLog[] = [];
-              logsSnap.forEach(d => lList.push(d.data() as CMSAuditLog));
-              setAuditLogs(lList.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
-            }
-
-          } catch (configErr) {
-            console.warn('Firestore CMS sync warning. Using local storage cache fallback.', configErr);
-            loadLocalConfigs();
           }
-        } else {
-          loadLocalConfigs();
+
+          // Listen to auth changes
+          supabase.auth.onAuthStateChange(async (event, session) => {
+            if (session?.user) {
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+
+              if (profile) {
+                setCurrentUser(mapProfileToUser(profile));
+              } else {
+                setCurrentUser({
+                  uid: session.user.id,
+                  email: session.user.email || '',
+                  fullName: session.user.user_metadata?.full_name || 'Người Dùng CMS',
+                  role: (session.user.user_metadata?.role as UserRole) || 'editor',
+                  status: 'active',
+                  createdAt: session.user.created_at
+                });
+              }
+            } else {
+              setCurrentUser(null);
+            }
+          });
+
+          await loadSupabaseData();
+        } catch (error) {
+          console.error('Supabase auth initialization error:', error);
         }
-      } catch (err) {
-        console.error('Master bootstrap CMS error:', err);
-        loadLocalConfigs();
-      } fontFinally: {
-        setLoading(false);
       }
+      setIsInitialized(true);
+      setLoading(false);
     };
 
-    bootstrapAllData();
-
-    return () => {
-      if (unsubsAuth) unsubsAuth();
-    };
+    initAuth();
   }, []);
 
-  const loadLocalConfigs = () => {
-    const cachedCompanyInfo = localStorage.getItem('cms_company_info');
-    if (cachedCompanyInfo) setCompanyInfo(JSON.parse(cachedCompanyInfo));
+  // Compute permissions & roles
+  const userRole = currentUser?.role || null;
+  const isAdmin = userRole === 'admin' || userRole === 'super_admin';
+  const isApprover = isAdmin || userRole === 'approver';
+  const isEditor = isApprover || userRole === 'editor';
+  const adminEmail = currentUser?.email || null;
 
-    const cachedStats = localStorage.getItem('cms_statistics');
-    if (cachedStats) setStatistics(JSON.parse(cachedStats));
-
-    const cachedSlides = localStorage.getItem('cms_slides');
-    if (cachedSlides) setSlides(JSON.parse(cachedSlides));
-
-    const cachedBrand = localStorage.getItem('cms_brand');
-    if (cachedBrand) setBrand(JSON.parse(cachedBrand));
-
-    const cachedSEO = localStorage.getItem('cms_seo');
-    if (cachedSEO) setSEO(JSON.parse(cachedSEO));
-
-    const cachedCategories = localStorage.getItem('cms_categories');
-    if (cachedCategories) setCategories(JSON.parse(cachedCategories));
-
-    const cachedUsers = localStorage.getItem('cms_users');
-    if (cachedUsers) setUsers(JSON.parse(cachedUsers));
-
-    const cachedQuotes = localStorage.getItem('cms_quotes');
-    if (cachedQuotes) setQuotes(JSON.parse(cachedQuotes));
-
-    const cachedLogs = localStorage.getItem('cms_audit_logs');
-    if (cachedLogs) setAuditLogs(JSON.parse(cachedLogs));
-  };
-
-  // Helper Permission Check
-  const hasPermission = (permission: string): boolean => {
+  const hasPermission = (permission: 'manage_users' | 'publish_post' | 'review_post' | 'edit_post' | 'upload_media' | 'manage_gallery'): boolean => {
     if (!currentUser) return false;
-    if (currentUser.role === 'super_admin') return true; // Super Admin has all access
-
-    switch (permission) {
-      case 'manage_users':
-      case 'manage_brand':
-      case 'manage_security':
-      case 'view_logs':
-        return currentUser.role === 'super_admin';
-
-      case 'manage_content':
-      case 'publish_content':
-      case 'manage_media':
-      case 'manage_categories':
-        return ['super_admin', 'admin', 'editor'].includes(currentUser.role);
-
-      case 'edit_content':
-        return ['super_admin', 'admin', 'editor', 'author'].includes(currentUser.role);
-
-      case 'view_cms':
-        return true;
-
-      default:
-        return false;
-    }
+    if (isAdmin) return true;
+    if (permission === 'manage_users') return isAdmin;
+    if (permission === 'publish_post' || permission === 'review_post') return isApprover;
+    if (permission === 'edit_post' || permission === 'upload_media' || permission === 'manage_gallery') return isEditor;
+    return false;
   };
 
-  // Auth Operations
-  const loginAdmin = async (email: string, password: string, otpCode?: string) => {
-    // Search existing user
-    const targetUser = users.find(u => u.email.toLowerCase() === email.toLowerCase()) || {
-      uid: email === 'xnitchcm@gmail.com' ? 'user-superadmin' : `user-${Date.now()}`,
-      email: email,
-      fullName: email === 'xnitchcm@gmail.com' ? 'Quản Trị Viên Cao Cấp' : 'Tài Khoản Quản Trị',
-      role: email === 'xnitchcm@gmail.com' ? 'super_admin' : 'admin',
-      status: 'active' as const,
-      twoFactorEnabled: false,
-      createdAt: new Date().toISOString()
-    };
-
-    if (targetUser.status === 'locked') {
-      await addAuditLog('LOGIN_ATTEMPT', email, 'Đăng nhập thất bại: Tài khoản bị khóa', 'failure');
-      throw new Error('Tài khoản của bạn hiện đang bị khóa. Vui lòng liên hệ Super Admin.');
-    }
-
-    // Check 2FA requirement
-    if (targetUser.twoFactorEnabled && !otpCode) {
-      return { requires2FA: true };
-    }
-
-    if (targetUser.twoFactorEnabled && otpCode !== '123456' && otpCode !== '654321') {
-      await addAuditLog('2FA_VERIFY', email, 'Xác thực 2FA không chính xác', 'failure');
-      throw new Error('Mã OTP 2FA không chính xác. Vui lòng thử lại.');
-    }
-
-    if (isFirebaseAvailable && auth) {
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (err: any) {
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.message?.includes('user-not-found')) {
-          try {
-            await createUserWithEmailAndPassword(auth, email, password);
-          } catch (createErr) {
-            console.error('Failed to register initial user:', createErr);
-            throw err;
-          }
-        } else {
-          await addAuditLog('LOGIN', email, `Thất bại: ${err.message}`, 'failure');
-          throw err;
-        }
-      }
-    } else {
-      if (!password || password.length < 6) {
-        throw new Error('Mật khẩu phải dài ít nhất 6 ký tự.');
-      }
-      localStorage.setItem('local_admin_signed_in', 'true');
-      localStorage.setItem('cms_current_user', JSON.stringify(targetUser));
-    }
-
-    setCurrentUser(targetUser as CMSUser);
-    setIsAdmin(true);
-    setAdminEmail(email);
-
-    await addAuditLog('LOGIN', email, 'Đăng nhập hệ thống CMS thành công', 'success');
-
-    return { requires2FA: false };
-  };
-
-  const logoutAdmin = async () => {
-    if (currentUser) {
-      await addAuditLog('LOGOUT', currentUser.email, 'Đăng xuất khỏi CMS', 'success');
-    }
-
-    if (isFirebaseAvailable && auth) {
-      await signOut(auth);
-    } else {
-      localStorage.removeItem('local_admin_signed_in');
-      localStorage.removeItem('cms_current_user');
-    }
-    setCurrentUser(null);
-    setIsAdmin(false);
-    setAdminEmail(null);
-    setActiveSessions([]);
-  };
-
-  const requestPasswordReset = async (email: string) => {
-    if (isFirebaseAvailable && auth) {
-      await sendPasswordResetEmail(auth, email);
-    }
-    await addAuditLog('PASSWORD_RESET_REQUEST', email, 'Yêu cầu khôi phục mật khẩu', 'success');
-  };
-
-  const confirmPasswordResetWithOTP = async (email: string, otp: string, newPass: string) => {
-    if (otp !== '123456' && otp !== '888888') {
-      throw new Error('Mã xác thực OTP không chính xác hoặc đã hết hạn.');
-    }
-    if (newPass.length < 6) {
-      throw new Error('Mật khẩu mới phải có ít nhất 6 ký tự.');
-    }
-    await addAuditLog('PASSWORD_RESET_CONFIRM', email, 'Đặt lại mật khẩu thành công qua OTP', 'success');
-  };
-
-  // General Savers
-  const saveCompanyInfo = async (info: typeof COMPANY_INFO) => {
-    setCompanyInfo(info);
-    localStorage.setItem('cms_company_info', JSON.stringify(info));
-    if (isFirebaseAvailable && db) {
-      try {
-        await updateDoc(doc(db, 'settings', 'config'), { companyInfo: info });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.UPDATE, 'settings/config');
-      }
-    }
-    await addAuditLog('UPDATE_COMPANY_INFO', 'Cấu hình chung', 'Cập nhật thông tin liên hệ xí nghiệp');
-  };
-
-  const saveStatistics = async (stats: typeof STATISTICS) => {
-    setStatistics(stats);
-    localStorage.setItem('cms_statistics', JSON.stringify(stats));
-    if (isFirebaseAvailable && db) {
-      try {
-        await updateDoc(doc(db, 'settings', 'config'), { statistics: stats });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.UPDATE, 'settings/config');
-      }
-    }
-    await addAuditLog('UPDATE_STATS', 'Thống kê KPI', 'Cập nhật các con số hoạt động');
-  };
-
-  const saveSlides = async (updatedSlides: HeroSlide[]) => {
-    setSlides(updatedSlides);
-    localStorage.setItem('cms_slides', JSON.stringify(updatedSlides));
-    if (isFirebaseAvailable && db) {
-      try {
-        await updateDoc(doc(db, 'settings', 'config'), { slides: updatedSlides });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.UPDATE, 'settings/config');
-      }
-    }
-    await addAuditLog('UPDATE_SLIDES', 'Banner Hero', 'Thay đổi danh sách slide banner trang chủ');
-  };
-
-  const saveBrand = async (updatedBrand: CMSBrand) => {
-    setBrand(updatedBrand);
-    localStorage.setItem('cms_brand', JSON.stringify(updatedBrand));
-    if (isFirebaseAvailable && db) {
-      try {
-        await updateDoc(doc(db, 'settings', 'config'), { brand: updatedBrand });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.UPDATE, 'settings/config');
-      }
-    }
-    await addAuditLog('UPDATE_BRAND', 'Cấu hình Thương Hiệu', 'Cập nhật logo, màu sắc thương hiệu CMS');
-  };
-
-  const saveSEO = async (updatedSEO: CMSSEO) => {
-    setSEO(updatedSEO);
-    localStorage.setItem('cms_seo', JSON.stringify(updatedSEO));
-    if (isFirebaseAvailable && db) {
-      try {
-        await updateDoc(doc(db, 'settings', 'config'), { seo: updatedSEO });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.UPDATE, 'settings/config');
-      }
-    }
-    await addAuditLog('UPDATE_SEO', 'Cấu hình SEO', 'Cập nhật meta titles, keywords & OG');
-  };
-
-  // Services
-  const saveService = async (item: ServiceItem) => {
-    const exists = services.some(s => s.id === item.id);
-    const updated = exists ? services.map(s => s.id === item.id ? item : s) : [...services, item];
-    
-    setServices(updated);
-    localStorage.setItem('cms_services', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await setDoc(doc(db, 'services', item.id), item);
-      } catch (err) {
-        handleFirestoreError(err, OperationType.WRITE, `services/${item.id}`);
-      }
-    }
-    await addAuditLog('SAVE_SERVICE', item.title, exists ? 'Chỉnh sửa dịch vụ' : 'Thêm mới dịch vụ');
-  };
-
-  const deleteService = async (id: string) => {
-    const updated = services.filter(s => s.id !== id);
-    setServices(updated);
-    localStorage.setItem('cms_services', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await deleteDoc(doc(db, 'services', id));
-      } catch (err) {
-        handleFirestoreError(err, OperationType.DELETE, `services/${id}`);
-      }
-    }
-    await addAuditLog('DELETE_SERVICE', id, 'Xóa mục dịch vụ');
-  };
-
-  // Technologies
-  const saveTechnology = async (item: TechnologyItem) => {
-    const exists = technologies.some(t => t.id === item.id);
-    const updated = exists ? technologies.map(t => t.id === item.id ? item : t) : [...technologies, item];
-    setTechnologies(updated);
-    await addAuditLog('SAVE_TECH', item.title, exists ? 'Chỉnh sửa máy móc' : 'Thêm thiết bị mới');
-  };
-
-  const deleteTechnology = async (id: string) => {
-    const updated = technologies.filter(t => t.id !== id);
-    setTechnologies(updated);
-    await addAuditLog('DELETE_TECH', id, 'Xóa thiết bị máy in');
-  };
-
-  // Gallery
-  const saveGalleryItem = async (item: GalleryItem) => {
-    const exists = gallery.some(g => g.id === item.id);
-    const updated = exists ? gallery.map(g => g.id === item.id ? item : g) : [...gallery, item];
-
-    setGallery(updated);
-    localStorage.setItem('cms_gallery', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await setDoc(doc(db, 'gallery', item.id), item);
-      } catch (err) {
-        handleFirestoreError(err, OperationType.WRITE, `gallery/${item.id}`);
-      }
-    }
-    await addAuditLog('SAVE_GALLERY', item.title, exists ? 'Cập nhật ảnh thư viện' : 'Thêm mới hình ảnh');
-  };
-
-  const deleteGalleryItem = async (id: string) => {
-    const updated = gallery.filter(g => g.id !== id);
-    setGallery(updated);
-    localStorage.setItem('cms_gallery', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await deleteDoc(doc(db, 'gallery', id));
-      } catch (err) {
-        handleFirestoreError(err, OperationType.DELETE, `gallery/${id}`);
-      }
-    }
-    await addAuditLog('DELETE_GALLERY', id, 'Xóa hình ảnh thư viện');
-  };
-
-  // Vacancy
-  const saveVacancy = async (item: JobVacancy) => {
-    const exists = vacancies.some(v => v.id === item.id);
-    const updated = exists ? vacancies.map(v => v.id === item.id ? item : v) : [...vacancies, item];
-
-    setVacancies(updated);
-    localStorage.setItem('cms_vacancies', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await setDoc(doc(db, 'vacancies', item.id), item);
-      } catch (err) {
-        handleFirestoreError(err, OperationType.WRITE, `vacancies/${item.id}`);
-      }
-    }
-    await addAuditLog('SAVE_VACANCY', item.title, exists ? 'Cập nhật tin tuyển dụng' : 'Tạo mới tuyển dụng');
-  };
-
-  const deleteVacancy = async (id: string) => {
-    const updated = vacancies.filter(v => v.id !== id);
-    setVacancies(updated);
-    localStorage.setItem('cms_vacancies', JSON.stringify(updated));
-
-    if (isFirebaseAvailable && db) {
-      try {
-        await deleteDoc(doc(db, 'vacancies', id));
-      } catch (err) {
-        handleFirestoreError(err, OperationType.DELETE, `vacancies/${id}`);
-      }
-    }
-    await addAuditLog('DELETE_VACANCY', id, 'Xóa tin tuyển dụng');
-  };
-
-  // News
-  const saveNewsPost = async (post: Omit<NewsPost, 'id'> & { id?: string }) => {
-    const freshDoc = await newsService.addNews(post);
-    const newsList = await newsService.getAllNews();
-    setNews(newsList);
-    await addAuditLog('SAVE_NEWS', freshDoc.title, post.id ? 'Cập nhật bài viết' : 'Đăng bài viết mới');
-    return freshDoc;
-  };
-
-  const deleteNewsPost = async (id: string) => {
-    await newsService.deleteNews(id);
-    const newsList = await newsService.getAllNews();
-    setNews(newsList);
-    await addAuditLog('DELETE_NEWS', id, 'Xóa bài viết tin tức');
-  };
-
-  // Categories
-  const saveCategory = async (cat: CMSCategory) => {
-    const exists = categories.some(c => c.id === cat.id);
-    const updated = exists ? categories.map(c => c.id === cat.id ? cat : c) : [...categories, cat];
-    setCategories(updated);
-    localStorage.setItem('cms_categories', JSON.stringify(updated));
-    await addAuditLog('SAVE_CATEGORY', cat.name, exists ? 'Chỉnh sửa danh mục' : 'Tạo danh mục mới');
-  };
-
-  const deleteCategory = async (id: string) => {
-    const updated = categories.filter(c => c.id !== id);
-    setCategories(updated);
-    localStorage.setItem('cms_categories', JSON.stringify(updated));
-    await addAuditLog('DELETE_CATEGORY', id, 'Xóa danh mục');
-  };
-
-  // Media
-  const saveMedia = async (m: CMSMedia) => {
-    const exists = mediaList.some(item => item.id === m.id);
-    const updated = exists ? mediaList.map(item => item.id === m.id ? m : item) : [...mediaList, m];
-    setMediaList(updated);
-    await addAuditLog('SAVE_MEDIA', m.title, 'Tải lên / Cập nhật tập tin media');
-  };
-
-  const deleteMedia = async (id: string) => {
-    const updated = mediaList.filter(item => item.id !== id);
-    setMediaList(updated);
-    await addAuditLog('DELETE_MEDIA', id, 'Xóa tệp tin thư viện media');
-  };
-
-  // Quotes
-  const saveQuote = async (q: QuoteRequest) => {
-    const finalQuote: QuoteRequest = {
-      ...q,
-      id: q.id || `quote-${Date.now()}`,
-      createdAt: q.createdAt || new Date().toISOString(),
-      status: q.status || 'pending'
-    };
-    const exists = quotes.some(item => item.id === finalQuote.id);
-    const updated = exists ? quotes.map(item => item.id === finalQuote.id ? finalQuote : item) : [finalQuote, ...quotes];
-    setQuotes(updated);
-    localStorage.setItem('cms_quotes', JSON.stringify(updated));
-    if (isFirebaseAvailable && db) {
-      try {
-        await setDoc(doc(db, 'cms_quotes', finalQuote.id!), finalQuote);
-      } catch (err) {
-        console.warn('Quote write warning:', err);
-      }
-    }
-  };
-
-  const deleteQuote = async (id: string) => {
-    const updated = quotes.filter(item => item.id !== id);
-    setQuotes(updated);
-    localStorage.setItem('cms_quotes', JSON.stringify(updated));
-  };
-
-  // Users
-  const saveUser = async (u: CMSUser) => {
-    const exists = users.some(item => item.uid === u.uid);
-    const updated = exists ? users.map(item => item.uid === u.uid ? u : item) : [...users, u];
-    setUsers(updated);
-    localStorage.setItem('cms_users', JSON.stringify(updated));
-    if (isFirebaseAvailable && db) {
-      try {
-        await setDoc(doc(db, 'cms_users', u.uid), u);
-      } catch (err) {
-        console.warn('User save warning:', err);
-      }
-    }
-    await addAuditLog('SAVE_USER', u.email, exists ? `Chỉnh sửa tài khoản (${u.role})` : `Tạo tài khoản mới (${u.role})`);
-  };
-
-  const toggleLockUser = async (uid: string) => {
-    const updated = users.map(u => {
-      if (u.uid === uid) {
-        const nextStatus = u.status === 'active' ? ('locked' as const) : ('active' as const);
-        return { ...u, status: nextStatus };
-      }
-      return u;
-    });
-    setUsers(updated);
-    localStorage.setItem('cms_users', JSON.stringify(updated));
-    await addAuditLog('TOGGLE_LOCK_USER', uid, 'Thay đổi trạng thái Khóa / Mở tài khoản');
-  };
-
-  const deleteUser = async (uid: string) => {
-    const updated = users.filter(u => u.uid !== uid);
-    setUsers(updated);
-    localStorage.setItem('cms_users', JSON.stringify(updated));
-    if (isFirebaseAvailable && db) {
-      try {
-        await deleteDoc(doc(db, 'cms_users', uid));
-      } catch (err) {
-        console.warn('User delete warning:', err);
-      }
-    }
-    await addAuditLog('DELETE_USER', uid, 'Xóa tài khoản người dùng');
-  };
-
-  // Audit Log
+  // Add Audit Log
   const addAuditLog = async (action: string, target: string, details: string, status: 'success' | 'failure' = 'success') => {
-    const log: CMSAuditLog = {
-      id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+    const newLog: CMSAuditLog = {
+      id: 'log-' + Date.now(),
       timestamp: new Date().toISOString(),
       userId: currentUser?.uid || 'guest',
-      userEmail: currentUser?.email || adminEmail || 'he-thong@xskthcm.com',
-      userName: currentUser?.fullName || 'Quản trị viên',
-      userRole: currentUser?.role || 'admin',
+      userEmail: currentUser?.email || 'unauthenticated',
+      userName: currentUser?.fullName || 'Khách',
+      userRole: currentUser?.role || 'editor',
       action,
       target,
       details,
-      ipAddress: '127.0.0.1 (Sandbox Container)',
+      ipAddress: '127.0.0.1',
       userAgent: navigator.userAgent,
       status
     };
-    const updatedLogs = [log, ...auditLogs].slice(0, 100); // keep last 100
-    setAuditLogs(updatedLogs);
-    localStorage.setItem('cms_audit_logs', JSON.stringify(updatedLogs));
 
-    if (isFirebaseAvailable && db) {
+    setAuditLogs(prev => [newLog, ...prev]);
+
+    if (supabase && isSupabaseConfigured) {
       try {
-        setDoc(doc(db, 'cms_audit_logs', log.id), log).catch(() => {});
-      } catch {}
+        await supabase.from('audit_logs').insert([{
+          user_id: currentUser?.uid ? currentUser.uid : null,
+          user_email: currentUser?.email,
+          user_name: currentUser?.fullName,
+          user_role: currentUser?.role,
+          action,
+          target,
+          details,
+          status
+        }]);
+      } catch (e) {
+        console.warn('Failed to write remote audit log:', e);
+      }
     }
   };
 
-  const revokeSession = async (sessionId: string) => {
-    setActiveSessions(activeSessions.filter(s => s.id !== sessionId));
-    await addAuditLog('REVOKE_SESSION', sessionId, 'Đã ngắt kết nối thiết bị đăng nhập');
+  // Auth: Login
+  const loginAdmin = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    // 1. Try Supabase Auth first
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          return { success: false, error: error.message };
+        }
+        if (data.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', data.user.id)
+            .single();
+
+          if (profile?.status === 'locked') {
+            await supabase.auth.signOut();
+            return { success: false, error: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Quản trị viên.' };
+          }
+
+          if (profile) {
+            setCurrentUser(mapProfileToUser(profile));
+          }
+          await addAuditLog('Đăng nhập Supabase', 'Authentication', `Đăng nhập thành công với email ${email}`);
+          return { success: true };
+        }
+      } catch (err: any) {
+        console.error('Supabase Login Error:', err);
+        return { success: false, error: err.message || 'Lỗi xác thực Supabase' };
+      }
+    }
+
+    // 2. Fallback local / demo authentication
+    const trimmedEmail = email.trim().toLowerCase();
+    const matched = users.find(u => u.email.toLowerCase() === trimmedEmail);
+    if (matched) {
+      if (matched.status === 'locked') {
+        return { success: false, error: 'Tài khoản đã bị tạm khóa bởi Quản trị viên.' };
+      }
+      setCurrentUser(matched);
+      await addAuditLog('Đăng nhập CMS (Demo Mode)', 'Authentication', `Đăng nhập vai trò ${matched.role}`);
+      return { success: true };
+    }
+
+    // Auto-create local admin if default admin email provided
+    if (trimmedEmail.includes('admin') || trimmedEmail === 'xnitchcm@gmail.com') {
+      const demoUser: CMSUser = {
+        uid: 'user-' + Date.now(),
+        email: trimmedEmail,
+        fullName: 'Quản Trị Viên',
+        role: 'admin',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString()
+      };
+      setUsers(prev => [demoUser, ...prev]);
+      setCurrentUser(demoUser);
+      return { success: true };
+    }
+
+    return { success: false, error: 'Email hoặc mật khẩu không chính xác. Hãy kiểm tra thông tin hoặc cấu hình Supabase.' };
   };
 
-  const revokeAllSessions = async () => {
-    setActiveSessions(activeSessions.filter(s => s.isCurrent));
-    await addAuditLog('REVOKE_ALL_SESSIONS', 'Toàn bộ thiết bị', 'Đã đăng xuất khỏi tất cả các thiết bị khác');
+  // Auth: Register new user (Admin creates user)
+  const registerUser = async (email: string, password: string, fullName: string, role: UserRole): Promise<{ success: boolean; error?: string }> => {
+    if (!isAdmin) {
+      return { success: false, error: 'Chỉ Quản trị viên mới có quyền tạo tài khoản mới.' };
+    }
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              role: role
+            }
+          }
+        });
+
+        if (error) return { success: false, error: error.message };
+
+        if (data.user) {
+          // Update profile in profiles table
+          await supabase.from('profiles').upsert([{
+            id: data.user.id,
+            email,
+            full_name: fullName,
+            role,
+            status: 'active'
+          }]);
+
+          await addAuditLog('Tạo tài khoản mới', 'User Management', `Tạo user ${email} với vai trò ${role}`);
+          await loadSupabaseData();
+          return { success: true };
+        }
+      } catch (err: any) {
+        return { success: false, error: err.message };
+      }
+    }
+
+    // Local fallback
+    const newUser: CMSUser = {
+      uid: 'user-' + Date.now(),
+      email,
+      fullName,
+      role,
+      status: 'active',
+      createdAt: new Date().toISOString()
+    };
+    setUsers(prev => [newUser, ...prev]);
+    await addAuditLog('Tạo tài khoản (Local)', 'User Management', `Tạo user ${email} (${role})`);
+    return { success: true };
   };
+
+  // Auth: Logout
+  const logoutAdmin = async () => {
+    await addAuditLog('Đăng xuất', 'Authentication', `Người dùng ${currentUser?.email} đăng xuất khỏi hệ thống`);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {
+        console.warn('Sign out error:', e);
+      }
+    }
+    setCurrentUser(null);
+  };
+
+  // Password reset request
+  const requestPasswordReset = async (email: string): Promise<{ success: boolean; error?: string }> => {
+    if (supabase && isSupabaseConfigured) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) return { success: false, error: error.message };
+      return { success: true };
+    }
+    return { success: true };
+  };
+
+  // Update user role
+  const updateUserRole = async (uid: string, newRole: UserRole) => {
+    if (!isAdmin) throw new Error('Chỉ Quản trị viên mới có thể thay đổi phân quyền.');
+    setUsers(prev => prev.map(u => u.uid === uid ? { ...u, role: newRole } : u));
+    if (currentUser?.uid === uid) {
+      setCurrentUser(prev => prev ? { ...prev, role: newRole } : null);
+    }
+    if (supabase && isSupabaseConfigured) {
+      await supabase.from('profiles').update({ role: newRole, updated_at: new Date().toISOString() }).eq('id', uid);
+    }
+    await addAuditLog('Đổi phân quyền', 'User Management', `Đổi vai trò user ${uid} sang ${newRole}`);
+  };
+
+  // Toggle user active/locked status
+  const toggleUserStatus = async (uid: string, currentStatus: 'active' | 'locked') => {
+    if (!isAdmin) throw new Error('Chỉ Quản trị viên mới có thể khóa hoặc mở khóa tài khoản.');
+    const nextStatus = currentStatus === 'active' ? 'locked' : 'active';
+    setUsers(prev => prev.map(u => u.uid === uid ? { ...u, status: nextStatus } : u));
+    if (supabase && isSupabaseConfigured) {
+      await supabase.from('profiles').update({ status: nextStatus, updated_at: new Date().toISOString() }).eq('id', uid);
+    }
+    await addAuditLog('Thay đổi trạng thái tài khoản', 'User Management', `${nextStatus === 'locked' ? 'Khóa' : 'Mở khóa'} tài khoản ${uid}`);
+  };
+
+  // Delete user account
+  const deleteUserAccount = async (uid: string) => {
+    if (!isAdmin) throw new Error('Chỉ Quản trị viên mới có thể xóa tài khoản.');
+    setUsers(prev => prev.filter(u => u.uid !== uid));
+    if (supabase && isSupabaseConfigured) {
+      await supabase.from('profiles').delete().eq('id', uid);
+    }
+    await addAuditLog('Xóa tài khoản', 'User Management', `Xóa tài khoản ${uid}`);
+  };
+
+  // Real Supabase Storage File Upload
+  const uploadMediaFile = async (file: File, folder: string = 'posts'): Promise<string> => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa cấu hình kết nối Supabase Storage.');
+    }
+
+    const fileExt = file.name.split('.').pop() || 'png';
+    const cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "_");
+    const fileName = `${folder}/${Date.now()}_${cleanName}.${fileExt}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from('media')
+      .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+    if (uploadError) {
+      console.error('Supabase storage upload error:', uploadError);
+      throw new Error(`Lỗi tải ảnh lên Supabase Storage (bucket "media"): ${uploadError.message}`);
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('media')
+      .getPublicUrl(fileName);
+
+    // Add to media library list
+    const newMedia: CMSMedia = {
+      id: 'media-' + Date.now(),
+      title: file.name,
+      url: publicUrl,
+      type: file.type.startsWith('video') ? 'video' : 'image',
+      size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
+      category: folder,
+      createdAt: new Date().toISOString(),
+      uploadedBy: currentUser?.fullName || 'Quản trị viên'
+    };
+    setMediaList(prev => [newMedia, ...prev]);
+
+    await addAuditLog('Tải lên tệp Media', 'Storage', `Tải lên tệp ${file.name} vào thư mục ${folder}`);
+    return publicUrl;
+  };
+
+  // News Workflow: Create / Update backed strictly by public.news_articles
+  const saveNewsPost = async (post: Partial<NewsPost>): Promise<NewsPost> => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Vui lòng kiểm tra lại cấu hình.');
+    }
+
+    // 1. Determine UUID
+    const isNew = !post.id || post.id.startsWith('news-') || post.id.startsWith('tin-');
+    const postId = isNew ? crypto.randomUUID() : (post.id as string);
+
+    // 2. Author ID from logged in user
+    let authorId = currentUser?.uid;
+    if (!authorId) {
+      const { data: authData } = await supabase.auth.getUser();
+      authorId = authData?.user?.id;
+    }
+
+    // 3. Determine workflow status
+    let targetStatus: ArticleWorkflowStatus = post.status || 'draft';
+    if (!isApprover && targetStatus === 'published') {
+      targetStatus = 'pending_review';
+    }
+
+    const generatedSlug = (post.title ? slugify(post.title) : 'bai-viet') + '-' + postId.slice(0, 8);
+    const publishedAtValue = targetStatus === 'published' 
+      ? (post.publishedAt || new Date().toISOString()) 
+      : null;
+
+    // 4. Strict DB Payload matching public.news_articles
+    const dbPayload = {
+      id: postId,
+      title: post.title?.trim() || 'Bài viết không tiêu đề',
+      slug: (post as any).slug || generatedSlug,
+      category: post.category || 'Hoạt động sản xuất',
+      summary: post.subtitle || (post as any).summary || '',
+      content: post.content || '',
+      image: post.imageUrl || (post as any).image || '',
+      author: post.author || currentUser?.fullName || 'Ban Biên Tập',
+      author_id: authorId || null,
+      status: targetStatus,
+      views: post.viewsCount || (post as any).views || 0,
+      featured: Boolean(post.isPinned || (post as any).featured),
+      reject_reason: post.rejectionReason || (post as any).reject_reason || null,
+      published_at: publishedAtValue,
+      updated_at: new Date().toISOString()
+    };
+
+    // 5. Execute DB Upsert
+    const { error: upsertError } = await supabase
+      .from('news_articles')
+      .upsert([dbPayload], { onConflict: 'id' });
+
+    if (upsertError) {
+      console.error('Lỗi khi lưu bài viết lên Supabase news_articles:', upsertError);
+      throw new Error(`Lỗi Supabase: ${upsertError.message || JSON.stringify(upsertError)}`);
+    }
+
+    // 6. Reload from Supabase
+    await loadNewsFromSupabase();
+
+    await addAuditLog(
+      isNew ? 'Tạo bài viết' : 'Cập nhật bài viết', 
+      'News Management', 
+      `Bài: "${dbPayload.title}" - Trạng thái: ${dbPayload.status}`
+    );
+
+    return mapArticleFromDb(dbPayload);
+  };
+
+  // Submit article for review (Editor action)
+  const submitNewsForReview = async (id: string) => {
+    if (!supabase || !isSupabaseConfigured) throw new Error('Chưa kết nối Supabase.');
+
+    const { error } = await supabase
+      .from('news_articles')
+      .update({ 
+        status: 'pending_review', 
+        updated_at: new Date().toISOString() 
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi gửi duyệt bài viết:', error);
+      throw new Error(`Lỗi Supabase: ${error.message}`);
+    }
+
+    await loadNewsFromSupabase();
+    await addAuditLog('Gửi duyệt bài viết', 'News Workflow', `Gửi duyệt bài ID ${id}`);
+  };
+
+  // Approve & Publish article (Approver / Admin action)
+  const approveAndPublishNews = async (id: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền duyệt bài viết.');
+    if (!supabase || !isSupabaseConfigured) throw new Error('Chưa kết nối Supabase.');
+
+    const { error } = await supabase
+      .from('news_articles')
+      .update({ 
+        status: 'published', 
+        published_at: new Date().toISOString(),
+        reject_reason: null,
+        updated_at: new Date().toISOString() 
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi duyệt bài viết:', error);
+      throw new Error(`Lỗi Supabase: ${error.message}`);
+    }
+
+    await loadNewsFromSupabase();
+    await addAuditLog('Duyệt & Xuất bản bài viết', 'News Workflow', `Đã duyệt và công khai bài ID ${id}`);
+  };
+
+  // Reject article with reason (Approver / Admin action)
+  const rejectNewsPost = async (id: string, reason: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền từ chối duyệt bài.');
+    if (!supabase || !isSupabaseConfigured) throw new Error('Chưa kết nối Supabase.');
+
+    const { error } = await supabase
+      .from('news_articles')
+      .update({ 
+        status: 'revision_requested', 
+        reject_reason: reason,
+        updated_at: new Date().toISOString() 
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi từ chối bài viết:', error);
+      throw new Error(`Lỗi Supabase: ${error.message}`);
+    }
+
+    await loadNewsFromSupabase();
+    await addAuditLog('Từ chối bài viết', 'News Workflow', `Yêu cầu sửa lại bài ID ${id}. Lý do: ${reason}`);
+  };
+
+  // Hide article (Approver / Admin action)
+  const hideNewsPost = async (id: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền ẩn bài viết.');
+    if (!supabase || !isSupabaseConfigured) throw new Error('Chưa kết nối Supabase.');
+
+    const { error } = await supabase
+      .from('news_articles')
+      .update({ 
+        status: 'hidden', 
+        updated_at: new Date().toISOString() 
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi ẩn bài viết:', error);
+      throw new Error(`Lỗi Supabase: ${error.message}`);
+    }
+
+    await loadNewsFromSupabase();
+    await addAuditLog('Ẩn bài viết', 'News Workflow', `Đã ẩn bài ID ${id} khỏi trang công chúng`);
+  };
+
+  // Delete article
+  const deleteNewsPost = async (id: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền xóa bài viết.');
+    if (!supabase || !isSupabaseConfigured) throw new Error('Chưa kết nối Supabase.');
+
+    const { error } = await supabase
+      .from('news_articles')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi xóa bài viết:', error);
+      throw new Error(`Lỗi Supabase: ${error.message}`);
+    }
+
+    await loadNewsFromSupabase();
+    await addAuditLog('Xóa bài viết', 'News Management', `Đã xóa vĩnh viễn bài ID ${id}`);
+  };
+
+  // Gallery: Save / Replace Item
+  const saveGalleryItem = async (item: GalleryItem, status: ArticleWorkflowStatus = 'published') => {
+    const isNew = !gallery.some(g => g.id === item.id);
+    setGallery(prev => {
+      const exists = prev.some(g => g.id === item.id);
+      if (exists) {
+        return prev.map(g => g.id === item.id ? item : g);
+      }
+      return [item, ...prev];
+    });
+
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('gallery_items').upsert([{
+          id: item.id.includes('-') && !item.id.startsWith('gal-') ? item.id : undefined,
+          title: item.title,
+          category: item.category,
+          image_url: item.image,
+          status,
+          updated_at: new Date().toISOString()
+        }]);
+      } catch (e) {
+        console.warn('Gallery Supabase sync warning:', e);
+      }
+    }
+
+    await addAuditLog(
+      isNew ? 'Thêm ảnh thư viện' : 'Cập nhật/Thay thế ảnh thư viện',
+      'Gallery Management',
+      `Ảnh: "${item.title}" (${item.category})`
+    );
+  };
+
+  // Gallery: Reorder
+  const reorderGalleryItems = async (items: GalleryItem[]) => {
+    setGallery(items);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const updates = items.map((item, index) => 
+          supabase.from('gallery_items').update({ display_order: index }).eq('id', item.id)
+        );
+        await Promise.all(updates);
+      } catch (e) {
+        console.warn('Reorder gallery sync warning:', e);
+      }
+    }
+    await addAuditLog('Sắp xếp lại thư viện ảnh', 'Gallery Management', `Cập nhật thứ tự hiển thị cho ${items.length} hình ảnh`);
+  };
+
+  // Gallery: Delete
+  const deleteGalleryItem = async (id: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền xóa ảnh thư viện.');
+    setGallery(prev => prev.filter(g => g.id !== id));
+    if (supabase && isSupabaseConfigured) {
+      await supabase.from('gallery_items').delete().eq('id', id);
+    }
+    await addAuditLog('Xóa ảnh thư viện', 'Gallery Management', `Đã xóa ảnh ID ${id}`);
+  };
+
+  // Public entity management helpers
+  const saveCompanyInfo = async (info: typeof COMPANY_INFO) => setCompanyInfo(info);
+  const saveStatistics = async (stats: typeof STATISTICS) => setStatistics(stats);
+  const saveSlides = async (newSlides: HeroSlide[]) => setSlides(newSlides);
+  const saveBrand = async (newBrand: CMSBrand) => setBrand(newBrand);
+  const saveSEO = async (newSEO: CMSSEO) => setSEO(newSEO);
+  
+  const saveService = async (service: ServiceItem) => {
+    setServices(prev => {
+      const exists = prev.some(s => s.id === service.id);
+      return exists ? prev.map(s => s.id === service.id ? service : s) : [service, ...prev];
+    });
+  };
+  const deleteService = async (id: string) => setServices(prev => prev.filter(s => s.id !== id));
+
+  const saveTechnology = async (tech: TechnologyItem) => {
+    setTechnologies(prev => {
+      const exists = prev.some(t => t.id === tech.id);
+      return exists ? prev.map(t => t.id === tech.id ? tech : t) : [tech, ...prev];
+    });
+  };
+  const deleteTechnology = async (id: string) => setTechnologies(prev => prev.filter(t => t.id !== id));
+
+  const saveVacancy = async (vac: JobVacancy) => {
+    setVacancies(prev => {
+      const exists = prev.some(v => v.id === vac.id);
+      return exists ? prev.map(v => v.id === vac.id ? vac : v) : [vac, ...prev];
+    });
+  };
+  const deleteVacancy = async (id: string) => setVacancies(prev => prev.filter(v => v.id !== id));
+
+  const saveCategory = async (cat: CMSCategory) => {
+    setCategories(prev => {
+      const exists = prev.some(c => c.id === cat.id);
+      return exists ? prev.map(c => c.id === cat.id ? cat : c) : [cat, ...prev];
+    });
+  };
+  const deleteCategory = async (id: string) => setCategories(prev => prev.filter(c => c.id !== id));
+
+  const saveMedia = async (med: CMSMedia) => {
+    setMediaList(prev => [med, ...prev]);
+  };
+  const deleteMedia = async (id: string) => setMediaList(prev => prev.filter(m => m.id !== id));
+
+  const saveQuote = async (quote: QuoteRequest) => {
+    setQuotes(prev => [quote, ...prev]);
+  };
+  const deleteQuote = async (id: string) => setQuotes(prev => prev.filter(q => q.id !== id));
 
   return (
     <CMSContext.Provider
@@ -913,46 +997,55 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         activeSessions,
 
         loading,
+        isInitialized,
         currentUser,
         isAdmin,
+        isApprover,
+        isEditor,
+        userRole,
         adminEmail,
-        firebaseConnected: isFirebaseAvailable,
+        supabaseConnected,
 
         loginAdmin,
+        registerUser,
         logoutAdmin,
         requestPasswordReset,
-        confirmPasswordResetWithOTP,
+        updateUserRole,
+        toggleUserStatus,
+        deleteUserAccount,
         hasPermission,
+
+        uploadMediaFile,
+        saveNewsPost,
+        submitNewsForReview,
+        approveAndPublishNews,
+        rejectNewsPost,
+        hideNewsPost,
+        deleteNewsPost,
+
+        saveGalleryItem,
+        reorderGalleryItems,
+        deleteGalleryItem,
 
         saveCompanyInfo,
         saveStatistics,
         saveSlides,
         saveBrand,
         saveSEO,
-
         saveService,
         deleteService,
         saveTechnology,
         deleteTechnology,
-        saveGalleryItem,
-        deleteGalleryItem,
         saveVacancy,
         deleteVacancy,
-        saveNewsPost,
-        deleteNewsPost,
         saveCategory,
         deleteCategory,
         saveMedia,
         deleteMedia,
         saveQuote,
         deleteQuote,
-        saveUser,
-        toggleLockUser,
-        deleteUser,
 
         addAuditLog,
-        revokeSession,
-        revokeAllSessions
       }}
     >
       {children}
@@ -962,7 +1055,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 export const useCMS = () => {
   const context = useContext(CMSContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCMS must be used within a CMSProvider');
   }
   return context;

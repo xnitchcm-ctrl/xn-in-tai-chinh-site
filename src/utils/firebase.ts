@@ -91,6 +91,12 @@ export interface NewsPost {
   isPinned: boolean;
   createdAt: string; // ISO String
   author: string;
+  status?: 'draft' | 'pending_review' | 'published' | 'rejected' | 'hidden';
+  rejectionReason?: string;
+  createdBy?: string;
+  reviewedBy?: string;
+  publishedAt?: string;
+  viewsCount?: number;
 }
 
 // Pre-populated default dataset
