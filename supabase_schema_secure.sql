@@ -468,3 +468,54 @@ CREATE POLICY "storage_media_user_delete" ON storage.objects
     bucket_id = 'media' 
     AND (public.is_approver_or_admin() OR (owner_id = (auth.uid())::text AND public.is_cms_user()))
   );
+
+-- ==============================================================================
+-- 6. BẢNG FORM_SUBMISSIONS (LƯU TRỮ BIỂU MẪU LIÊN HỆ, BÁO GIÁ, TƯ VẤN, TUYỂN DỤNG)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.form_submissions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  form_type TEXT NOT NULL DEFAULT 'contact',
+  title TEXT NOT NULL DEFAULT '',
+  full_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT,
+  company_name TEXT,
+  service_type TEXT,
+  quantity TEXT,
+  deadline TEXT,
+  subject TEXT,
+  message TEXT,
+  cv_link TEXT,
+  details JSONB DEFAULT '{}'::jsonb,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'pending', 'contacted', 'processed', 'archived')),
+  created_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Bật Row Level Security (RLS)
+ALTER TABLE public.form_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Policy 1: Khách vãng lai và mọi người dùng được phép tạo bản ghi (INSERT)
+DROP POLICY IF EXISTS "Public insert form submissions" ON public.form_submissions;
+CREATE POLICY "Public insert form submissions" ON public.form_submissions
+  FOR INSERT TO anon, authenticated
+  WITH CHECK (true);
+
+-- Policy 2: Chỉ người dùng đã đăng nhập CMS (authenticated) mới được xem (SELECT)
+DROP POLICY IF EXISTS "CMS users can view form submissions" ON public.form_submissions;
+CREATE POLICY "CMS users can view form submissions" ON public.form_submissions
+  FOR SELECT TO authenticated
+  USING (true);
+
+-- Policy 3: Chỉ người dùng đã đăng nhập CMS mới được cập nhật trạng thái (UPDATE)
+DROP POLICY IF EXISTS "CMS users can update form submissions" ON public.form_submissions;
+CREATE POLICY "CMS users can update form submissions" ON public.form_submissions
+  FOR UPDATE TO authenticated
+  USING (true);
+
+-- Policy 4: Chỉ Quản trị viên (Admin & Approver) mới được xóa (DELETE)
+DROP POLICY IF EXISTS "Admins can delete form submissions" ON public.form_submissions;
+CREATE POLICY "Admins can delete form submissions" ON public.form_submissions
+  FOR DELETE TO authenticated
+  USING (public.is_approver_or_admin());
+

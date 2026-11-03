@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Send, CheckCircle2, Ticket, Printer, ShieldCheck, Mail, Phone, Calendar } from 'lucide-react';
+import { X, Send, CheckCircle2, Ticket, Printer, ShieldCheck, Mail, Phone, Calendar, AlertCircle } from 'lucide-react';
+import { submitCustomerForm } from '../utils/formSubmission';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
   const [quantity, setQuantity] = useState('');
   const [deadline, setDeadline] = useState('');
   const [notes, setNotes] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const [isSending, setIsSending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -29,17 +32,26 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
     }
   }, [preselectedService]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phone || !serviceType) return;
+    setErrorMessage(null);
 
-    setIsSending(true);
-    // Simulate server side post processing
-    setTimeout(() => {
-      setIsSending(false);
+    try {
+      setIsSending(true);
+      await submitCustomerForm({
+        formType: 'consultation',
+        fullName,
+        phone,
+        email,
+        companyName,
+        serviceType,
+        quantity,
+        deadline,
+        notes,
+        honeypot,
+      });
+
       setIsSuccess(true);
-      
-      // Clean up fields after success
       setFullName('');
       setEmail('');
       setPhone('');
@@ -47,11 +59,18 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
       setQuantity('');
       setDeadline('');
       setNotes('');
-    }, 1800);
+      setHoneypot('');
+    } catch (err: any) {
+      console.error('QuoteModal submit error:', err);
+      setErrorMessage(err.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại sau.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleReset = () => {
     setIsSuccess(false);
+    setErrorMessage(null);
     onClose();
   };
 
@@ -98,19 +117,42 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
             >
               <CheckCircle2 className="w-14 h-14 text-emerald-600 animate-pulse" />
               <h4 className="text-base font-black text-emerald-950 font-display uppercase tracking-wider">ĐĂNG KÝ THÔNG TIN THÀNH CÔNG</h4>
-              <p className="text-xs text-emerald-800 leading-relaxed max-w-sm">
-                Chúng tôi đã tiếp nhận yêu cầu đăng ký tư vấn báo giá dịch vụ: <strong className="text-brand-blue">"{serviceType}"</strong>. Đội ngũ Kỹ thư Ký của Xí nghiệp In Tài Chính sẽ liên hệ hỗ trợ bạn thông qua số điện thoại sớm nhất!
+              <p className="text-sm text-emerald-900 leading-relaxed max-w-sm font-semibold">
+                Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.
               </p>
               <button
                 type="button"
                 onClick={handleReset}
                 className="px-6 py-2.5 mt-2 text-xs font-black font-display tracking-widest text-white rounded bg-emerald-700 hover:bg-emerald-800 transition-all cursor-pointer"
               >
-                Đồng Ý & Quay Lại
+                Đồng Ý & Đóng
               </button>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Anti-spam Honeypot Trap */}
+              <input
+                type="text"
+                name="_bot_trap"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                style={{ display: 'none' }}
+              />
+
+              {/* Error Notice */}
+              {errorMessage && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+                  <div className="flex-1">
+                    <p className="font-bold">Không thể gửi yêu cầu:</p>
+                    <p className="mt-0.5">{errorMessage}</p>
+                  </div>
+                </div>
+              )}
+
               <p className="text-[11px] text-slate-500 font-sans leading-relaxed">
                 Để phục vụ việc tính giá thành phẩm tối ưu cùng điều kiện kiểm soát chất lượng chính xác, vui lòng gửi các gợi ý nghiệp vụ ban đầu sau. Mọi dữ liệu cam kết được bảo mật hoàn toàn.
               </p>
@@ -258,7 +300,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
                   className="px-6 py-2.5 text-xs font-extrabold tracking-widest bg-brand-gold text-brand-blue hover:bg-yellow-400 hover:shadow shadow-md rounded transition-all cursor-pointer font-display uppercase flex items-center justify-center gap-1.5"
                 >
                   <Send className="w-3 h-3" />
-                  {isSending ? 'ĐANG GỬI...' : 'ĐĂNG KÝ NGAY'}
+                  {isSending ? 'Đang gửi...' : 'ĐĂNG KÝ NGAY'}
                 </button>
               </div>
 

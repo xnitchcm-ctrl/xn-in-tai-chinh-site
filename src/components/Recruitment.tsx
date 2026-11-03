@@ -15,9 +15,12 @@ import {
   Palette,
   Printer,
   Layers,
-  Settings
+  Settings,
+  AlertCircle,
+  Send
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
+import { submitCustomerForm } from '../utils/formSubmission';
 
 export default function Recruitment() {
   const { vacancies: VACANCIES, companyInfo } = useCMS();
@@ -32,6 +35,8 @@ export default function Recruitment() {
   const [candidatePhone, setCandidatePhone] = useState('');
   const [cvLink, setCvLink] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,22 +44,36 @@ export default function Recruitment() {
     setExpandedVacancyId((prev) => (prev === id ? null : id));
   };
 
-  const handleApplySubmit = (e: React.FormEvent) => {
+  const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!candidateName || !candidateEmail || !candidatePhone) return;
+    setErrorMessage(null);
 
-    setIsSubmitting(true);
-    // Custom email submission notification for xnitchcm@gmail.com
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      setIsSubmitting(true);
+      await submitCustomerForm({
+        formType: 'recruitment',
+        fullName: candidateName,
+        phone: candidatePhone,
+        email: candidateEmail,
+        position: applyVacancyTitle || 'Ứng viên nộp hồ sơ tự do / Vị trí tiềm năng',
+        cvLink,
+        coverLetter,
+        honeypot,
+      });
+
       setFormSubmitted(true);
-      // Clean up Form fields
       setCandidateName('');
       setCandidateEmail('');
       setCandidatePhone('');
       setCvLink('');
       setCoverLetter('');
-    }, 1800);
+      setHoneypot('');
+    } catch (err: any) {
+      console.error('Recruitment submit error:', err);
+      setErrorMessage(err.message || 'Gửi hồ sơ thất bại. Vui lòng kiểm tra lại thông tin và thử lại.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getJobIcon = (id: string) => {
@@ -263,12 +282,15 @@ export default function Recruitment() {
                 className="p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center flex flex-col items-center gap-3"
               >
                 <CheckCircle className="w-12 h-12 text-emerald-600 animate-bounce" />
-                <h4 className="text-sm font-bold text-emerald-900 font-display">NỘP ĐƠN HỒ SƠ THÀNH CÔNG!</h4>
-                <p className="text-xs text-emerald-700 leading-normal">
-                  Hệ thống Xí nghiệp In Tài Chính đã ghi nhận hồ sơ ứng cử viên. Chúng tôi đã gửi email tự động xác nhận tới địa chỉ của bạn. Trân trọng cảm ơn!
+                <h4 className="text-sm font-bold text-emerald-900 font-display uppercase">NỘP ĐƠN HỒ SƠ THÀNH CÔNG!</h4>
+                <p className="text-sm text-emerald-800 leading-normal font-semibold max-w-sm">
+                  Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.
                 </p>
                 <button
-                  onClick={() => setFormSubmitted(false)}
+                  onClick={() => {
+                    setFormSubmitted(false);
+                    setErrorMessage(null);
+                  }}
                   className="px-4 py-2 mt-2 bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-bold font-display rounded transition-colors cursor-pointer"
                 >
                   Nộp Đơn Khác
@@ -276,6 +298,28 @@ export default function Recruitment() {
               </motion.div>
             ) : (
               <form onSubmit={handleApplySubmit} className="space-y-4">
+                {/* Anti-spam Honeypot Trap */}
+                <input
+                  type="text"
+                  name="_job_bot_trap"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  style={{ display: 'none' }}
+                />
+
+                {/* Error Notice */}
+                {errorMessage && (
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+                    <div className="flex-1">
+                      <p className="font-bold">Không thể gửi hồ sơ:</p>
+                      <p className="mt-0.5">{errorMessage}</p>
+                    </div>
+                  </div>
+                )}
                 
                 {/* Auto selected or user selected position header */}
                 <div>
@@ -285,16 +329,17 @@ export default function Recruitment() {
                   <select
                     value={applyVacancyTitle || ''}
                     onChange={(e) => setApplyVacancyTitle(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed"
-                    required
-                    disabled={VACANCIES.every(v => v.isClosed)}
+                    className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue cursor-pointer"
                   >
-                    <option value="" disabled>--- Chọn vị trí cần ứng tuyển ---</option>
+                    <option value="">--- Chọn vị trí cần ứng tuyển ---</option>
                     {VACANCIES.map((j) => (
-                      <option key={j.id} value={j.title} disabled={j.isClosed}>
-                        {j.title} {j.isClosed ? '(Đã hết tuyển dụng)' : ''}
+                      <option key={j.id} value={j.title}>
+                        {j.title} ({j.department})
                       </option>
                     ))}
+                    <option value="Vị trí tiềm năng / Khác (Kỹ thuật, Vận hành, KCS, Cơ điện)">
+                      Vị trí tiềm năng / Khác (Kỹ thuật, Vận hành, KCS, Cơ điện)
+                    </option>
                   </select>
                 </div>
 
@@ -367,7 +412,7 @@ export default function Recruitment() {
                   </label>
                   <textarea
                     rows={3}
-                    placeholder="Sơ lược về kinh nghiệm của bạn hoặc ca trực tối mong muốn ứng tuyển tuyển..."
+                    placeholder="Sơ lược về kinh nghiệm của bạn hoặc ca trực tối mong muốn ứng tuyển..."
                     value={coverLetter}
                     onChange={(e) => setCoverLetter(e.target.value)}
                     className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded font-sans focus:outline-none focus:border-brand-blue"
@@ -376,21 +421,18 @@ export default function Recruitment() {
 
                 <button
                   type="submit"
-                  disabled={VACANCIES.every(v => v.isClosed) || isSubmitting}
+                  disabled={isSubmitting}
                   className={`w-full py-3 mt-2 text-xs font-black font-display tracking-widest text-white rounded transition-all shadow uppercase flex items-center justify-center gap-2 ${
-                    VACANCIES.every(v => v.isClosed)
-                      ? 'bg-red-600 hover:bg-red-700 cursor-not-allowed'
-                      : isSubmitting 
-                        ? 'bg-slate-400 cursor-not-allowed' 
-                        : 'bg-brand-blue hover:bg-brand-blue-dark cursor-pointer'
+                    isSubmitting 
+                      ? 'bg-slate-400 cursor-not-allowed' 
+                      : 'bg-red-600 hover:bg-red-700 cursor-pointer shadow-red-600/20 active:scale-[0.99]'
                   }`}
                 >
-                  {VACANCIES.every(v => v.isClosed) ? (
-                    <span>🔴 TẠM THỜI KHÔNG NHẬN HỒ SƠ</span>
-                  ) : isSubmitting ? (
-                    <span>ĐANG GỬI HỒ SƠ...</span>
+                  <Send className="w-3.5 h-3.5" />
+                  {isSubmitting ? (
+                    <span>Đang gửi...</span>
                   ) : (
-                    <>GỬI HỒ SƠ XÉT DUYỆT</>
+                    <span>GỬI HỒ SƠ ỨNG TUYỂN</span>
                   )}
                 </button>
               </form>

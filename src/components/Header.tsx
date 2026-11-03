@@ -233,15 +233,19 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
           {/* Logo overlay on Sticky state */}
           {isSticky && (
             <div 
-              className="flex items-center gap-2 cursor-pointer transition-all duration-305 text-brand-gold hover:text-white"
+              className="flex items-center gap-2.5 cursor-pointer transition-all duration-300 text-left group pr-2 select-none"
               onClick={() => handleNavClick('hero')}
             >
-              <div className="w-8 h-8 bg-brand-gold text-brand-blue rounded-full flex items-center justify-center font-black text-xs shadow">
+              <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-brand-gold text-brand-blue rounded-full flex items-center justify-center font-black text-xs shadow shrink-0 group-hover:scale-105 transition-transform">
                 ITC
               </div>
-              <div className="flex flex-col">
-                <span className="font-display font-black text-xs tracking-wider uppercase leading-none">IN TÀI CHÍNH</span>
-                <span className="text-[8px] text-white/70 tracking-widest uppercase font-display leading-none mt-0.5">XỐ SỐ TP.HCM</span>
+              <div className="flex flex-col text-left justify-center">
+                <span className="text-[9px] text-white/85 font-bold tracking-wider uppercase font-display leading-none mb-0.5">
+                  XỔ SỐ TP.HCM
+                </span>
+                <span className="font-display font-black text-xs sm:text-[13px] tracking-wider uppercase leading-none text-brand-gold group-hover:text-yellow-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] transition-colors">
+                  IN TÀI CHÍNH
+                </span>
               </div>
             </div>
           )}
@@ -540,8 +544,8 @@ export default function Header({ activeSection, onNavigate, openQuoteModal }: He
                       <span className="text-[10px] font-black font-display text-white">ITC</span>
                     </div>
                     <div>
-                      <p className="text-[9px] font-bold text-brand-gold tracking-widest font-display leading-none">XN IN TÀI CHÍNH</p>
-                      <p className="text-[7px] text-slate-400 font-sans tracking-wide leading-none mt-1">TP. HỒ CHÍ MINH</p>
+                      <p className="text-[9px] font-bold text-white/80 tracking-widest font-display leading-none mb-1">XỔ SỐ TP.HCM</p>
+                      <p className="text-sm font-black text-brand-gold tracking-wider font-display leading-none">IN TÀI CHÍNH</p>
                     </div>
                   </div>
                   

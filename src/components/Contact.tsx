@@ -13,9 +13,11 @@ import {
   Map, 
   Compass, 
   ArrowUpRight, 
-  Globe 
+  Globe,
+  AlertCircle 
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
+import { submitCustomerForm } from '../utils/formSubmission';
 
 export default function Contact() {
   const [formType, setFormType] = useState<'contact' | 'quote'>('contact');
@@ -29,25 +31,54 @@ export default function Contact() {
   const [quoteService, setQuoteService] = useState('In Vé Số Kiến Thiết');
   const [quoteQuantity, setQuoteQuantity] = useState('');
   
+  const [honeypot, setHoneypot] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return;
+    setErrorMessage(null);
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      setIsSubmitting(true);
+      if (formType === 'contact') {
+        await submitCustomerForm({
+          formType: 'contact',
+          fullName: name,
+          phone,
+          email,
+          subject,
+          message,
+          honeypot,
+        });
+      } else {
+        await submitCustomerForm({
+          formType: 'quote',
+          fullName: name,
+          phone,
+          email,
+          serviceType: quoteService,
+          quantity: quoteQuantity,
+          message,
+          honeypot,
+        });
+      }
+
       setIsSuccess(true);
-      // Clean up fields
       setName('');
       setEmail('');
       setPhone('');
       setSubject('');
       setMessage('');
       setQuoteQuantity('');
-    }, 1500);
+      setHoneypot('');
+    } catch (err: any) {
+      console.error('Contact submission error:', err);
+      setErrorMessage(err.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại sau.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -288,19 +319,44 @@ export default function Contact() {
                     <ThumbsUp className="w-8 h-8" />
                   </div>
                   <h4 className="text-base font-black text-[#153A6B] font-display tracking-wider uppercase">GỬI YÊU CẦU THÀNH CÔNG!</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed max-w-sm font-semibold">
-                    Yêu cầu thông tin báo giá đã được luân chuyển an toàn về địa chỉ điện tử tiếp nhận <strong>xnitchcm@gmail.com</strong> của Ban Kế hoạch Xí nghiệp. Chúng tôi sẽ liên hệ phản sắc nét sớm nhất có thể.
+                  <p className="text-sm text-slate-700 leading-relaxed max-w-sm font-semibold">
+                    Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.
                   </p>
                   <button
                     type="button"
-                    onClick={() => setIsSuccess(false)}
+                    onClick={() => {
+                      setIsSuccess(false);
+                      setErrorMessage(null);
+                    }}
                     className="px-6 py-2.5 text-xs font-black font-display bg-[#0D4F9C] hover:bg-[#1E63B5] text-white rounded transition-colors uppercase tracking-wider cursor-pointer"
                   >
-                    Quay lại biểu mẫu
+                    Gửi yêu cầu khác
                   </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-5">
+                  {/* Anti-spam Honeypot Trap (Hidden from real users) */}
+                  <input
+                    type="text"
+                    name="_trap_field"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="hidden"
+                    style={{ display: 'none' }}
+                  />
+
+                  {/* Error Notification Alert */}
+                  {errorMessage && (
+                    <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-3">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+                      <div className="flex-1">
+                        <p className="font-bold">Không thể gửi yêu cầu:</p>
+                        <p className="mt-0.5">{errorMessage}</p>
+                      </div>
+                    </div>
+                  )}
                   
                   {/* Name & phone side by side */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -439,7 +495,7 @@ export default function Contact() {
                     }`}
                   >
                     <Send className="w-4 h-4 shrink-0" />
-                    {isSubmitting ? <span>ĐANG XỬ LÝ GỬI THƯ...</span> : <span>GỬI YÊU CẦU NGHIỆP VỤ NGAY</span>}
+                    {isSubmitting ? <span>Đang gửi...</span> : <span>GỬI YÊU CẦU NGHIỆP VỤ NGAY</span>}
                   </button>
                 </form>
               )}

@@ -69,7 +69,7 @@ export default function OrgChart() {
     {
       id: 'batnhap',
       tag: 'PHÂN XƯỞNG SẢN XUẤT',
-      name: 'Phân xưởng Bắt nhấp cặp',
+      name: 'Phân xưởng Bắt nhập cặp',
       icon: <Sliders className="w-5 h-5 text-pink-400" />,
       glowColor: 'hover:shadow-[0_0_20px_rgba(244,114,182,0.15)] hover:border-pink-400/60'
     },

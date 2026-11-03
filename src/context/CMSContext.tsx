@@ -112,6 +112,7 @@ export interface CMSContextType {
   saveMedia: (media: CMSMedia) => Promise<void>;
   deleteMedia: (id: string) => Promise<void>;
   saveQuote: (quote: QuoteRequest) => Promise<void>;
+  updateQuoteStatus: (id: string, newStatus: string) => Promise<void>;
   deleteQuote: (id: string) => Promise<void>;
   
   // Audit Logs
@@ -347,6 +348,29 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           ipAddress: 'Supabase Server',
           userAgent: 'Web App',
           status: l.status || 'success'
+        })));
+      }
+
+      // 5. Fetch Form Submissions / Quotes
+      const { data: submissionsData, error: subErr } = await supabase
+        .from('form_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!subErr && submissionsData && submissionsData.length > 0) {
+        setQuotes(submissionsData.map((s: any) => ({
+          id: s.id,
+          fullName: s.full_name || '',
+          email: s.email || '',
+          phone: s.phone || '',
+          companyName: s.company_name || '',
+          serviceType: s.service_type || s.title || s.form_type || 'Yêu cầu',
+          quantity: s.quantity || '',
+          note: s.message || s.notes || s.subject || '',
+          notes: s.message || s.notes || s.subject || '',
+          status: s.status === 'new' ? 'Mới nhận' : s.status,
+          createdAt: s.created_at,
+          deadline: s.deadline
         })));
       }
 
@@ -992,7 +1016,28 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const saveQuote = async (quote: QuoteRequest) => {
     setQuotes(prev => [quote, ...prev]);
   };
-  const deleteQuote = async (id: string) => setQuotes(prev => prev.filter(q => q.id !== id));
+
+  const updateQuoteStatus = async (id: string, newStatus: string) => {
+    setQuotes(prev => prev.map(q => q.id === id ? { ...q, status: newStatus as any } : q));
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('form_submissions').update({ status: newStatus }).eq('id', id);
+      } catch (e) {
+        console.warn('Failed to update status on Supabase form_submissions:', e);
+      }
+    }
+  };
+
+  const deleteQuote = async (id: string) => {
+    setQuotes(prev => prev.filter(q => q.id !== id));
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('form_submissions').delete().eq('id', id);
+      } catch (e) {
+        console.warn('Failed to delete on Supabase form_submissions:', e);
+      }
+    }
+  };
 
   return (
     <CMSContext.Provider
@@ -1062,6 +1107,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveMedia,
         deleteMedia,
         saveQuote,
+        updateQuoteStatus,
         deleteQuote,
 
         addAuditLog,
