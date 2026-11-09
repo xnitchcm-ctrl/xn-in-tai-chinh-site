@@ -105,8 +105,11 @@ export interface CMSContextType {
   deleteService: (id: string) => Promise<void>;
   saveTechnology: (tech: TechnologyItem) => Promise<void>;
   deleteTechnology: (id: string) => Promise<void>;
-  saveVacancy: (vacancy: JobVacancy) => Promise<void>;
-  deleteVacancy: (id: string) => Promise<void>;
+  saveVacancy: (vacancy: Partial<JobVacancy> & { id?: string }) => Promise<JobVacancy>;
+  deleteVacancy: (id: string) => Promise<{ success: boolean; error?: string }>;
+  saveJobVacancy: (vacancy: Partial<JobVacancy> & { id?: string }) => Promise<JobVacancy>;
+  deleteJobVacancy: (id: string) => Promise<{ success: boolean; error?: string }>;
+  loadVacanciesFromSupabase: () => Promise<JobVacancy[]>;
   saveCategory: (category: CMSCategory) => Promise<void>;
   deleteCategory: (id: string) => Promise<void>;
   saveMedia: (media: CMSMedia) => Promise<void>;
@@ -225,7 +228,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [services, setServices] = useState<ServiceItem[]>(SERVICE_ITEMS);
   const [technologies, setTechnologies] = useState<TechnologyItem[]>(TECHNOLOGIES);
   const [gallery, setGallery] = useState<GalleryItem[]>(GALLERY_ITEMS);
-  const [vacancies, setVacancies] = useState<JobVacancy[]>(VACANCIES);
+  const [vacancies, setVacancies] = useState<JobVacancy[]>([]);
   const [news, setNews] = useState<NewsPost[]>([]);
   const [categories, setCategories] = useState<CMSCategory[]>(DEFAULT_CATEGORIES);
   const [mediaList, setMediaList] = useState<CMSMedia[]>([]);
@@ -293,12 +296,83 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return mappedNews;
   };
 
+  const mapDbPositionToVacancy = (row: any): JobVacancy => {
+    let reqs: string[] = [];
+    if (Array.isArray(row.requirements)) {
+      reqs = row.requirements;
+    } else if (typeof row.requirements === 'string') {
+      try {
+        const parsed = JSON.parse(row.requirements);
+        reqs = Array.isArray(parsed) ? parsed : [row.requirements];
+      } catch {
+        reqs = row.requirements ? [row.requirements] : [];
+      }
+    }
+
+    let tasks: string[] = [];
+    if (row.description) {
+      tasks = row.description.split(';').map((t: string) => t.trim()).filter(Boolean);
+    }
+
+    return {
+      id: row.id,
+      title: row.title || '',
+      department: row.department || '',
+      type: 'Toàn thời gian',
+      salary: row.salary || 'Mức lương thỏa thuận',
+      quantity: row.quantity !== null && row.quantity !== undefined 
+        ? (typeof row.quantity === 'number' ? `${row.quantity} người` : String(row.quantity)) 
+        : '01 người',
+      deadline: row.deadline || '',
+      requirements: reqs,
+      benefits: [
+        'Được đóng đầy đủ BHXH, BHYT, BHTN theo luật Lao động Nhà nước',
+        'Lương tháng 13 + thưởng năng suất ấn phẩm vượt chỉ tiêu cực hấp dẫn',
+        'Hỗ trợ cơm trưa tại xí nghiệp và trợ cấp ca kíp, độc hại',
+        'Khám sức khỏe định kỳ hàng năm và du lịch nghỉ mát cùng Công ty'
+      ],
+      tasks: tasks.length > 0 ? tasks : undefined,
+      description: row.description || undefined,
+      status: row.status || 'active',
+      isClosed: row.status === 'closed',
+      display_order: row.display_order || 0,
+      location: 'TP. Hồ Chí Minh',
+    };
+  };
+
+  // Dedicated helper to refresh vacancies directly from Supabase recruitment_positions
+  const loadVacanciesFromSupabase = async (): Promise<JobVacancy[]> => {
+    if (!supabase) return [];
+    try {
+      const { data, error } = await supabase
+        .from('recruitment_positions')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.warn('Lỗi đọc bảng recruitment_positions từ Supabase:', error.message);
+        return [];
+      }
+
+      const mapped = (data || []).map(mapDbPositionToVacancy);
+      setVacancies(mapped);
+      return mapped;
+    } catch (e) {
+      console.warn('Lỗi kết nối tải recruitment_positions:', e);
+      return [];
+    }
+  };
+
   // Fetch Supabase data when connected
   const loadSupabaseData = async () => {
     if (!supabase) return;
     try {
       // 1. Fetch News
       await loadNewsFromSupabase();
+
+      // 1.1. Fetch Recruitment Positions
+      await loadVacanciesFromSupabase();
 
       // 2. Fetch Gallery
       const { data: galleryData, error: galErr } = await supabase
@@ -992,13 +1066,116 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
   const deleteTechnology = async (id: string) => setTechnologies(prev => prev.filter(t => t.id !== id));
 
-  const saveVacancy = async (vac: JobVacancy) => {
-    setVacancies(prev => {
-      const exists = prev.some(v => v.id === vac.id);
-      return exists ? prev.map(v => v.id === vac.id ? vac : v) : [vac, ...prev];
-    });
+  const saveVacancy = async (vac: Partial<JobVacancy> & { id?: string }): Promise<JobVacancy> => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể lưu vị trí tuyển dụng.');
+    }
+
+    const qtyNum = typeof vac.quantity === 'number' 
+      ? vac.quantity 
+      : parseInt(String(vac.quantity || '1').replace(/\D/g, ''), 10) || 1;
+
+    let cleanDeadline: string | null = null;
+    if (vac.deadline) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(vac.deadline)) {
+        cleanDeadline = vac.deadline;
+      } else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(vac.deadline)) {
+        const parts = vac.deadline.split('/');
+        cleanDeadline = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+      } else {
+        cleanDeadline = vac.deadline;
+      }
+    }
+
+    const reqsArray = Array.isArray(vac.requirements) 
+      ? vac.requirements.filter(r => r && r.trim().length > 0)
+      : [];
+
+    const dbPayload: any = {
+      title: vac.title,
+      department: vac.department || null,
+      salary: vac.salary || 'Mức lương thỏa thuận',
+      quantity: qtyNum,
+      deadline: cleanDeadline,
+      requirements: reqsArray,
+      description: vac.tasks && vac.tasks.length > 0 ? vac.tasks.join('; ') : (vac.description || null),
+      status: vac.isClosed ? 'closed' : (vac.status || 'active'),
+      updated_at: new Date().toISOString()
+    };
+
+    const isUUID = vac.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(vac.id);
+
+    if (isUUID) {
+      const { data, error } = await supabase
+        .from('recruitment_positions')
+        .update(dbPayload)
+        .eq('id', vac.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Update recruitment_positions error:', error);
+        throw new Error(`Cập nhật thất bại: ${error.message}`);
+      }
+      if (!data) {
+        throw new Error('Cập nhật thất bại: Thao tác bị từ chối bởi RLS hoặc không tìm thấy bản ghi.');
+      }
+
+      const updated = mapDbPositionToVacancy(data);
+      setVacancies(prev => prev.map(v => v.id === vac.id ? updated : v));
+      await addAuditLog('Cập nhật tuyển dụng', 'Recruitment', `Cập nhật vị trí "${vac.title}"`);
+      return updated;
+    } else {
+      const { data, error } = await supabase
+        .from('recruitment_positions')
+        .insert([{
+          ...dbPayload,
+          display_order: vacancies.length + 1,
+          created_by: currentUser?.uid && currentUser.uid.length > 10 ? currentUser.uid : null,
+          created_at: new Date().toISOString()
+        }])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Insert recruitment_positions error:', error);
+        throw new Error(`Thêm mới thất bại: ${error.message}`);
+      }
+      if (!data) {
+        throw new Error('Thêm mới thất bại: Thao tác bị từ chối bởi chính sách RLS.');
+      }
+
+      const created = mapDbPositionToVacancy(data);
+      setVacancies(prev => [created, ...prev]);
+      await addAuditLog('Đăng tuyển dụng', 'Recruitment', `Đăng vị trí mới "${vac.title}"`);
+      return created;
+    }
   };
-  const deleteVacancy = async (id: string) => setVacancies(prev => prev.filter(v => v.id !== id));
+
+  const deleteVacancy = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể xóa vị trí tuyển dụng.');
+    }
+
+    const { data, error } = await supabase
+      .from('recruitment_positions')
+      .delete()
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      console.error('Supabase DELETE recruitment_positions error:', error);
+      throw new Error(`Xóa thất bại: ${error.message}`);
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error('Xóa thất bại: Bạn không có quyền Quản trị viên (RLS is_admin) hoặc vị trí này không còn tồn tại trên hệ thống.');
+    }
+
+    setVacancies(prev => prev.filter(v => v.id !== id));
+    await addAuditLog('Xóa tuyển dụng', 'Recruitment', `Đã xóa vị trí tuyển dụng ID ${id}`);
+    return { success: true };
+  };
 
   const saveCategory = async (cat: CMSCategory) => {
     setCategories(prev => {
@@ -1102,6 +1279,9 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteTechnology,
         saveVacancy,
         deleteVacancy,
+        saveJobVacancy: saveVacancy,
+        deleteJobVacancy: deleteVacancy,
+        loadVacanciesFromSupabase,
         saveCategory,
         deleteCategory,
         saveMedia,

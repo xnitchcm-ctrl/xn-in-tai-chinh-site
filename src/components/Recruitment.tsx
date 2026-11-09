@@ -115,18 +115,23 @@ export default function Recruitment() {
             </h3>
 
             <div className="space-y-4">
-              {VACANCIES.map((job) => {
-                const isExpanded = expandedVacancyId === job.id;
-                const isClosed = job.isClosed;
-                return (
-                  <div 
-                    key={job.id}
-                    className={`border rounded-xl transition-all overflow-hidden ${
-                      isClosed ? 'opacity-85 bg-slate-50/50' : ''
-                    } ${
-                      isExpanded ? 'border-brand-blue ring-1 ring-brand-blue/15 bg-slate-50' : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
+              {VACANCIES.length === 0 ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-xl text-slate-500 text-xs">
+                  Hiện tại Xí nghiệp chưa có vị trí tuyển dụng mới. Quý ứng viên quan tâm có thể gửi hồ sơ dự tuyển tự do qua biểu mẫu bên cạnh.
+                </div>
+              ) : (
+                VACANCIES.map((job) => {
+                  const isExpanded = expandedVacancyId === job.id;
+                  const isClosed = job.isClosed;
+                  return (
+                    <div 
+                      key={job.id}
+                      className={`border rounded-xl transition-all overflow-hidden ${
+                        isClosed ? 'opacity-85 bg-slate-50/50' : ''
+                      } ${
+                        isExpanded ? 'border-brand-blue ring-1 ring-brand-blue/15 bg-slate-50' : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
                     {/* Accordion Trigger row */}
                     <button
                       onClick={() => toggleAccordion(job.id)}
@@ -262,7 +267,8 @@ export default function Recruitment() {
                     </AnimatePresence>
                   </div>
                 );
-              })}
+              })
+            )}
             </div>
           </div>
 

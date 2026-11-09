@@ -160,61 +160,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   }
 ];
 
-export const VACANCIES: JobVacancy[] = [
-  {
-    id: 'v1',
-    title: 'Kỹ Sư Công Nghệ In',
-    isClosed: true,
-    department: 'Phòng Kỹ thuật & Công nghệ In',
-    type: 'Toàn thời gian (Cố định)',
-    salary: 'Mức lương thỏa thuận',
-    deadline: '30/06/2026',
-    requirements: [
-      'Tốt nghiệp chuyên ngành Kỹ sư Công nghệ In',
-      'Có kiến thức về quy trình in offset và in kỹ thuật số',
-      'Hiểu cơ bản về chế bản, quản lý màu và file in',
-      'Có tinh thần trách nhiệm và khả năng làm việc nhóm',
-      'Ưu tiên ứng viên có kinh nghiệm trong ngành in vé số hoặc in ấn tài chính'
-    ],
-    tasks: [
-      'Theo dõi và hỗ trợ vận hành sản xuất in ấn',
-      'Kiểm tra chất lượng file và thành phẩm in',
-      'Hỗ trợ quản lý dữ liệu in biến đổi và QR Code',
-      'Phối hợp giữa bộ phận chế bản và phân xưởng in'
-    ],
-    benefits: [
-      'Được đóng đầy đủ BHXH, BHYT, BHTN theo luật Lao động Nhà nước',
-      'Lương tháng 13 + thưởng năng suất ấn phẩm vượt chỉ tiêu cực hấp dẫn',
-      'Hỗ trợ cơm trưa tại xí nghiệp và trợ cấp ca kíp, độc hại',
-      'Khám sức khỏe định kỳ hàng năm và du lịch nghỉ mát cùng Công ty'
-    ]
-  },
-  {
-    id: 'v2',
-    title: 'Họa Sĩ Thiết Kế Đồ Họa',
-    isClosed: true,
-    department: 'Phân Xưởng Chế Bản',
-    type: 'Toàn thời gian',
-    salary: 'Mức lương thỏa thuận',
-    deadline: '15/07/2026',
-    requirements: [
-      'Thành thạo Adobe Illustrator, Photoshop',
-      'Có kiến thức về thiết kế và chế bản ngành in',
-      'Hiểu cơ bản về màu sắc, dàn trang và file xuất in',
-      'Có khả năng làm việc cẩn thận, chính xác'
-    ],
-    tasks: [
-      'Thiết kế và chỉnh sửa file in',
-      'Tạo mẫu phục vụ sản xuất vé số và ấn phẩm tài chính',
-      'Thực hiện công việc tại phân xưởng chế bản',
-      'Chuẩn bị file in kỹ thuật số và offset',
-      'Phối hợp xử lý dữ liệu biến đổi khi cần'
-    ],
-    benefits: [
-      'Hưởng đầy đủ mọi chế độ phúc lợi, nghỉ Lễ Tết theo quy chế Công ty Nhà Nước',
-      'Lương tháng 13 + thưởng hiệu quả hoàn thiện thiết kế xuất sắc',
-      'Cung cấp đầy đủ thiết bị, máy tính đồ họa chuyên sâu cấu hình cao',
-      'Môi trường làm việc văn minh, thân thiện, cơ hội thăng tiến rộng mở'
-    ]
-  }
-];
+// Vacancies are loaded dynamically from Supabase table recruitment_positions
+export const VACANCIES: JobVacancy[] = [];
+

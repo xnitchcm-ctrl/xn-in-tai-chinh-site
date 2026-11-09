@@ -33,13 +33,18 @@ export interface JobVacancy {
   id: string;
   title: string;
   department: string;
-  type: string; // "Toàn thời gian", etc.
+  type?: string; // "Toàn thời gian", etc.
   salary: string;
+  quantity?: number | string;
   deadline: string;
   requirements: string[];
   benefits: string[];
-  tasks?: string[]; // Optional job descriptions/tasks
+  tasks?: string[];
+  description?: string;
   isClosed?: boolean;
+  status?: string;
+  display_order?: number;
+  location?: string;
 }
 
 export interface QuoteRequest {
