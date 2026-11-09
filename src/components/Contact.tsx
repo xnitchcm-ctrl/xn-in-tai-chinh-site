@@ -17,7 +17,7 @@ import {
   AlertCircle 
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
-import { submitCustomerForm } from '../utils/formSubmission';
+import { submitCustomerForm, sanitizeUserErrorMessage } from '../utils/formSubmission';
 
 export default function Contact() {
   const [formType, setFormType] = useState<'contact' | 'quote'>('contact');
@@ -75,7 +75,7 @@ export default function Contact() {
       setHoneypot('');
     } catch (err: any) {
       console.error('Contact submission error:', err);
-      setErrorMessage(err.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại sau.');
+      setErrorMessage(sanitizeUserErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }

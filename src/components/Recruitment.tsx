@@ -20,7 +20,7 @@ import {
   Send
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
-import { submitCustomerForm } from '../utils/formSubmission';
+import { submitCustomerForm, sanitizeUserErrorMessage } from '../utils/formSubmission';
 
 export default function Recruitment() {
   const { vacancies: VACANCIES, companyInfo } = useCMS();
@@ -70,7 +70,7 @@ export default function Recruitment() {
       setHoneypot('');
     } catch (err: any) {
       console.error('Recruitment submit error:', err);
-      setErrorMessage(err.message || 'Gửi hồ sơ thất bại. Vui lòng kiểm tra lại thông tin và thử lại.');
+      setErrorMessage(sanitizeUserErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }

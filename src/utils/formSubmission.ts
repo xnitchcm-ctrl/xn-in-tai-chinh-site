@@ -1,7 +1,7 @@
 /**
  * Central Form Submission Handler
- * - Saves form submission to Supabase DB (table: form_submissions) with RLS
- * - Dispatches email notification via Supabase Edge Function (send-email) to xnitchcm@gmail.com
+ * - Dispatches form data via Supabase Edge Function (send-form-email)
+ * - Persists record in public.form_submissions with strict RLS
  * - Anti-spam: Honeypot check + Client debounce / duplicate prevention
  * - Zero secrets in frontend
  */
@@ -76,6 +76,27 @@ export function isValidEmail(email: string): boolean {
 }
 
 /**
+ * Sanitize error message to ensure NO technical English or jargon is displayed to customers
+ */
+export function sanitizeUserErrorMessage(rawError: any): string {
+  if (!rawError) {
+    return 'Gửi yêu cầu không thành công. Quý khách vui lòng thử lại hoặc liên hệ hotline để được hỗ trợ.';
+  }
+
+  const str = typeof rawError === 'string' ? rawError : (rawError.message || String(rawError));
+
+  // Catch typical technical or English error strings
+  const isTechnicalOrEnglish = 
+    /Failed to send a request|Edge Function|FunctionsHttpError|NetworkError|Failed to fetch|Load failed|404|500|relation|PGRST|syntax error|TypeError|ReferenceError|not found|unauthorized/i.test(str);
+
+  if (isTechnicalOrEnglish) {
+    return 'Không thể kết nối đến máy chủ tiếp nhận yêu cầu. Quý khách vui lòng thử lại trong giây lát hoặc liên hệ trực tiếp hotline.';
+  }
+
+  return str;
+}
+
+/**
  * Main form submission function
  */
 export async function submitCustomerForm(
@@ -93,6 +114,7 @@ export async function submitCustomerForm(
   // 2. Validate required fields
   const trimmedName = (payload.fullName || '').trim();
   const trimmedPhone = (payload.phone || '').trim();
+  const trimmedEmail = (payload.email || '').trim();
 
   if (!trimmedName) {
     throw new Error('Vui lòng nhập họ và tên của quý khách.');
@@ -106,7 +128,7 @@ export async function submitCustomerForm(
     throw new Error('Số điện thoại không hợp lệ. Vui lòng nhập đúng số điện thoại (ví dụ: 0901234567).');
   }
 
-  if (payload.email && payload.email.trim() && !isValidEmail(payload.email.trim())) {
+  if (trimmedEmail && !isValidEmail(trimmedEmail)) {
     throw new Error('Địa chỉ email không đúng định dạng. Vui lòng kiểm tra lại.');
   }
 
@@ -121,121 +143,125 @@ export async function submitCustomerForm(
 
   const emailSubject = FORM_EMAIL_SUBJECTS[payload.formType] || '[Website In Tài Chính] Yêu cầu mới';
 
-  // Prepare standard data map for both database and email
-  const submissionData: Record<string, any> = {
-    fullName: trimmedName,
+  // Construct structured formData according to user specifications
+  const formData = {
+    form_type: payload.formType,
+    full_name: trimmedName,
     phone: trimmedPhone,
-    email: (payload.email || '').trim(),
-    companyName: (payload.companyName || '').trim(),
-    serviceType: (payload.serviceType || '').trim(),
-    quantity: (payload.quantity || '').trim(),
-    deadline: (payload.deadline || '').trim(),
-    subject: (payload.subject || '').trim(),
-    message: (payload.message || '').trim(),
-    notes: (payload.notes || '').trim(),
-    position: (payload.position || '').trim(),
-    cvLink: (payload.cvLink || '').trim(),
-    coverLetter: (payload.coverLetter || '').trim(),
-    ...(payload.extraData || {}),
+    email: trimmedEmail || null,
+    company: (payload.companyName || '').trim() || null,
+    company_name: (payload.companyName || '').trim() || null,
+    service: (payload.serviceType || '').trim() || null,
+    service_type: (payload.serviceType || '').trim() || null,
+    quantity: (payload.quantity || '').trim() || null,
+    deadline: (payload.deadline || '').trim() || null,
+    message: (payload.message || payload.notes || payload.coverLetter || '').trim() || null,
+    position: (payload.position || '').trim() || null,
+    cv_link: (payload.cvLink || '').trim() || null,
+    subject: emailSubject,
+    replyTo: trimmedEmail || undefined,
+    metadata: {
+      formType: payload.formType,
+      formTitle: FORM_TYPE_NAMES[payload.formType] || payload.formType,
+      fullName: trimmedName,
+      phone: trimmedPhone,
+      email: trimmedEmail || null,
+      company: (payload.companyName || '').trim() || null,
+      service: (payload.serviceType || '').trim() || null,
+      quantity: (payload.quantity || '').trim() || null,
+      deadline: (payload.deadline || '').trim() || null,
+      message: (payload.message || payload.notes || payload.coverLetter || '').trim() || null,
+      position: (payload.position || '').trim() || null,
+      cvLink: (payload.cvLink || '').trim() || null,
+      notes: (payload.notes || '').trim() || null,
+      coverLetter: (payload.coverLetter || '').trim() || null,
+      submittedAt: new Date().toISOString(),
+      pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+      ...(payload.extraData || {}),
+    },
   };
 
-  // Remove empty keys from the email data table for cleaner reading
-  const cleanEmailData: Record<string, any> = {};
-  for (const [k, v] of Object.entries(submissionData)) {
-    if (v !== '' && v !== null && v !== undefined) {
-      cleanEmailData[k] = v;
-    }
-  }
+  let submissionId: string | undefined;
+  let edgeInvokedSuccess = false;
+  let dbSavedSuccess = false;
 
-  let dbSaved = false;
-  let recordId: string | undefined;
-
-  // 4. Save to Supabase table (form_submissions) if configured
+  // 4. Gọi Supabase Edge Function send-form-email
   if (supabase && isSupabaseConfigured) {
     try {
-      const { data, error } = await supabase
-        .from('form_submissions')
-        .insert([
-          {
-            form_type: payload.formType,
-            title: FORM_TYPE_NAMES[payload.formType] || payload.formType,
-            full_name: trimmedName,
-            phone: trimmedPhone,
-            email: (payload.email || '').trim() || null,
-            company_name: (payload.companyName || '').trim() || null,
-            service_type: (payload.serviceType || '').trim() || null,
-            quantity: (payload.quantity || '').trim() || null,
-            deadline: (payload.deadline || '').trim() || null,
-            subject: (payload.subject || '').trim() || null,
-            message: (payload.message || '').trim() || null,
-            cv_link: (payload.cvLink || '').trim() || null,
-            details: submissionData,
-            status: 'new',
-          },
-        ])
-        .select('id')
-        .maybeSingle();
-
-      if (!error && data?.id) {
-        dbSaved = true;
-        recordId = data.id;
-      } else if (error) {
-        console.warn('Could not insert to form_submissions table (may need SQL migration):', error.message);
-      }
-    } catch (dbErr) {
-      console.warn('Supabase DB insert error:', dbErr);
-    }
-  }
-
-  // 5. Invoke Supabase Edge Function to deliver email to xnitchcm@gmail.com
-  let emailSent = false;
-  let edgeFunctionError: string | null = null;
-
-  if (supabase && isSupabaseConfigured) {
-    try {
-      const { data: edgeData, error: edgeError } = await supabase.functions.invoke('send-email', {
-        body: {
-          formType: payload.formType,
-          subject: emailSubject,
-          replyTo: payload.email?.trim() || undefined,
-          senderName: trimmedName,
-          data: cleanEmailData,
-        },
+      const { data: edgeData, error: edgeError } = await supabase.functions.invoke('send-form-email', {
+        body: formData,
       });
 
-      if (edgeError) {
-        console.warn('Edge Function returned error:', edgeError);
-        edgeFunctionError = edgeError.message || 'Không thể kết nối đến dịch vụ gửi email';
-      } else if (edgeData?.error) {
-        console.warn('Edge Function response error:', edgeData.error);
-        edgeFunctionError = edgeData.error;
-      } else {
-        emailSent = true;
+      if (!edgeError && edgeData?.success) {
+        edgeInvokedSuccess = true;
+        submissionId = edgeData.submissionId;
+      } else if (edgeError) {
+        console.warn('[Edge Function send-form-email warning]:', edgeError.message);
+      } else if (edgeData && !edgeData.success) {
+        console.warn('[Edge Function send-form-email returned]:', edgeData.message);
       }
     } catch (err: any) {
-      console.warn('Failed to invoke send-email Edge Function:', err);
-      edgeFunctionError = err.message || 'Lỗi gửi email máy chủ';
+      console.warn('[Edge Function invocation error]:', err?.message || err);
+    }
+
+    // 5. Nếu Edge Function chưa trả về thành công (hoặc chưa kịp deploy), lưu trực tiếp vào bảng public.form_submissions qua Supabase RLS
+    if (!edgeInvokedSuccess) {
+      try {
+        const { data: dbData, error: dbError } = await supabase
+          .from('form_submissions')
+          .insert([
+            {
+              form_type: formData.form_type,
+              full_name: formData.full_name,
+              phone: formData.phone,
+              email: formData.email,
+              company: formData.company,
+              company_name: formData.company_name,
+              service: formData.service,
+              service_type: formData.service_type,
+              quantity: formData.quantity,
+              deadline: formData.deadline,
+              message: formData.message,
+              metadata: formData.metadata,
+              details: formData.metadata,
+              status: 'new',
+            },
+          ])
+          .select('id')
+          .maybeSingle();
+
+        if (!dbError) {
+          dbSavedSuccess = true;
+          if (dbData?.id) {
+            submissionId = dbData.id;
+          }
+        } else {
+          console.warn('[Direct DB insert warning]:', dbError.message);
+        }
+      } catch (dbErr: any) {
+        console.warn('[Direct DB insert exception]:', dbErr?.message || dbErr);
+      }
     }
   }
 
-  // 6. Handle outcome
-  // If either edge function sent OR DB saved, the request was recorded
-  if (emailSent || dbSaved) {
+  // 6. Kiểm tra kết quả
+  if (edgeInvokedSuccess || dbSavedSuccess) {
     return {
       success: true,
       message: 'Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.',
-      id: recordId,
+      id: submissionId,
     };
   }
 
-  // If both failed (e.g. edge function error AND DB unavailable), throw user-friendly error so they can retry
-  if (edgeFunctionError) {
-    throw new Error(`Gửi yêu cầu không thành công: ${edgeFunctionError}. Quý khách vui lòng thử lại hoặc liên hệ trực tiếp qua số hotline.`);
+  // 7. Nếu trong chế độ preview/demo mà Supabase chưa điền URL/Key
+  if (!isSupabaseConfigured) {
+    console.info('[Demo Mode] Simulating successful submission in preview environment.');
+    return {
+      success: true,
+      message: 'Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.',
+    };
   }
 
-  // Fallback in local/preview mock mode
-  return {
-    success: true,
-    message: 'Yêu cầu đã được gửi thành công. Chúng tôi sẽ liên hệ lại sớm.',
-  };
+  // 8. Nếu cả 2 phương thức đều lỗi do sự cố mạng hoặc cấu hình
+  throw new Error('Không thể kết nối đến máy chủ tiếp nhận yêu cầu. Quý khách vui lòng thử lại trong giây lát hoặc liên hệ trực tiếp hotline.');
 }

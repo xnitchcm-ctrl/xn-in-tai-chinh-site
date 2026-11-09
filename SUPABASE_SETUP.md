@@ -259,78 +259,93 @@ CREATE POLICY "Admin và Approver xóa ảnh trong bucket media" ON storage.obje
 
 ---
 
-## 6. Thiết Lập Edge Function Gửi Email (Resend) Về `xnitchcm@gmail.com`
+## 6. Thiết Lập Edge Function Gửi Email (`send-form-email`) Về `xnitchcm@gmail.com`
 
-Website sử dụng **Supabase Edge Function** (`send-email`) và dịch vụ **Resend** để gửi thông báo tự động khi khách hàng gửi biểu mẫu (Liên hệ, Báo giá, Tư vấn, Tuyển dụng). Toàn bộ mã API key được lưu an toàn trong **Supabase Secrets**, tuyệt đối không để lộ ở client.
+Website sử dụng **Supabase Edge Function** (`send-form-email`) và dịch vụ **Resend** để gửi thông báo tự động khi khách hàng gửi biểu mẫu (Liên hệ, Báo giá, Tư vấn, Tuyển dụng). Toàn bộ mã API key được lưu an toàn trong **Supabase Secrets**, tuyệt đối không để lộ ở client.
 
-### Bước 1: Đăng ký tài khoản và lấy API Key trên Resend
-1. Truy cập [https://resend.com](https://resend.com) và đăng ký tài khoản miễn phí (miễn phí 3.000 email/tháng, 100 email/ngày).
-2. Vào mục **API Keys** -> Nhấp **Create API Key**.
-3. Đặt tên (ví dụ: `Website In Tai Chinh`) và chọn quyền `Sending access` -> Nhấp **Add**.
-4. Sao chép khóa API (có định dạng bắt đầu bằng `re_...`).
+Supabase Project ID của bạn: `zdxfunpysjufddkgjhiw`
 
-### Bước 2: Thêm Secrets vào Supabase
-Vào Supabase Dashboard của Project -> **Project Settings** -> **Edge Functions** (hoặc dùng Supabase CLI):
-Thêm các Secrets sau:
-
-| Tên Secret | Bắt buộc | Giá trị mẫu | Mô tả |
-| :--- | :--- | :--- | :--- |
-| `RESEND_API_KEY` | **Bắt buộc** | `re_abc123...` | Khóa API lấy từ trang Resend.com |
-| `NOTIFICATION_EMAIL` | Tùy chọn | `xnitchcm@gmail.com` | Email nhận thông báo (mặc định đã là `xnitchcm@gmail.com`) |
-| `SENDER_EMAIL` | Tùy chọn | `Xí Nghiệp In Tài Chính <onboarding@resend.dev>` | Địa chỉ gửi (dùng `onboarding@resend.dev` khi test hoặc domain công ty đã xác thực trên Resend) |
-
-Hoặc chạy lệnh qua Supabase CLI:
-```bash
-supabase secrets set RESEND_API_KEY=re_your_api_key_here
-supabase secrets set NOTIFICATION_EMAIL=xnitchcm@gmail.com
-supabase secrets set SENDER_EMAIL="Xí Nghiệp In Tài Chính <onboarding@resend.dev>"
-```
-
-### Bước 3: Triển khai (Deploy) Edge Function lên Supabase
-Chạy lệnh sau tại thư mục dự án:
-```bash
-supabase functions deploy send-email --no-verify-jwt
-```
-*(Cờ `--no-verify-jwt` cho phép khách vãng lai gửi biểu mẫu liên hệ mà không cần đăng nhập).*
-
-### Bước 4: Tạo bảng `form_submissions` trong Supabase SQL Editor
-Chạy đoạn mã sau trong **SQL Editor**:
+### Bước 1: Tạo bảng `public.form_submissions` trong Supabase SQL Editor
+1. Vào **SQL Editor** trong Supabase Dashboard (`https://supabase.com/dashboard/project/zdxfunpysjufddkgjhiw/sql/new`).
+2. Dán toàn bộ nội dung từ file `supabase_form_submissions.sql` và bấm **Run**:
 ```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS public.form_submissions (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   form_type TEXT NOT NULL DEFAULT 'contact',
-  title TEXT NOT NULL DEFAULT '',
   full_name TEXT NOT NULL,
   phone TEXT NOT NULL,
   email TEXT,
+  company TEXT,
   company_name TEXT,
+  service TEXT,
   service_type TEXT,
   quantity TEXT,
   deadline TEXT,
-  subject TEXT,
   message TEXT,
-  cv_link TEXT,
-  details JSONB DEFAULT '{}'::jsonb,
   status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'pending', 'contacted', 'processed', 'archived')),
-  created_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-  updated_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  details JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE INDEX IF NOT EXISTS idx_form_submissions_created_at ON public.form_submissions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_form_submissions_status ON public.form_submissions(status);
+CREATE INDEX IF NOT EXISTS idx_form_submissions_form_type ON public.form_submissions(form_type);
 
 ALTER TABLE public.form_submissions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Public insert form submissions" ON public.form_submissions
+DROP POLICY IF EXISTS "Public insert form submissions" ON public.form_submissions;
+DROP POLICY IF EXISTS "form_submissions_anon_insert" ON public.form_submissions;
+CREATE POLICY "form_submissions_anon_insert" ON public.form_submissions
   FOR INSERT TO anon, authenticated
   WITH CHECK (true);
 
-CREATE POLICY "CMS users can view form submissions" ON public.form_submissions
+DROP POLICY IF EXISTS "form_submissions_auth_select" ON public.form_submissions;
+CREATE POLICY "form_submissions_auth_select" ON public.form_submissions
   FOR SELECT TO authenticated
   USING (true);
 
-CREATE POLICY "CMS users can update form submissions" ON public.form_submissions
+DROP POLICY IF EXISTS "form_submissions_auth_update" ON public.form_submissions;
+CREATE POLICY "form_submissions_auth_update" ON public.form_submissions
   FOR UPDATE TO authenticated
-  USING (true);
+  USING (true)
+  WITH CHECK (true);
 
-CREATE POLICY "Admins can delete form submissions" ON public.form_submissions
+DROP POLICY IF EXISTS "form_submissions_admin_delete" ON public.form_submissions;
+CREATE POLICY "form_submissions_admin_delete" ON public.form_submissions
   FOR DELETE TO authenticated
-  USING (public.get_my_role() IN ('admin', 'approver'));
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+        AND profiles.role IN ('admin', 'super_admin', 'approver')
+    )
+    OR NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid())
+  );
 ```
+
+### Bước 2: Lấy API Key từ Resend
+1. Truy cập [https://resend.com](https://resend.com) và đăng ký/đăng nhập tài khoản.
+2. Vào mục **API Keys** -> Nhấp **Create API Key**.
+3. Đặt tên (ví dụ: `Website In Tai Chinh`) và chọn quyền `Sending access` -> Nhấp **Add**.
+4. Sao chép khóa API (bắt đầu bằng `re_...`).
+
+### Bước 3: Cấu hình Secrets trên Supabase
+Vào Supabase Dashboard: **Project Settings** -> **Edge Functions** -> **Add Secret** (hoặc dùng lệnh):
+
+| Tên Secret | Bắt buộc | Giá trị | Ghi chú |
+| :--- | :--- | :--- | :--- |
+| `RESEND_API_KEY` | **Bắt buộc** | `re_abc123...` | Khóa API lấy từ trang Resend.com |
+| `CONTACT_RECEIVER_EMAIL` | **Bắt buộc** | `xnitchcm@gmail.com` | Email nhận toàn bộ thông báo biểu mẫu |
+| `SENDER_EMAIL` | Tùy chọn | `Xí Nghiệp In Tài Chính <onboarding@resend.dev>` | Email người gửi (`onboarding@resend.dev` khi test hoặc email theo tên miền doanh nghiệp) |
+
+### Bước 4: Triển khai (Deploy) Edge Function lên Supabase
+Chạy lệnh sau tại máy tính có Supabase CLI (đã đăng nhập qua `supabase login`):
+```bash
+supabase functions deploy send-form-email --project-ref zdxfunpysjufddkgjhiw --no-verify-jwt
+```
+*(Cờ `--no-verify-jwt` cho phép khách vãng lai gửi biểu mẫu liên hệ mà không cần đăng nhập).*
+

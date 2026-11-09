@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, CheckCircle2, Ticket, Printer, ShieldCheck, Mail, Phone, Calendar, AlertCircle } from 'lucide-react';
-import { submitCustomerForm } from '../utils/formSubmission';
+import { submitCustomerForm, sanitizeUserErrorMessage } from '../utils/formSubmission';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -62,7 +62,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedService }: Quot
       setHoneypot('');
     } catch (err: any) {
       console.error('QuoteModal submit error:', err);
-      setErrorMessage(err.message || 'Gửi yêu cầu thất bại. Vui lòng thử lại sau.');
+      setErrorMessage(sanitizeUserErrorMessage(err));
     } finally {
       setIsSending(false);
     }
