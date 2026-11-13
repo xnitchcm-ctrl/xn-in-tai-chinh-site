@@ -7,32 +7,37 @@ import {
   Trash2, 
   Save, 
   X, 
-  CheckCircle2, 
   AlertCircle,
   ArrowUp,
   ArrowDown,
   Upload,
   RefreshCw,
-  Eye,
-  Filter,
-  Check,
-  Tag,
-  Sparkles
 } from 'lucide-react';
 import { useCMS } from '../../../context/CMSContext';
 import { GalleryItem } from '../../../types';
 
+const categoryOptions = [
+  { value: 'machinery', label: 'Dây chuyền thiết bị' },
+  { value: 'products', label: 'Ấn phẩm bảo mật' },
+  { value: 'certificates', label: 'Kiểm định & KCS' },
+  { value: 'activities', label: 'Hoạt động & Đoàn thể' }
+] as const;
+
+type GalleryCategoryValue = (typeof categoryOptions)[number]['value'];
+
+const getCategoryLabel = (value: string): string => {
+  return categoryOptions.find(opt => opt.value === value)?.label || value;
+};
+
 export default function CMSGallery() {
   const { 
     gallery, 
+    galleryError,
     saveGalleryItem, 
     reorderGalleryItems, 
     deleteGalleryItem, 
     uploadMediaFile,
-    currentUser,
-    isAdmin,
     isApprover,
-    isEditor
   } = useCMS();
 
   const [selectedCat, setSelectedCat] = useState<string>('all');
@@ -45,18 +50,19 @@ export default function CMSGallery() {
   }>({
     id: '',
     title: '',
-    category: 'Dây chuyền thiết bị',
-    image: '/src/assets/images/printing_hero_1779242674142.png'
+    category: 'machinery',
+    image: ''
   });
 
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [savingItem, setSavingItem] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+  const [modalInfo, setModalInfo] = useState<string | null>(null);
   const [notice, setNotice] = useState<{ type: 'success' | 'error' | 'info'; msg: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const replaceFileInputRef = useRef<HTMLInputElement | null>(null);
   const [replacingItemId, setReplacingItemId] = useState<string | null>(null);
-
-  const categoriesList = ['Dây chuyền thiết bị', 'Ấn phẩm bảo mật', 'Kiểm định & KCS', 'Hoạt động & Đoàn thể'];
 
   const filteredGallery = gallery.filter(item => {
     if (selectedCat === 'all') return true;
@@ -64,39 +70,49 @@ export default function CMSGallery() {
   });
 
   const handleOpenCreate = () => {
+    setModalError(null);
+    setModalInfo(null);
     setEditingItem({
       id: `gal-${Date.now()}`,
       title: '',
-      category: 'Dây chuyền thiết bị',
-      image: '/src/assets/images/printing_hero_1779242674142.png'
+      category: 'machinery',
+      image: ''
     });
     setIsEditing(true);
   };
 
   const handleOpenEdit = (item: GalleryItem) => {
+    setModalError(null);
+    setModalInfo(null);
+    const isKnownCategory = categoryOptions.some(opt => opt.value === item.category);
     setEditingItem({
       id: item.id,
       title: item.title,
-      category: item.category,
-      image: item.image
+      category: isKnownCategory ? item.category : 'machinery',
+      image: item.image || ''
     });
     setIsEditing(true);
   };
 
-  // Upload image to Supabase Storage
+  // Upload image to Supabase Storage (does not save gallery_items record yet)
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     setUploadingImage(true);
+    setModalError(null);
+    setModalInfo(null);
     try {
       const publicUrl = await uploadMediaFile(files[0], 'gallery');
       setEditingItem(prev => ({ ...prev, image: publicUrl }));
-      setNotice({ type: 'success', msg: 'Đã tải ảnh lên Supabase Storage thành công!' });
+      setModalInfo('Đã đính kèm ảnh từ Storage. Bấm "Lưu Vào Thư Viện" để lưu bản ghi vào cơ sở dữ liệu.');
     } catch (err: any) {
-      setNotice({ type: 'error', msg: 'Lỗi tải ảnh: ' + (err.message || 'Thử lại sau') });
+      const errMsg = 'Lỗi tải ảnh lên Storage: ' + (err.message || 'Thử lại sau');
+      setModalError(errMsg);
+      setNotice({ type: 'error', msg: errMsg });
     } finally {
       setUploadingImage(false);
+      e.target.value = '';
     }
   };
 
@@ -106,7 +122,11 @@ export default function CMSGallery() {
     if (!files || files.length === 0 || !replacingItemId) return;
 
     const targetItem = gallery.find(g => g.id === replacingItemId);
-    if (!targetItem) return;
+    if (!targetItem) {
+      e.target.value = '';
+      setReplacingItemId(null);
+      return;
+    }
 
     setNotice({ type: 'info', msg: 'Đang tải và thay thế ảnh...' });
     try {
@@ -115,48 +135,78 @@ export default function CMSGallery() {
         ...targetItem,
         image: publicUrl
       });
-      setNotice({ type: 'success', msg: `Đã thay thế ảnh cho "${targetItem.title}" thành công!` });
+      setNotice({ type: 'success', msg: `Đã lưu thành công! Đã thay thế ảnh cho "${targetItem.title}".` });
     } catch (err: any) {
-      setNotice({ type: 'error', msg: 'Lỗi khi thay thế ảnh: ' + err.message });
+      setNotice({ type: 'error', msg: 'Lỗi khi thay thế ảnh: ' + (err.message || 'Thử lại sau') });
     } finally {
       setReplacingItemId(null);
+      e.target.value = '';
     }
   };
 
   const handleSaveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingItem.title.trim() || !editingItem.image.trim()) {
-      setNotice({ type: 'error', msg: 'Vui lòng nhập đầy đủ Tiêu đề và Hình ảnh.' });
+    if (uploadingImage || savingItem) return;
+
+    setModalError(null);
+    const trimmedTitle = editingItem.title.trim();
+    const trimmedImage = editingItem.image.trim();
+
+    if (!trimmedTitle) {
+      const msg = 'Vui lòng nhập Tiêu đề / Chú thích ảnh.';
+      setModalError(msg);
+      setNotice({ type: 'error', msg });
       return;
     }
 
+    if (!trimmedImage) {
+      const msg = 'Vui lòng chọn tải ảnh lên hoặc nhập URL hình ảnh thật.';
+      setModalError(msg);
+      setNotice({ type: 'error', msg });
+      return;
+    }
+
+    setSavingItem(true);
     try {
       await saveGalleryItem({
-        id: editingItem.id,
-        title: editingItem.title.trim(),
-        category: editingItem.category,
-        image: editingItem.image
+        id: editingItem.id || `gal-${Date.now()}`,
+        title: trimmedTitle,
+        category: editingItem.category as GalleryCategoryValue,
+        image: trimmedImage
       });
 
-      setNotice({ type: 'success', msg: 'Đã lưu hình ảnh thư viện thành công!' });
+      setNotice({ type: 'success', msg: 'Đã lưu thành công!' });
       setIsEditing(false);
     } catch (err: any) {
-      setNotice({ type: 'error', msg: err.message || 'Lỗi khi lưu hình ảnh.' });
+      const msg = err.message || 'Lỗi khi lưu hình ảnh lên Supabase.';
+      setModalError(msg);
+      setNotice({ type: 'error', msg });
+    } finally {
+      setSavingItem(false);
     }
   };
 
   // Move item up / down in order
-  const handleMove = async (index: number, direction: 'up' | 'down') => {
+  const handleMove = async (filteredIndex: number, direction: 'up' | 'down') => {
+    const targetFilteredIndex = direction === 'up' ? filteredIndex - 1 : filteredIndex + 1;
+    if (targetFilteredIndex < 0 || targetFilteredIndex >= filteredGallery.length) return;
+
+    const currentItem = filteredGallery[filteredIndex];
+    const swapItem = filteredGallery[targetFilteredIndex];
+    const fullIndexA = gallery.findIndex(g => g.id === currentItem.id);
+    const fullIndexB = gallery.findIndex(g => g.id === swapItem.id);
+    if (fullIndexA === -1 || fullIndexB === -1) return;
+
     const newItems = [...gallery];
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newItems.length) return;
+    newItems[fullIndexA] = gallery[fullIndexB];
+    newItems[fullIndexB] = gallery[fullIndexA];
 
-    const temp = newItems[index];
-    newItems[index] = newItems[targetIndex];
-    newItems[targetIndex] = temp;
-
-    await reorderGalleryItems(newItems);
-    setNotice({ type: 'success', msg: 'Đã cập nhật thứ tự hiển thị của thư viện ảnh!' });
+    try {
+      await reorderGalleryItems(newItems);
+      setNotice({ type: 'success', msg: 'Đã cập nhật thứ tự hiển thị của thư viện ảnh!' });
+    } catch (err: any) {
+      setNotice({ type: 'error', msg: err.message || 'Lỗi cập nhật thứ tự ảnh.' });
+    }
   };
 
   const handleDelete = async (id: string, title: string) => {
@@ -219,19 +269,19 @@ export default function CMSGallery() {
           >
             Tất cả danh mục ({gallery.length})
           </button>
-          {categoriesList.map(cat => {
-            const count = gallery.filter(g => g.category === cat).length;
+          {categoryOptions.map(cat => {
+            const count = gallery.filter(g => g.category === cat.value).length;
             return (
               <button
-                key={cat}
-                onClick={() => setSelectedCat(cat)}
+                key={cat.value}
+                onClick={() => setSelectedCat(cat.value)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  selectedCat === cat
+                  selectedCat === cat.value
                     ? 'bg-[#174A87] text-white shadow-sm'
                     : 'text-slate-600 hover:bg-[#F7FAFF] hover:text-[#174A87]'
                 }`}
               >
-                {cat} ({count})
+                {cat.label} ({count})
               </button>
             );
           })}
@@ -241,6 +291,13 @@ export default function CMSGallery() {
           Dùng nút mũi tên để đổi thứ tự ảnh
         </span>
       </div>
+
+      {galleryError && (
+        <div className="p-4 rounded-xl text-xs flex items-center gap-2 font-medium border bg-rose-50 border-rose-200 text-rose-900">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+          <span>{galleryError}</span>
+        </div>
+      )}
 
       {notice && (
         <motion.div
@@ -269,18 +326,22 @@ export default function CMSGallery() {
           >
             {/* Image Preview & Category Badge */}
             <div className="relative h-48 bg-slate-100 overflow-hidden">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  (e.target as HTMLElement).setAttribute('src', '/src/assets/images/printing_hero_1779242674142.png');
-                }}
-              />
+              {item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-1">
+                  <ImageIcon className="w-8 h-8" />
+                  <span className="text-[11px]">Không có ảnh</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
               
               <span className="absolute top-3 left-3 px-2.5 py-1 bg-[#174A87]/90 backdrop-blur-xs text-white text-[10px] font-bold rounded-lg shadow">
-                {item.category}
+                {getCategoryLabel(item.category)}
               </span>
 
               {/* Order number tag */}
@@ -321,7 +382,7 @@ export default function CMSGallery() {
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
                   <button
-                    disabled={index === gallery.length - 1}
+                    disabled={index === filteredGallery.length - 1}
                     onClick={() => handleMove(index, 'down')}
                     className="p-1.5 bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-[#174A87] rounded-lg disabled:opacity-30 cursor-pointer"
                     title="Di chuyển về sau"
@@ -385,6 +446,19 @@ export default function CMSGallery() {
               </div>
 
               <form onSubmit={handleSaveSubmit} className="space-y-4 py-4 text-xs">
+                {modalError && (
+                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                    <span>{modalError}</span>
+                  </div>
+                )}
+
+                {modalInfo && (
+                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-[11px]">
+                    {modalInfo}
+                  </div>
+                )}
+
                 {/* Title */}
                 <div>
                   <label className="block font-bold text-[#173F72] uppercase tracking-wider mb-1.5">
@@ -410,8 +484,8 @@ export default function CMSGallery() {
                     onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
                     className="w-full p-3 bg-[#F7FAFF] border border-[#DCE7F2] rounded-xl text-xs focus:outline-none focus:border-[#174A87] font-semibold text-slate-800"
                   >
-                    {categoriesList.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                    {categoryOptions.map(cat => (
+                      <option key={cat.value} value={cat.value}>{cat.label}</option>
                     ))}
                   </select>
                 </div>
@@ -419,18 +493,24 @@ export default function CMSGallery() {
                 {/* Image Upload & Preview */}
                 <div>
                   <label className="block font-bold text-[#173F72] uppercase tracking-wider mb-1.5">
-                    Tải Ảnh Lên Supabase Storage
+                    Tải Ảnh Lên Supabase Storage *
                   </label>
                   <div className="p-4 bg-[#F7FAFF] border border-[#DCE7F2] rounded-2xl space-y-3">
-                    <div className="h-36 bg-slate-200 rounded-xl overflow-hidden border border-[#DCE7F2]">
-                      <img
-                        src={editingItem.image}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLElement).setAttribute('src', '/src/assets/images/printing_hero_1779242674142.png');
-                        }}
-                      />
+                    <div className="h-36 bg-slate-100 rounded-xl overflow-hidden border border-[#DCE7F2] flex items-center justify-center">
+                      {editingItem.image.trim() ? (
+                        <img
+                          src={editingItem.image}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-slate-400 gap-1.5 px-4 text-center">
+                          <ImageIcon className="w-8 h-8 text-slate-300" />
+                          <span className="text-[11px] font-medium">
+                            Chưa có hình ảnh — vui lòng chọn ảnh từ máy hoặc nhập URL thật
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap gap-2">
@@ -443,9 +523,9 @@ export default function CMSGallery() {
                       />
                       <button
                         type="button"
-                        disabled={uploadingImage}
+                        disabled={uploadingImage || savingItem}
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-4 py-2 bg-[#174A87] text-white font-bold rounded-xl flex items-center gap-2 hover:bg-[#123C70] transition-colors cursor-pointer"
+                        className="px-4 py-2 bg-[#174A87] text-white font-bold rounded-xl flex items-center gap-2 hover:bg-[#123C70] transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         <Upload className="w-3.5 h-3.5" />
                         <span>{uploadingImage ? 'Đang tải lên...' : 'Chọn Ảnh Từ Máy Tính'}</span>
@@ -454,9 +534,10 @@ export default function CMSGallery() {
 
                     <input
                       type="text"
+                      required
                       value={editingItem.image}
                       onChange={(e) => setEditingItem({ ...editingItem, image: e.target.value })}
-                      placeholder="Hoặc dán URL hình ảnh..."
+                      placeholder="Hoặc dán URL hình ảnh thật (https://...)..."
                       className="w-full p-2 bg-white border border-[#DCE7F2] rounded-lg text-[11px]"
                     />
                   </div>
@@ -466,17 +547,25 @@ export default function CMSGallery() {
                 <div className="pt-3 border-t border-[#DCE7F2] flex justify-end gap-2">
                   <button
                     type="button"
+                    disabled={savingItem}
                     onClick={() => setIsEditing(false)}
-                    className="px-4 py-2.5 rounded-xl border border-[#DCE7F2] text-slate-600 font-bold hover:bg-slate-100 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl border border-[#DCE7F2] text-slate-600 font-bold hover:bg-slate-100 cursor-pointer disabled:opacity-50"
                   >
                     Hủy
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-[#174A87] hover:bg-[#123C70] text-white font-bold shadow-md shadow-[#174A87]/20 cursor-pointer flex items-center gap-1.5"
+                    disabled={uploadingImage || savingItem}
+                    className="px-5 py-2.5 rounded-xl bg-[#174A87] hover:bg-[#123C70] text-white font-bold shadow-md shadow-[#174A87]/20 cursor-pointer flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Save className="w-4 h-4" />
-                    <span>Lưu Vào Thư Viện</span>
+                    <span>
+                      {uploadingImage
+                        ? 'Đang tải ảnh...'
+                        : savingItem
+                          ? 'Đang lưu...'
+                          : 'Lưu Vào Thư Viện'}
+                    </span>
                   </button>
                 </div>
               </form>

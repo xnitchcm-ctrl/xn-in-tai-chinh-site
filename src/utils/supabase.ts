@@ -83,10 +83,9 @@ export interface SupabaseGalleryItem {
   id: string;
   title: string;
   category: 'machinery' | 'products' | 'activities' | 'certificates';
-  image_url: string;
+  image: string;
   display_order: number;
-  status: 'draft' | 'pending_review' | 'published' | 'hidden';
-  created_by?: string;
+  uploaded_by?: string;
   created_at: string;
   updated_at: string;
 }
@@ -149,13 +148,12 @@ CREATE TABLE IF NOT EXISTS public.news_articles (
 
 -- 4. BẢNG THƯ VIỆN ẢNH (GALLERY_ITEMS)
 CREATE TABLE IF NOT EXISTS public.gallery_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
   category TEXT NOT NULL CHECK (category IN ('machinery', 'products', 'activities', 'certificates')),
-  image_url TEXT NOT NULL,
+  image TEXT NOT NULL,
   display_order INT NOT NULL DEFAULT 0,
-  status TEXT NOT NULL DEFAULT 'published' CHECK (status IN ('draft', 'pending_review', 'published', 'hidden')),
-  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  uploaded_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -257,15 +255,10 @@ CREATE POLICY "Admin và Approver được xóa bài" ON public.news_articles
   USING (public.get_my_role() IN ('admin', 'approver'));
 
 -- 10. POLICIES CHO BẢNG GALLERY_ITEMS (THƯ VIỆN ẢNH)
--- Công chúng xem ảnh đã đăng
-CREATE POLICY "Công chúng xem thư viện ảnh đã đăng" ON public.gallery_items
+-- Công chúng xem tất cả ảnh thư viện
+CREATE POLICY "Công chúng xem thư viện ảnh" ON public.gallery_items
   FOR SELECT TO anon, authenticated
-  USING (status = 'published');
-
--- Admin & Approver xem toàn bộ ảnh
-CREATE POLICY "Admin và Approver xem mọi ảnh thư viện" ON public.gallery_items
-  FOR SELECT TO authenticated
-  USING (public.get_my_role() IN ('admin', 'approver') OR created_by = auth.uid());
+  USING (true);
 
 -- Thêm & Quản lý ảnh
 CREATE POLICY "Thêm ảnh thư viện" ON public.gallery_items
@@ -274,7 +267,7 @@ CREATE POLICY "Thêm ảnh thư viện" ON public.gallery_items
 
 CREATE POLICY "Cập nhật sắp xếp ảnh thư viện" ON public.gallery_items
   FOR UPDATE TO authenticated
-  USING (public.get_my_role() IN ('admin', 'approver') OR created_by = auth.uid());
+  USING (public.get_my_role() IN ('admin', 'approver') OR uploaded_by = auth.uid());
 
 CREATE POLICY "Admin và Approver xóa ảnh thư viện" ON public.gallery_items
   FOR DELETE TO authenticated

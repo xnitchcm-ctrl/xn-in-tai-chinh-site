@@ -4,7 +4,7 @@ import { useCMS } from '../context/CMSContext';
 import { Image as ImageIcon, Eye, X, ChevronLeft, ChevronRight, Filter, ZoomIn, ShieldCheck, Compass } from 'lucide-react';
 
 export default function Gallery() {
-  const { gallery: GALLERY_ITEMS } = useCMS();
+  const { gallery, galleryError } = useCMS();
   const [activeFilter, setActiveFilter] = useState<'all' | 'machinery' | 'products' | 'certificates' | 'activities'>('all');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -13,11 +13,12 @@ export default function Gallery() {
     { value: 'all', label: 'Tất Cả Hình Ảnh' },
     { value: 'machinery', label: 'Dây Chuyền Thiết Bị' },
     { value: 'products', label: 'Ấn Phẩm Bảo Mật' },
-    { value: 'certificates', label: 'Kiểm Định & KCS' }
+    { value: 'certificates', label: 'Kiểm Định & KCS' },
+    { value: 'activities', label: 'Hoạt Động & Đoàn Thể' }
   ] as const;
 
   // Filter items based on selected category
-  const filteredItems = GALLERY_ITEMS.filter((item) => {
+  const filteredItems = gallery.filter((item) => {
     if (activeFilter === 'all') return true;
     return item.category === activeFilter;
   });
@@ -110,68 +111,81 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* CSS Masonry Multi-Column Layout */}
-        <motion.div 
-          layout
-          className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 [column-fill:_balance] w-full"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredItems.map((item, index) => {
-              const aspectClass = masonryAspects[index % masonryAspects.length];
-              return (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.45 }}
-                  onClick={() => {
-                    setLightboxIndex(index);
-                    setIsZoomed(false);
-                  }}
-                  className={`break-inside-avoid relative overflow-hidden rounded-2xl border border-slate-250/70 bg-[#123A78] group cursor-pointer shadow hover:shadow-2xl transition-all duration-300 ${aspectClass}`}
-                >
-                  {/* Image tag with lazy support */}
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter brightness-[0.93] group-hover:brightness-100"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                  />
+        {galleryError ? (
+          <div className="bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl p-8 text-center max-w-2xl mx-auto text-sm font-medium">
+            {galleryError}
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center max-w-2xl mx-auto shadow-sm">
+            <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <p className="text-slate-600 font-semibold text-sm">
+              Thư viện hiện chưa có hình ảnh.
+            </p>
+          </div>
+        ) : (
+          /* CSS Masonry Multi-Column Layout */
+          <motion.div 
+            layout
+            className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 [column-fill:_balance] w-full"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredItems.map((item, index) => {
+                const aspectClass = masonryAspects[index % masonryAspects.length];
+                return (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.45 }}
+                    onClick={() => {
+                      setLightboxIndex(index);
+                      setIsZoomed(false);
+                    }}
+                    className={`break-inside-avoid relative overflow-hidden rounded-2xl border border-slate-250/70 bg-[#123A78] group cursor-pointer shadow hover:shadow-2xl transition-all duration-300 ${aspectClass}`}
+                  >
+                    {/* Image tag with lazy support */}
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter brightness-[0.93] group-hover:brightness-100"
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                    />
 
-                  {/* Laser Scan Sweeper decoration on hover */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand-gold or to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_8px_rgb(220,169,42)] absolute-scan" />
+                    {/* Laser Scan Sweeper decoration on hover */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand-gold or to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_8px_rgb(220,169,42)] absolute-scan" />
 
-                  {/* Exquisite Double Masking gradient overlay */}
-                  <div className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-[#123A78]/90 via-[#123A78]/50 to-transparent p-5 sm:p-6 flex flex-col justify-end z-20">
-                    
-                    {/* Floating Meta */}
-                    <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300">
-                      <div className="flex items-center gap-1.5 text-brand-gold text-[9px] uppercase font-black tracking-widest font-display">
-                        <ImageIcon className="w-3.5 h-3.5" />
-                        <span>Hệ thống ISO 9001:2015</span>
+                    {/* Exquisite Double Masking gradient overlay */}
+                    <div className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-[#123A78]/90 via-[#123A78]/50 to-transparent p-5 sm:p-6 flex flex-col justify-end z-20">
+                      
+                      {/* Floating Meta */}
+                      <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300">
+                        <div className="flex items-center gap-1.5 text-brand-gold text-[9px] uppercase font-black tracking-widest font-display">
+                          <ImageIcon className="w-3.5 h-3.5" />
+                          <span>Hệ thống ISO 9001:2015</span>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-brand-gold text-brand-blue flex items-center justify-center shadow-lg transform scale-90 hover:scale-100 transition-transform">
+                          <Eye className="w-4 h-4" />
+                        </div>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-brand-gold text-brand-blue flex items-center justify-center shadow-lg transform scale-90 hover:scale-100 transition-transform">
-                        <Eye className="w-4 h-4" />
-                      </div>
+
+                      <h3 className="text-xs sm:text-sm font-bold text-white font-display uppercase tracking-wide leading-snug mt-2.5 truncate-2-lines line-clamp-2">
+                        {item.title}
+                      </h3>
                     </div>
 
-                    <h3 className="text-xs sm:text-sm font-bold text-white font-display uppercase tracking-wide leading-snug mt-2.5 truncate-2-lines line-clamp-2">
-                      {item.title}
-                    </h3>
-                  </div>
-
-                  {/* Absolute category tag spacer */}
-                  <span className="absolute top-3.5 right-3.5 bg-[#00004D]/60 backdrop-blur-md text-white/90 font-display font-medium text-[8px] tracking-widest uppercase py-1 px-2.5 rounded-full border border-white/10 opacity-75 group-hover:opacity-100 transition-opacity">
-                    Khu vực #0{index + 1}
-                  </span>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+                    {/* Absolute category tag spacer */}
+                    <span className="absolute top-3.5 right-3.5 bg-[#00004D]/60 backdrop-blur-md text-white/90 font-display font-medium text-[8px] tracking-widest uppercase py-1 px-2.5 rounded-full border border-white/10 opacity-75 group-hover:opacity-100 transition-opacity">
+                      Khu vực #0{index + 1}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
 
         {/* Lightbox Premium Glassmorphism Modal */}
         <AnimatePresence>

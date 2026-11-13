@@ -8,7 +8,7 @@ import {
   AuditLogItem,
   slugify
 } from '../utils/supabase';
-import { COMPANY_INFO, STATISTICS, SERVICE_ITEMS, TECHNOLOGIES, GALLERY_ITEMS, VACANCIES } from '../data/companyData';
+import { COMPANY_INFO, STATISTICS, SERVICE_ITEMS, TECHNOLOGIES, VACANCIES } from '../data/companyData';
 import { 
   ServiceItem, 
   TechnologyItem, 
@@ -91,7 +91,9 @@ export interface CMSContextType {
   deleteNewsPost: (id: string) => Promise<void>;
   
   // Gallery Management with ordering & replacement
-  saveGalleryItem: (item: GalleryItem, status?: ArticleWorkflowStatus) => Promise<void>;
+  galleryError: string | null;
+  loadGalleryFromSupabase: () => Promise<GalleryItem[]>;
+  saveGalleryItem: (item: GalleryItem) => Promise<void>;
   reorderGalleryItems: (items: GalleryItem[]) => Promise<void>;
   deleteGalleryItem: (id: string) => Promise<void>;
   
@@ -227,7 +229,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [slides, setSlides] = useState<HeroSlide[]>(DEFAULT_SLIDES);
   const [services, setServices] = useState<ServiceItem[]>(SERVICE_ITEMS);
   const [technologies, setTechnologies] = useState<TechnologyItem[]>(TECHNOLOGIES);
-  const [gallery, setGallery] = useState<GalleryItem[]>(GALLERY_ITEMS);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [galleryError, setGalleryError] = useState<string | null>(null);
   const [vacancies, setVacancies] = useState<JobVacancy[]>([]);
   const [news, setNews] = useState<NewsPost[]>([]);
   const [categories, setCategories] = useState<CMSCategory[]>(DEFAULT_CATEGORIES);
@@ -364,6 +367,33 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  // Dedicated helper to refresh gallery_items directly from Supabase
+  const loadGalleryFromSupabase = async (): Promise<GalleryItem[]> => {
+    if (!supabase) return [];
+    const { data: galleryData, error: galErr } = await supabase
+      .from('gallery_items')
+      .select('*')
+      .order('display_order', { ascending: true })
+      .order('created_at', { ascending: false });
+
+    if (galErr) {
+      console.error('Lỗi khi đọc bảng gallery_items từ Supabase:', galErr);
+      setGalleryError(`Không thể tải thư viện ảnh từ Supabase: ${galErr.message}`);
+      return [];
+    }
+
+    setGalleryError(null);
+    const mappedGal: GalleryItem[] = (galleryData || []).map((item: any) => ({
+      id: item.id,
+      title: item.title || '',
+      category: item.category || 'machinery',
+      image: item.image || '',
+      display_order: typeof item.display_order === 'number' ? item.display_order : 0,
+    }));
+    setGallery(mappedGal);
+    return mappedGal;
+  };
+
   // Fetch Supabase data when connected
   const loadSupabaseData = async () => {
     if (!supabase) return;
@@ -375,21 +405,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       await loadVacanciesFromSupabase();
 
       // 2. Fetch Gallery
-      const { data: galleryData, error: galErr } = await supabase
-        .from('gallery_items')
-        .select('*')
-        .order('display_order', { ascending: true })
-        .order('created_at', { ascending: false });
-
-      if (!galErr && galleryData && galleryData.length > 0) {
-        const mappedGal: GalleryItem[] = galleryData.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          category: item.category,
-          image: item.image_url
-        }));
-        setGallery(mappedGal);
-      }
+      await loadGalleryFromSupabase();
 
       // 3. Fetch Profiles / Users
       const { data: profilesData, error: profErr } = await supabase
@@ -985,31 +1001,45 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Gallery: Save / Replace Item
-  const saveGalleryItem = async (item: GalleryItem, status: ArticleWorkflowStatus = 'published') => {
-    const isNew = !gallery.some(g => g.id === item.id);
-    setGallery(prev => {
-      const exists = prev.some(g => g.id === item.id);
-      if (exists) {
-        return prev.map(g => g.id === item.id ? item : g);
-      }
-      return [item, ...prev];
-    });
-
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase.from('gallery_items').upsert([{
-          id: item.id.includes('-') && !item.id.startsWith('gal-') ? item.id : undefined,
-          title: item.title,
-          category: item.category,
-          image_url: item.image,
-          status,
-          updated_at: new Date().toISOString()
-        }]);
-      } catch (e) {
-        console.warn('Gallery Supabase sync warning:', e);
-      }
+  const saveGalleryItem = async (item: GalleryItem) => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể lưu hình ảnh thư viện.');
     }
 
+    const isNew = !gallery.some(g => g.id === item.id);
+    const existingIndex = gallery.findIndex(g => g.id === item.id);
+    const displayOrder =
+      typeof item.display_order === 'number'
+        ? item.display_order
+        : existingIndex >= 0
+          ? (typeof gallery[existingIndex].display_order === 'number'
+              ? gallery[existingIndex].display_order
+              : existingIndex)
+          : 0;
+
+    const isUuid = (val?: string | null) =>
+      Boolean(val && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val));
+
+    const payload = {
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      image: item.image,
+      display_order: displayOrder,
+      uploaded_by: isUuid(currentUser?.uid) ? currentUser!.uid : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('gallery_items')
+      .upsert([payload], { onConflict: 'id' });
+
+    if (error) {
+      console.error('Lỗi khi lưu gallery_items lên Supabase:', error);
+      throw new Error(error.message);
+    }
+
+    await loadGalleryFromSupabase();
     await addAuditLog(
       isNew ? 'Thêm ảnh thư viện' : 'Cập nhật/Thay thế ảnh thư viện',
       'Gallery Management',
@@ -1019,27 +1049,50 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Gallery: Reorder
   const reorderGalleryItems = async (items: GalleryItem[]) => {
-    setGallery(items);
-    if (supabase && isSupabaseConfigured) {
-      try {
-        const updates = items.map((item, index) => 
-          supabase.from('gallery_items').update({ display_order: index }).eq('id', item.id)
-        );
-        await Promise.all(updates);
-      } catch (e) {
-        console.warn('Reorder gallery sync warning:', e);
-      }
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể sắp xếp lại thư viện ảnh.');
     }
+
+    const results = await Promise.all(
+      items.map((item, index) =>
+        supabase
+          .from('gallery_items')
+          .update({
+            display_order: index,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', item.id)
+      )
+    );
+
+    const failed = results.find(res => res.error);
+    if (failed?.error) {
+      console.error('Lỗi cập nhật thứ tự gallery_items:', failed.error);
+      throw new Error(failed.error.message);
+    }
+
+    await loadGalleryFromSupabase();
     await addAuditLog('Sắp xếp lại thư viện ảnh', 'Gallery Management', `Cập nhật thứ tự hiển thị cho ${items.length} hình ảnh`);
   };
 
   // Gallery: Delete
   const deleteGalleryItem = async (id: string) => {
     if (!isApprover) throw new Error('Bạn không có quyền xóa ảnh thư viện.');
-    setGallery(prev => prev.filter(g => g.id !== id));
-    if (supabase && isSupabaseConfigured) {
-      await supabase.from('gallery_items').delete().eq('id', id);
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể xóa hình ảnh thư viện.');
     }
+
+    const { error } = await supabase
+      .from('gallery_items')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi khi xóa gallery_items trên Supabase:', error);
+      throw new Error(error.message);
+    }
+
+    await loadGalleryFromSupabase();
     await addAuditLog('Xóa ảnh thư viện', 'Gallery Management', `Đã xóa ảnh ID ${id}`);
   };
 
@@ -1264,6 +1317,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         hideNewsPost,
         deleteNewsPost,
 
+        galleryError,
+        loadGalleryFromSupabase,
         saveGalleryItem,
         reorderGalleryItems,
         deleteGalleryItem,

@@ -27,6 +27,7 @@ export interface GalleryItem {
   title: string;
   category: 'all' | 'machinery' | 'products' | 'activities' | 'certificates';
   image: string;
+  display_order?: number;
 }
 
 export interface JobVacancy {
