@@ -28,6 +28,7 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderProps) {
   const { slides } = useCMS();
+  const activeSlides = (Array.isArray(slides) ? slides : []).filter(s => s && s.isActive !== false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoActive, setIsVideoActive] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -35,14 +36,17 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const safeIndex = activeSlides.length > 0 ? currentSlide % activeSlides.length : 0;
+  const current = activeSlides[safeIndex];
+
   // Rotate slides automatically every 8 seconds
   useEffect(() => {
-    if (!slides || slides.length === 0) return;
+    if (activeSlides.length === 0) return;
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
     }, 8500);
     return () => clearInterval(interval);
-  }, [slides?.length]);
+  }, [activeSlides.length]);
 
   // Adjust video play state
   useEffect(() => {
@@ -66,11 +70,13 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    if (activeSlides.length === 0) return;
+    setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    if (activeSlides.length === 0) return;
+    setCurrentSlide((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
   };
 
   const corePillars = [
@@ -135,7 +141,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
                 setVideoError(true);
                 setIsVideoActive(false);
               }}
-              poster={slides[0].image}
+              poster={activeSlides[0]?.image || undefined}
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-65"
             >
               <source src="https://assets.mixkit.co/videos/preview/mixkit-printing-machine-in-action-close-up-40453-large.mp4" type="video/mp4" />
@@ -145,10 +151,10 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
         )}
 
         {/* Photorealistic static fallback slide images inside AnimatePresence */}
-        {(!isVideoActive || videoError) && (
+        {(!isVideoActive || videoError) && current && (
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentSlide}
+              key={current.id || safeIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -158,12 +164,14 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
               {/* Brighter 20% overlay on top of slide images with corporate gradient blend */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#0D4F9C]/80 via-[#1E63B5]/75 to-[#2F7DD1]/60 z-10"></div>
               <div className="absolute inset-0 bg-[#00004D]/20 z-10"></div>
-              <img
-                src={slides[currentSlide].image}
-                alt={slides[currentSlide].title}
-                className="w-full h-full object-cover object-center scale-100"
-                referrerPolicy="no-referrer"
-              />
+              {current.image && (
+                <img
+                  src={current.image}
+                  alt={current.title || 'Banner'}
+                  className="w-full h-full object-cover object-center scale-100"
+                  referrerPolicy="no-referrer"
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         )}
@@ -176,7 +184,7 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
             <div className="lg:col-span-7 flex flex-col items-start gap-4 sm:gap-5">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={currentSlide}
+                  key={current?.id || safeIndex}
                   initial={{ y: 25, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -25, opacity: 0 }}
@@ -186,22 +194,22 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
                   {/* Micro tag badge */}
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black tracking-widest bg-brand-gold text-brand-blue rounded font-display uppercase shadow-sm">
                     <Sparkles className="w-3 h-3 text-brand-blue-dark animate-pulse" />
-                    {slides[currentSlide].badgeText}
+                    {current?.badgeText || 'XÍ NGHIỆP IN TÀI CHÍNH TP.HCM'}
                   </span>
 
                   {/* Main Heading headline splits */}
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase leading-tight">
-                    {slides[currentSlide].title.split('–')[0]}
-                    {slides[currentSlide].title.includes('–') && (
+                    {(current?.title || 'XÍ NGHIỆP IN TÀI CHÍNH TP. HỒ CHÍ MINH').split('–')[0]}
+                    {(current?.title || '').includes('–') && (
                       <span className="text-brand-gold block xl:inline mt-1 xl:mt-0 xl:before:content-['-'] xl:before:mx-2 text-shadow-glow">
-                        {slides[currentSlide].title.split('–')[1]}
+                        {current.title.split('–')[1]}
                       </span>
                     )}
                   </h2>
 
                   {/* Support detail text */}
                   <p className="text-sm sm:text-[15px] text-slate-200 font-sans leading-relaxed max-w-2xl font-light">
-                    {slides[currentSlide].subtitle}
+                    {current?.subtitle || 'Chuyên in vé số kiến thiết, vé số cào và ấn phẩm chứng từ tài chính bảo mật chất lượng cao.'}
                   </p>
                 </motion.div>
               </AnimatePresence>
@@ -237,10 +245,17 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
               {/* Always static interactive CTA Row */}
               <div className="flex flex-wrap gap-3.5 mt-2">
                 <button
-                  onClick={() => onLearnMore(slides[currentSlide].targetId)}
+                  onClick={() => {
+                    const target = (current?.targetId || 'about').trim();
+                    if (/^https?:\/\//i.test(target)) {
+                      window.location.href = target;
+                    } else {
+                      onLearnMore(target.replace(/^#/, ''));
+                    }
+                  }}
                   className="flex items-center gap-2 px-6 py-3.5 bg-brand-gold text-brand-blue hover:bg-yellow-400 hover:shadow-lg rounded font-display font-extrabold text-xs tracking-widest uppercase transition-all duration-200 scale-100 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-md"
                 >
-                  KHÁM PHÁ NGAY <ArrowRight className="w-4 h-4 text-brand-blue" />
+                  {current?.ctaText || 'KHÁM PHÁ NGAY'} <ArrowRight className="w-4 h-4 text-brand-blue" />
                 </button>
                 
                 <button
@@ -381,13 +396,13 @@ export default function HeroSlider({ onLearnMore, openQuoteModal }: HeroSliderPr
 
         {/* 8. MINI DOT LIST INDICATORS */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2.5">
-          {slides.map((_, idx) => (
+          {activeSlides.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentSlide(idx)}
               aria-label={`Đi tới slide ${idx + 1}`}
               className={`w-10 h-1.5 rounded transition-all cursor-pointer ${
-                idx === currentSlide ? 'bg-brand-gold' : 'bg-white/45 hover:bg-white/85'
+                idx === safeIndex ? 'bg-brand-gold' : 'bg-white/45 hover:bg-white/85'
               }`}
             ></button>
           ))}

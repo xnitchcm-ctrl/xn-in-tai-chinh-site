@@ -170,13 +170,14 @@ export type PrintingTechnology = TechnologyItem;
 
 export interface HeroSlide {
   id: string;
+  image: string;
   title: string;
   subtitle: string;
-  description: string;
-  imageUrl: string;
-  buttonText?: string;
-  buttonLink?: string;
-  order?: number;
+  badgeText: string;
+  targetId: string;
+  ctaText?: string;
   isActive?: boolean;
+  displayOrder?: number;
 }
+
 

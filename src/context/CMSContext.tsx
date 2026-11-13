@@ -23,18 +23,12 @@ import {
   CMSAuditLog, 
   CMSSession,
   QuoteRequest,
-  ArticleWorkflowStatus
+  ArticleWorkflowStatus,
+  HeroSlide
 } from '../types';
 import { NewsPost, DEFAULT_MOCK_NEWS, NEWS_CATEGORIES } from '../utils/firebase';
 
-export interface HeroSlide {
-  id: string;
-  image: string;
-  title: string;
-  subtitle: string;
-  badgeText: string;
-  targetId: string;
-}
+export type { HeroSlide };
 
 export interface CMSContextType {
   // Public data state (synced with Supabase if available)
@@ -100,6 +94,13 @@ export interface CMSContextType {
   // Content Updaters
   saveCompanyInfo: (info: typeof COMPANY_INFO) => Promise<void>;
   saveStatistics: (stats: typeof STATISTICS) => Promise<void>;
+  slidesError: string | null;
+  slidesLoading: boolean;
+  loadSlidesFromSupabase: () => Promise<HeroSlide[]>;
+  saveHeroSlide: (slide: HeroSlide) => Promise<void>;
+  deleteHeroSlide: (id: string) => Promise<void>;
+  toggleHeroSlideActive: (id: string, isActive: boolean) => Promise<void>;
+  reorderHeroSlides: (items: HeroSlide[]) => Promise<void>;
   saveSlides: (slides: HeroSlide[]) => Promise<void>;
   saveBrand: (brand: CMSBrand) => Promise<void>;
   saveSEO: (seo: CMSSEO) => Promise<void>;
@@ -226,7 +227,9 @@ const INITIAL_LOCAL_USERS: CMSUser[] = [
 export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [companyInfo, setCompanyInfo] = useState<typeof COMPANY_INFO>(COMPANY_INFO);
   const [statistics, setStatistics] = useState<typeof STATISTICS>(STATISTICS);
-  const [slides, setSlides] = useState<HeroSlide[]>(DEFAULT_SLIDES);
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [slidesError, setSlidesError] = useState<string | null>(null);
+  const [slidesLoading, setSlidesLoading] = useState<boolean>(false);
   const [services, setServices] = useState<ServiceItem[]>(SERVICE_ITEMS);
   const [technologies, setTechnologies] = useState<TechnologyItem[]>(TECHNOLOGIES);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
@@ -394,6 +397,59 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return mappedGal;
   };
 
+  // Dedicated helper to refresh banner_slides from Supabase with try/catch
+  const loadSlidesFromSupabase = async (): Promise<HeroSlide[]> => {
+    if (!supabase) return [];
+    setSlidesLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('banner_slides')
+        .select('*')
+        .order('display_order', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Lỗi khi đọc bảng banner_slides từ Supabase:', error);
+        const msg = error.message || 'Không thể tải danh sách Banner Slide.';
+        if (
+          error.code === '42P01' ||
+          error.code === 'PGRST205' ||
+          msg.toLowerCase().includes('banner_slides')
+        ) {
+          setSlidesError(
+            `Bảng dữ liệu banner_slides chưa tồn tại trên Supabase hoặc không truy cập được (${msg}). Vui lòng chạy file SQL supabase_banner_slides.sql trong Supabase SQL Editor.`
+          );
+        } else {
+          setSlidesError(`Không thể tải Banner Slide từ Supabase: ${msg}`);
+        }
+        setSlides([]);
+        return [];
+      }
+
+      setSlidesError(null);
+      const mapped: HeroSlide[] = (Array.isArray(data) ? data : []).map((row: any, idx: number) => ({
+        id: String(row?.id || `slide-${idx}`),
+        image: row?.image || '',
+        title: row?.title || '',
+        subtitle: row?.subtitle || '',
+        badgeText: row?.badge_text || '',
+        targetId: row?.target_id || 'services',
+        ctaText: row?.cta_text || 'KHÁM PHÁ NGAY',
+        isActive: row?.is_active !== false,
+        displayOrder: typeof row?.display_order === 'number' ? row.display_order : idx,
+      }));
+      setSlides(mapped);
+      return mapped;
+    } catch (err: any) {
+      console.error('Lỗi kết nối khi tải banner_slides:', err);
+      setSlidesError(`Lỗi tải dữ liệu Banner Slide: ${err?.message || 'Không xác định'}`);
+      setSlides([]);
+      return [];
+    } finally {
+      setSlidesLoading(false);
+    }
+  };
+
   // Fetch Supabase data when connected
   const loadSupabaseData = async () => {
     if (!supabase) return;
@@ -406,6 +462,9 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       // 2. Fetch Gallery
       await loadGalleryFromSupabase();
+
+      // 2.1. Fetch Banner Slides
+      await loadSlidesFromSupabase();
 
       // 3. Fetch Profiles / Users
       const { data: profilesData, error: profErr } = await supabase
@@ -1099,6 +1158,128 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Public entity management helpers
   const saveCompanyInfo = async (info: typeof COMPANY_INFO) => setCompanyInfo(info);
   const saveStatistics = async (stats: typeof STATISTICS) => setStatistics(stats);
+
+  const saveHeroSlide = async (slide: HeroSlide) => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể lưu Banner Slide.');
+    }
+
+    const isNew = !slides.some(s => s.id === slide.id);
+    const existingIdx = slides.findIndex(s => s.id === slide.id);
+    const displayOrder =
+      typeof slide.displayOrder === 'number'
+        ? slide.displayOrder
+        : existingIdx >= 0
+          ? (slides[existingIdx].displayOrder ?? existingIdx)
+          : slides.length;
+
+    const isUuid = (val?: string | null) =>
+      Boolean(val && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val));
+
+    const payload = {
+      id: slide.id,
+      title: slide.title,
+      subtitle: slide.subtitle || '',
+      badge_text: slide.badgeText || '',
+      cta_text: slide.ctaText || 'KHÁM PHÁ NGAY',
+      target_id: slide.targetId || 'services',
+      image: slide.image,
+      is_active: slide.isActive !== false,
+      display_order: displayOrder,
+      uploaded_by: isUuid(currentUser?.uid) ? currentUser!.uid : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('banner_slides')
+      .upsert([payload], { onConflict: 'id' });
+
+    if (error) {
+      console.error('Lỗi khi lưu banner_slides lên Supabase:', error);
+      throw new Error(error.message);
+    }
+
+    await loadSlidesFromSupabase();
+    await addAuditLog(
+      isNew ? 'Thêm Banner Slide' : 'Cập nhật Banner Slide',
+      'Banner Management',
+      `Slide: "${slide.title}"`
+    );
+  };
+
+  const deleteHeroSlide = async (id: string) => {
+    if (!isApprover) throw new Error('Bạn không có quyền xóa Banner Slide.');
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể xóa Banner Slide.');
+    }
+
+    const { error } = await supabase
+      .from('banner_slides')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi khi xóa banner_slides trên Supabase:', error);
+      throw new Error(error.message);
+    }
+
+    await loadSlidesFromSupabase();
+    await addAuditLog('Xóa Banner Slide', 'Banner Management', `Đã xóa Banner ID ${id}`);
+  };
+
+  const toggleHeroSlideActive = async (id: string, isActive: boolean) => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể đổi trạng thái Banner Slide.');
+    }
+
+    const { error } = await supabase
+      .from('banner_slides')
+      .update({
+        is_active: isActive,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi cập nhật trạng thái banner_slides:', error);
+      throw new Error(error.message);
+    }
+
+    await loadSlidesFromSupabase();
+    await addAuditLog(
+      isActive ? 'Bật hiển thị Banner Slide' : 'Ẩn Banner Slide',
+      'Banner Management',
+      `Banner ID ${id}`
+    );
+  };
+
+  const reorderHeroSlides = async (items: HeroSlide[]) => {
+    if (!supabase || !isSupabaseConfigured) {
+      throw new Error('Chưa kết nối Supabase. Không thể sắp xếp Banner Slide.');
+    }
+
+    const results = await Promise.all(
+      items.map((item, index) =>
+        supabase
+          .from('banner_slides')
+          .update({
+            display_order: index,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', item.id)
+      )
+    );
+
+    const failed = results.find(res => res.error);
+    if (failed?.error) {
+      console.error('Lỗi cập nhật thứ tự banner_slides:', failed.error);
+      throw new Error(failed.error.message);
+    }
+
+    await loadSlidesFromSupabase();
+    await addAuditLog('Sắp xếp lại Banner Slide', 'Banner Management', `Cập nhật thứ tự hiển thị cho ${items.length} banner`);
+  };
+
   const saveSlides = async (newSlides: HeroSlide[]) => setSlides(newSlides);
   const saveBrand = async (newBrand: CMSBrand) => setBrand(newBrand);
   const saveSEO = async (newSEO: CMSSEO) => setSEO(newSEO);
@@ -1325,6 +1506,13 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         saveCompanyInfo,
         saveStatistics,
+        slidesError,
+        slidesLoading,
+        loadSlidesFromSupabase,
+        saveHeroSlide,
+        deleteHeroSlide,
+        toggleHeroSlideActive,
+        reorderHeroSlides,
         saveSlides,
         saveBrand,
         saveSEO,

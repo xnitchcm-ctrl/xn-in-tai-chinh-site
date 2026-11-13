@@ -37,6 +37,53 @@ import {
 import { useCMS } from '../../context/CMSContext';
 import { SUPABASE_URL, isSupabaseConfigured, SUPABASE_SQL_SETUP } from '../../utils/supabase';
 
+class CMSErrorBoundary extends React.Component<
+  { children: React.ReactNode; resetKey: string },
+  { hasError: boolean; errorMsg: string }
+> {
+  declare props: { children: React.ReactNode; resetKey: string };
+  declare state: { hasError: boolean; errorMsg: string };
+  declare setState: (s: Partial<{ hasError: boolean; errorMsg: string }>) => void;
+
+  constructor(props: { children: React.ReactNode; resetKey: string }) {
+    super(props);
+    this.state = { hasError: false, errorMsg: '' };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, errorMsg: error?.message || 'Lỗi hiển thị trang quản trị.' };
+  }
+
+  componentDidUpdate(prevProps: { resetKey: string }) {
+    if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
+      this.setState({ hasError: false, errorMsg: '' });
+    }
+  }
+
+  componentDidCatch(error: Error) {
+    console.error('CMS View Error:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="bg-white rounded-2xl border border-rose-200 p-8 shadow-sm text-center space-y-3">
+          <p className="text-sm font-black text-rose-700 uppercase">Không thể hiển thị mục quản trị này</p>
+          <p className="text-xs text-slate-600">{this.state.errorMsg}</p>
+          <button
+            type="button"
+            onClick={() => this.setState({ hasError: false, errorMsg: '' })}
+            className="px-4 py-2 bg-[#174A87] text-white rounded-xl text-xs font-bold cursor-pointer"
+          >
+            Thử tải lại
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function CMSLayout() {
   const { 
     currentUser, 
@@ -501,7 +548,9 @@ export default function CMSLayout() {
         {/* Dynamic CMS View Render */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
-            <Outlet />
+            <CMSErrorBoundary resetKey={location.pathname}>
+              <Outlet />
+            </CMSErrorBoundary>
           </div>
         </main>
       </div>
